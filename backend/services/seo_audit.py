@@ -298,23 +298,38 @@ class SEOAuditService:
             OnPageSEOAnalyzer(),
             OffPageSEOAnalyzer()
         ]
+        self.crawler = WebCrawler()
     
     async def run_audit(self, url: str) -> Dict[str, Any]:
-        """Run comprehensive SEO audit"""
+        """Run comprehensive SEO audit with real crawler"""
+        
+        # Crawl the website
+        crawl_data = await self.crawler.crawl_and_analyze(url)
+        
+        if not crawl_data.get('success'):
+            # Return error if crawl failed
+            return {
+                'seo_score': 0,
+                'technical_score': 0,
+                'onpage_score': 0,
+                'offpage_score': 0,
+                'issues': [AuditIssue(
+                    category='technical',
+                    severity='critical',
+                    title='Site Unreachable',
+                    description=f'Unable to crawl site: {crawl_data.get(\"error\", \"Unknown error\")}',
+                    fix='Check if the site is online and accessible. Ensure URL is correct.',
+                    impact_score=100
+                )],
+                'recommendations': ['Fix site accessibility issues before running SEO analysis'],
+                'crawl_data': crawl_data
+            }
+        
         all_issues = []
         
-        # Fetch content once
-        content = None
-        try:
-            async with httpx.AsyncClient(timeout=10.0) as client:
-                response = await client.get(url)
-                content = response.text
-        except:
-            pass
-        
-        # Run all analyzers
+        # Run all analyzers with crawl data
         for analyzer in self.analyzers:
-            issues = await analyzer.analyze(url, content)
+            issues = await analyzer.analyze(url, None, crawl_data)
             all_issues.extend(issues)
         
         # Calculate scores
@@ -329,8 +344,8 @@ class SEOAuditService:
         onpage_score = max(0, 100 - sum(i.impact_score for i in onpage_issues) // 5)
         offpage_score = max(0, 100 - sum(i.impact_score for i in offpage_issues) // 5)
         
-        # Generate AI recommendations
-        recommendations = await self._generate_recommendations(all_issues)
+        # Generate AI recommendations with real data
+        recommendations = await self._generate_recommendations(all_issues, crawl_data)
         
         return {
             'seo_score': seo_score,
@@ -338,13 +353,14 @@ class SEOAuditService:
             'onpage_score': onpage_score,
             'offpage_score': offpage_score,
             'issues': all_issues,
-            'recommendations': recommendations
+            'recommendations': recommendations,
+            'crawl_data': crawl_data  # Include for AI agents
         }
     
-    async def _generate_recommendations(self, issues: List[AuditIssue]) -> List[str]:
-        """Generate prioritized recommendations using AI"""
+    async def _generate_recommendations(self, issues: List[AuditIssue], crawl_data: Dict) -> List[str]:
+        """Generate prioritized recommendations using AI and crawl data"""
         if not issues:
-            return ['Great job! No critical issues found. Continue monitoring your SEO performance.']
+            return ['Excellent! No critical issues found. Continue monitoring your SEO performance.']
         
         # Sort by severity and impact
         critical = [i for i in issues if i.severity == 'critical']
@@ -353,13 +369,32 @@ class SEOAuditService:
         recommendations = []
         
         if critical:
-            recommendations.append(f'CRITICAL: Fix {len(critical)} critical issues immediately - these are blocking your SEO performance')
+            recommendations.append(f'🔴 CRITICAL: Fix {len(critical)} critical issues immediately - these are blocking your SEO performance')
         
         if high:
-            recommendations.append(f'HIGH PRIORITY: Address {len(high)} high-priority issues this week')
+            recommendations.append(f'🟠 HIGH PRIORITY: Address {len(high)} high-priority issues this week')
         
-        # Add specific recommendations
+        # Add specific data-driven recommendations
+        meta = crawl_data.get('meta', {})
+        content_data = crawl_data.get('content', {})
+        performance = crawl_data.get('performance', {})
+        
+        # Content recommendations
+        word_count = content_data.get('word_count', 0)
+        if word_count < 500:
+            recommendations.append(f'📝 Content: Expand content from {word_count} to at least 500 words for better rankings')
+        
+        # Performance recommendations
+        load_time = performance.get('load_time_seconds', 0)
+        if load_time > 2:
+            recommendations.append(f'⚡ Performance: Improve page speed from {load_time}s to under 2 seconds')
+        
+        # Meta recommendations
+        if not meta.get('has_description'):
+            recommendations.append('🎯 Meta: Add compelling meta description to improve click-through rate')
+        
+        # Add top 3 specific issues
         for issue in sorted(issues, key=lambda x: x.impact_score, reverse=True)[:3]:
-            recommendations.append(f'{issue.title}: {issue.fix}')
+            recommendations.append(f'✓ {issue.title}: {issue.fix}')
         
-        return recommendations
+        return recommendations[:8]  # Limit to 8 recommendations
