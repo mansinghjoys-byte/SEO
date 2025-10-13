@@ -1,0 +1,81 @@
+{
+  "summary": {
+    "passed": 5,
+    "total": 7,
+    "success_rate": "71.4%"
+  },
+  "results": [
+    {
+      "test": "Admin Login",
+      "success": true,
+      "message": "Successfully logged in as admin@rankforge.com",
+      "response_data": {
+        "token_received": true,
+        "user_email": "admin@rankforge.com"
+      },
+      "timestamp": "2025-10-13T13:35:57.412336"
+    },
+    {
+      "test": "SEO Settings GET",
+      "success": true,
+      "message": "Retrieved SEO settings with title: 'RankForge - AI-Powered SEO Platform'",
+      "response_data": {
+        "title": "RankForge - AI-Powered SEO Platform",
+        "keywords_count": 4
+      },
+      "timestamp": "2025-10-13T13:35:57.485198"
+    },
+    {
+      "test": "SEO Settings UPDATE",
+      "success": true,
+      "message": "Successfully updated SEO settings",
+      "response_data": {
+        "updated_title": "RankForge - Updated SEO Platform",
+        "keywords_count": 5
+      },
+      "timestamp": "2025-10-13T13:35:57.531194"
+    },
+    {
+      "test": "System Stats",
+      "success": true,
+      "message": "Retrieved system stats - Users: 1, Sites: 2, Audits: 2",
+      "response_data": {
+        "total_users": 1,
+        "total_sites": 2,
+        "total_audits": 2,
+        "revenue": 0.0
+      },
+      "timestamp": "2025-10-13T13:35:57.577639"
+    },
+    {
+      "test": "Plans Management GET",
+      "success": true,
+      "message": "Retrieved 0 pricing plans",
+      "response_data": {
+        "plans_count": 0,
+        "plan_names": []
+      },
+      "timestamp": "2025-10-13T13:35:57.616919"
+    },
+    {
+      "test": "Users Management GET",
+      "success": true,
+      "message": "Retrieved 1 users with proper structure",
+      "response_data": {
+        "users_count": 1,
+        "sample_user_email": "amis.joys@gmail.com"
+      },
+      "timestamp": "2025-10-13T13:35:57.658734"
+    },
+    {
+      "test": "Deep Analysis Endpoint",
+      "success": true,
+      "message": "Endpoint accessible (HTTP 401)",
+      "response_data": {
+        "status_code": 401
+      },
+      "timestamp": "2025-10-13T13:35:57.735695"
+    }
+  ],
+  "timestamp": "2025-10-13T13:35:57.736643"
+}
