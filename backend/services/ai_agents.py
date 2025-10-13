@@ -44,13 +44,39 @@ class SEOAuditAgent(BaseAIAgent):
     """AI Agent specialized in SEO audits and recommendations"""
     
     async def process_message(self, message: str) -> Dict[str, Any]:
+        # Get real audit data from context if available
+        audit_data = self.context.get('latest_audit', {})
+        crawl_data = self.context.get('crawl_data', {})
+        
+        # Build context with real data
+        context_info = []
+        if audit_data:
+            context_info.append(f"Latest SEO Score: {audit_data.get('seo_score', 'N/A')}/100")
+            context_info.append(f"Technical: {audit_data.get('technical_score', 'N/A')}/100")
+            context_info.append(f"On-Page: {audit_data.get('onpage_score', 'N/A')}/100")
+            context_info.append(f"Issues Found: {len(audit_data.get('issues', []))}")
+        
+        if crawl_data and crawl_data.get('success'):
+            meta = crawl_data.get('meta', {})
+            content = crawl_data.get('content', {})
+            performance = crawl_data.get('performance', {})
+            
+            context_info.append(f"\nReal Website Data:")
+            context_info.append(f"- Title: '{meta.get('title', 'N/A')}'")
+            context_info.append(f"- Word Count: {content.get('word_count', 0)}")
+            context_info.append(f"- Load Time: {performance.get('load_time_seconds', 0)}s")
+            context_info.append(f"- Images: {crawl_data.get('images', {}).get('total_images', 0)}")
+            context_info.append(f"- H1 Tags: {content.get('h1_count', 0)}")
+        
         system_prompt = f"""
 You are an expert SEO audit assistant named {self.name}. Your purpose is to help users understand and fix SEO issues on their websites.
 
-Context: {json.dumps(self.context, indent=2)}
+REAL WEBSITE DATA:
+{chr(10).join(context_info) if context_info else 'No audit data available yet. Ask user to run an audit first.'}
 
 Provide clear, actionable SEO advice. Break down technical concepts into simple terms. 
 Always prioritize recommendations by impact and ease of implementation.
+Base your advice on the REAL data provided above.
 """
         
         messages = [
@@ -65,42 +91,40 @@ Always prioritize recommendations by impact and ease of implementation.
         self.conversation_history.append({'role': 'user', 'content': message})
         self.conversation_history.append({'role': 'assistant', 'content': response})
         
-        # Generate suggestions
-        suggestions = await self._generate_suggestions(message, response)
+        # Generate suggestions based on real data
+        suggestions = await self._generate_suggestions(message, response, audit_data, crawl_data)
         
         return {
             'response': response,
             'suggestions': suggestions
         }
     
-    async def _generate_suggestions(self, user_message: str, agent_response: str) -> List[str]:
-        """Generate follow-up suggestions based on conversation"""
+    async def _generate_suggestions(self, user_message: str, agent_response: str, audit_data: Dict, crawl_data: Dict) -> List[str]:
+        """Generate follow-up suggestions based on real data"""
         suggestions = []
         
-        if 'technical' in user_message.lower():
-            suggestions.extend([
-                'Analyze page speed issues',
-                'Check mobile responsiveness',
-                'Review structured data'
-            ])
-        elif 'keyword' in user_message.lower():
-            suggestions.extend([
-                'Find related keywords',
-                'Analyze keyword difficulty',
-                'Check search intent'
-            ])
-        elif 'content' in user_message.lower():
-            suggestions.extend([
-                'Optimize existing content',
-                'Find content gaps',
-                'Review readability'
-            ])
-        else:
-            suggestions.extend([
-                'Run full site audit',
-                'Analyze top competitors',
-                'Review backlink profile'
-            ])
+        if not audit_data:
+            return ['Run an audit first', 'Add your website', 'Check SEO basics']
+        
+        issues = audit_data.get('issues', [])
+        critical = [i for i in issues if i.get('severity') == 'critical']
+        high = [i for i in issues if i.get('severity') == 'high']
+        
+        if critical:
+            suggestions.append('Fix critical issues first')
+        if high:
+            suggestions.append('Review high priority items')
+        
+        if crawl_data and crawl_data.get('success'):
+            meta = crawl_data.get('meta', {})
+            content = crawl_data.get('content', {})
+            
+            if not meta.get('has_description'):
+                suggestions.append('Add meta description')
+            if content.get('word_count', 0) < 500:
+                suggestions.append('Expand content length')
+            if content.get('h1_count', 0) == 0:
+                suggestions.append('Add H1 heading')
         
         return suggestions[:3]
 
