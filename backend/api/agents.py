@@ -77,16 +77,45 @@ async def chat_with_agent(chat_data: ChatRequest, current_user: dict = Depends(g
             detail='Agent not found'
         )
     
+    # Get latest audit data for context if agent is audit assistant
+    if agent_doc['purpose'] == 'audit_assistant':
+        # Get user's sites
+        sites = await db.sites.find({'user_id': current_user['user_id']}, {'_id': 0}).to_list(10)
+        
+        if sites:
+            # Get latest audit for first site
+            latest_audit = await db.audits.find_one(
+                {'user_id': current_user['user_id'], 'site_id': sites[0]['site_id']},
+                {'_id': 0},
+                sort=[('created_at', -1)]
+            )
+            
+            if latest_audit:
+                # Update agent context with real data
+                agent_doc['context'] = {
+                    'latest_audit': {
+                        'seo_score': latest_audit.get('seo_score'),
+                        'technical_score': latest_audit.get('technical_score'),
+                        'onpage_score': latest_audit.get('onpage_score'),
+                        'offpage_score': latest_audit.get('offpage_score'),
+                        'issues': latest_audit.get('issues', [])
+                    },
+                    'crawl_data': latest_audit.get('crawl_data', {}),
+                    'site_url': sites[0].get('url')
+                }
+    
     # Get or create agent instance
     if chat_data.agent_id not in active_agents:
         agent_instance = AgentFactory.create_agent(
             agent_doc['purpose'],
             agent_doc['name'],
-            agent_doc['context']
+            agent_doc.get('context', {})
         )
         active_agents[chat_data.agent_id] = agent_instance
     else:
         agent_instance = active_agents[chat_data.agent_id]
+        # Update context with latest data
+        agent_instance.context = agent_doc.get('context', {})
     
     # Process message
     response = await agent_instance.process_message(chat_data.message)
