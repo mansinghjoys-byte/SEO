@@ -20,29 +20,18 @@ class BaseAnalyzer(ABC):
 class TechnicalSEOAnalyzer(BaseAnalyzer):
     """Analyzes technical SEO aspects"""
     
-    async def analyze(self, url: str, content: str = None) -> List[AuditIssue]:
+    async def analyze(self, url: str, content: str = None, crawl_data: Dict = None) -> List[AuditIssue]:
         issues = []
         
-        if not content:
-            try:
-                async with httpx.AsyncClient(timeout=10.0) as client:
-                    response = await client.get(url, follow_redirects=True)
-                    content = response.text
-                    status_code = response.status_code
-                    response_time = response.elapsed.total_seconds()
-            except Exception as e:
-                issues.append(AuditIssue(
-                    category='technical',
-                    severity='critical',
-                    title='Site Unreachable',
-                    description=f'Unable to access the site: {str(e)}',
-                    fix='Check if the site is online and accessible',
-                    impact_score=100
-                ))
-                return issues
+        if not crawl_data:
+            return issues
+        
+        technical = crawl_data.get('technical', {})
+        performance = crawl_data.get('performance', {})
+        mobile = crawl_data.get('mobile', {})
         
         # Check HTTPS
-        if not url.startswith('https://'):
+        if not technical.get('https'):
             issues.append(AuditIssue(
                 category='technical',
                 severity='high',
@@ -52,19 +41,20 @@ class TechnicalSEOAnalyzer(BaseAnalyzer):
                 impact_score=80
             ))
         
-        # Check page speed (simulated)
-        if 'response_time' in locals() and response_time > 3:
+        # Check page speed
+        load_time = performance.get('load_time_seconds', 0)
+        if load_time > 3:
             issues.append(AuditIssue(
                 category='technical',
                 severity='high',
                 title='Slow Page Load Time',
-                description=f'Page loads in {response_time:.2f} seconds (should be <3s)',
+                description=f'Page loads in {load_time} seconds (should be <3s)',
                 fix='Optimize images, enable caching, use CDN, minify CSS/JS',
                 impact_score=75
             ))
         
         # Check mobile viewport
-        if content and 'viewport' not in content.lower():
+        if not mobile.get('has_viewport'):
             issues.append(AuditIssue(
                 category='technical',
                 severity='medium',
@@ -73,16 +63,48 @@ class TechnicalSEOAnalyzer(BaseAnalyzer):
                 fix='Add <meta name="viewport" content="width=device-width, initial-scale=1">',
                 impact_score=60
             ))
-        
-        # Check robots meta
-        if content and 'noindex' in content.lower():
+        elif not mobile.get('is_responsive'):
             issues.append(AuditIssue(
                 category='technical',
-                severity='critical',
-                title='Page Blocked from Indexing',
-                description='Page has noindex directive',
-                fix='Remove noindex meta tag unless intentional',
-                impact_score=100
+                severity='medium',
+                title='Non-Responsive Viewport',
+                description='Viewport meta tag exists but may not be properly configured',
+                fix='Ensure viewport contains: width=device-width, initial-scale=1',
+                impact_score=55
+            ))
+        
+        # Check redirects
+        if technical.get('redirects', 0) > 2:
+            issues.append(AuditIssue(
+                category='technical',
+                severity='medium',
+                title='Multiple Redirects',
+                description=f'Page has {technical.get("redirects")} redirects',
+                fix='Reduce redirect chains to improve load speed',
+                impact_score=45
+            ))
+        
+        # Check canonical
+        if not technical.get('has_canonical'):
+            issues.append(AuditIssue(
+                category='technical',
+                severity='low',
+                title='Missing Canonical Tag',
+                description='No canonical URL specified',
+                fix='Add canonical tag to prevent duplicate content issues',
+                impact_score=35
+            ))
+        
+        # Check HTML size
+        if not performance.get('is_optimal_size'):
+            size_kb = performance.get('html_size_kb', 0)
+            issues.append(AuditIssue(
+                category='technical',
+                severity='low',
+                title='Large HTML Size',
+                description=f'HTML size is {size_kb}KB (optimal: <100KB)',
+                fix='Minify HTML, remove unnecessary code, optimize inline styles',
+                impact_score=30
             ))
         
         return issues
