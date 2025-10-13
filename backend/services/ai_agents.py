@@ -61,7 +61,7 @@ class SEOAuditAgent(BaseAIAgent):
             content = crawl_data.get('content', {})
             performance = crawl_data.get('performance', {})
             
-            context_info.append(f"\nReal Website Data:")
+            context_info.append("\nReal Website Data:")
             context_info.append(f"- Title: '{meta.get('title', 'N/A')}'")
             context_info.append(f"- Word Count: {content.get('word_count', 0)}")
             context_info.append(f"- Load Time: {performance.get('load_time_seconds', 0)}s")
