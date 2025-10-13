@@ -103,3 +103,102 @@ async def get_audit(audit_id: str, current_user: dict = Depends(get_current_user
         )
     
     return AuditResult(**audit)
+
+@router.post('/deep-analysis/{site_id}')
+async def deep_analysis(site_id: str, current_user: dict = Depends(get_current_user)):
+    """
+    Perform comprehensive AI-powered deep analysis
+    Includes: content quality, backlinks, domain authority, competitors, recommendations
+    """
+    db = await get_database()
+    
+    # Check credits (costs more for deep analysis)
+    deep_analysis_cost = 10  # 10 credits for deep analysis
+    if current_user['credits'] < deep_analysis_cost:
+        raise HTTPException(
+            status_code=status.HTTP_402_PAYMENT_REQUIRED,
+            detail='Insufficient credits. Deep analysis requires 10 credits.'
+        )
+    
+    # Get site
+    site = await db.sites.find_one({'site_id': site_id, 'user_id': current_user['user_id']}, {'_id': 0})
+    if not site:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail='Site not found'
+        )
+    
+    # Run deep analysis
+    crawler = AdvancedSEOCrawler()
+    analysis = await crawler.deep_analyze(site['url'])
+    
+    if not analysis.get('success'):
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Analysis failed: {analysis.get('error', 'Unknown error')}"
+        )
+    
+    # Save deep analysis result
+    analysis_id = str(uuid.uuid4())
+    analysis_doc = {
+        'analysis_id': analysis_id,
+        'site_id': site_id,
+        'user_id': current_user['user_id'],
+        'url': site['url'],
+        'analysis_type': 'deep',
+        'results': analysis,
+        'created_at': datetime.now(timezone.utc)
+    }
+    
+    await db.deep_analyses.insert_one(analysis_doc)
+    
+    # Update site with latest analysis
+    await db.sites.update_one(
+        {'site_id': site_id},
+        {'$set': {
+            'last_deep_analysis': datetime.now(timezone.utc),
+            'domain_authority': analysis.get('domain_authority', {}).get('domain_authority', 0)
+        }}
+    )
+    
+    # Deduct credits
+    await db.users.update_one(
+        {'user_id': current_user['user_id']},
+        {'$inc': {'credits': -deep_analysis_cost}}
+    )
+    
+    # Log transaction
+    await db.credit_transactions.insert_one({
+        'transaction_id': str(uuid.uuid4()),
+        'user_id': current_user['user_id'],
+        'amount': -deep_analysis_cost,
+        'type': 'deep_analysis',
+        'description': f'Deep SEO analysis for {site["url"]}',
+        'timestamp': datetime.now(timezone.utc).isoformat()
+    })
+    
+    return {
+        'analysis_id': analysis_id,
+        'message': 'Deep analysis completed successfully',
+        'credits_used': deep_analysis_cost,
+        'results': analysis
+    }
+
+@router.get('/deep-analysis/{site_id}/latest')
+async def get_latest_deep_analysis(site_id: str, current_user: dict = Depends(get_current_user)):
+    """Get the latest deep analysis for a site"""
+    db = await get_database()
+    
+    analysis = await db.deep_analyses.find_one(
+        {'site_id': site_id, 'user_id': current_user['user_id']},
+        {'_id': 0}
+    , sort=[('created_at', -1)])
+    
+    if not analysis:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail='No deep analysis found for this site'
+        )
+    
+    return analysis
+
