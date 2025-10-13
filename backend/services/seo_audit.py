@@ -365,39 +365,107 @@ class SEOAuditService:
         if not issues:
             return ['Excellent! No critical issues found. Continue monitoring your SEO performance.']
         
-        # Sort by severity and impact
-        critical = [i for i in issues if i.severity == 'critical']
-        high = [i for i in issues if i.severity == 'high']
-        
-        recommendations = []
-        
-        if critical:
-            recommendations.append(f'🔴 CRITICAL: Fix {len(critical)} critical issues immediately - these are blocking your SEO performance')
-        
-        if high:
-            recommendations.append(f'🟠 HIGH PRIORITY: Address {len(high)} high-priority issues this week')
-        
-        # Add specific data-driven recommendations
-        meta = crawl_data.get('meta', {})
-        content_data = crawl_data.get('content', {})
-        performance = crawl_data.get('performance', {})
-        
-        # Content recommendations
-        word_count = content_data.get('word_count', 0)
-        if word_count < 500:
-            recommendations.append(f'📝 Content: Expand content from {word_count} to at least 500 words for better rankings')
-        
-        # Performance recommendations
-        load_time = performance.get('load_time_seconds', 0)
-        if load_time > 2:
-            recommendations.append(f'⚡ Performance: Improve page speed from {load_time}s to under 2 seconds')
-        
-        # Meta recommendations
-        if not meta.get('has_description'):
-            recommendations.append('🎯 Meta: Add compelling meta description to improve click-through rate')
-        
-        # Add top 3 specific issues
-        for issue in sorted(issues, key=lambda x: x.impact_score, reverse=True)[:3]:
-            recommendations.append(f'✓ {issue.title}: {issue.fix}')
-        
-        return recommendations[:8]  # Limit to 8 recommendations
+        # Generate detailed AI-powered recommendations
+        try:
+            groq_client = AsyncGroq(api_key=settings.GROQ_API_KEY)
+            
+            # Prepare issue summary for AI
+            issues_summary = []
+            for issue in issues[:10]:  # Top 10 issues
+                issues_summary.append({
+                    'title': issue.title,
+                    'severity': issue.severity,
+                    'description': issue.description,
+                    'category': issue.category
+                })
+            
+            meta = crawl_data.get('meta', {})
+            content_data = crawl_data.get('content', {})
+            
+            prompt = f"""You are an SEO expert helping a beginner improve their website. Analyze these issues and provide DETAILED, STEP-BY-STEP recommendations that anyone can follow without technical knowledge.
+
+Website Issues Found:
+{issues_summary}
+
+Current Stats:
+- Title: {meta.get('title', 'Missing')}
+- Description: {meta.get('description', 'Missing')}
+- Word Count: {content_data.get('word_count', 0)}
+- H1 Tags: {content_data.get('h1_count', 0)}
+
+Provide 8-10 detailed recommendations in this EXACT format (each as a separate item):
+
+1. **[Category] Issue Name** - [Why it matters]
+   • Step 1: [Exact action to take]
+   • Step 2: [Next action]
+   • Step 3: [Final action]
+   📌 Example: [Show a concrete example]
+   ⏱️ Time needed: [5 mins/30 mins/1 hour]
+   🎯 Impact: [High/Medium/Low] - [What will improve]
+
+Make it BEGINNER-FRIENDLY with:
+- Simple language (avoid jargon)
+- Exact steps they can follow
+- Real examples they can copy
+- Why it matters for rankings
+- How long it takes
+
+Focus on the HIGHEST IMPACT issues first."""
+
+            response = await groq_client.chat.completions.create(
+                model=settings.GROQ_MODEL,
+                messages=[{
+                    "role": "system",
+                    "content": "You are a patient SEO teacher helping beginners improve their websites. Provide detailed, actionable steps."
+                }, {
+                    "role": "user",
+                    "content": prompt
+                }],
+                temperature=0.7,
+                max_tokens=2000
+            )
+            
+            ai_recommendations = response.choices[0].message.content
+            
+            # Return as single text block for better formatting
+            return [ai_recommendations]
+            
+        except Exception as e:
+            # Fallback to basic recommendations
+            recommendations = []
+            
+            # Sort by severity and impact
+            critical = [i for i in issues if i.severity == 'critical']
+            high = [i for i in issues if i.severity == 'high']
+            
+            if critical:
+                recommendations.append(f'🔴 CRITICAL: Fix {len(critical)} critical issues immediately - these are blocking your SEO performance')
+            
+            if high:
+                recommendations.append(f'🟠 HIGH PRIORITY: Address {len(high)} high-priority issues this week')
+            
+            # Add specific data-driven recommendations
+            meta = crawl_data.get('meta', {})
+            content_data = crawl_data.get('content', {})
+            performance = crawl_data.get('performance', {})
+            
+            # Content recommendations
+            word_count = content_data.get('word_count', 0)
+            if word_count < 500:
+                recommendations.append(f'📝 Content: Expand content from {word_count} to at least 500 words for better rankings')
+            
+            # Performance recommendations
+            load_time = performance.get('load_time_seconds', 0)
+            if load_time > 2:
+                recommendations.append(f'⚡ Performance: Improve page speed from {load_time}s to under 2 seconds')
+            
+            # Meta recommendations
+            if not meta.get('has_description'):
+                recommendations.append('🎯 Meta: Add compelling meta description to improve click-through rate')
+            
+            # Add top 3 specific issues
+            for issue in sorted(issues, key=lambda x: x.impact_score, reverse=True)[:3]:
+                recommendations.append(f'✓ {issue.title}: {issue.fix}')
+            
+            return recommendations[:8]  # Limit to 8 recommendations
+
