@@ -245,31 +245,47 @@ class OnPageSEOAnalyzer(BaseAnalyzer):
 class OffPageSEOAnalyzer(BaseAnalyzer):
     """Analyzes off-page SEO factors"""
     
-    async def analyze(self, url: str, content: str = None) -> List[AuditIssue]:
+    async def analyze(self, url: str, content: str = None, crawl_data: Dict = None) -> List[AuditIssue]:
         issues = []
         
-        # Simulated backlink analysis
-        issues.append(AuditIssue(
-            category='off-page',
-            severity='low',
-            title='Limited Backlink Profile',
-            description='Your site would benefit from more quality backlinks',
-            fix='Start link building campaign: guest posting, broken link building, PR outreach',
-            impact_score=65
-        ))
+        if not crawl_data:
+            return issues
         
-        # Check social signals (simulated)
-        if content:
-            has_og_tags = 'og:' in content.lower()
-            if not has_og_tags:
-                issues.append(AuditIssue(
-                    category='off-page',
-                    severity='medium',
-                    title='Missing Open Graph Tags',
-                    description='No Open Graph meta tags for social sharing',
-                    fix='Add og:title, og:description, og:image tags for better social media appearance',
-                    impact_score=45
-                ))
+        meta = crawl_data.get('meta', {})
+        structured_data = crawl_data.get('structured_data', {})
+        
+        # Check social signals (Open Graph)
+        if not meta.get('has_og_tags'):
+            issues.append(AuditIssue(
+                category='off-page',
+                severity='medium',
+                title='Missing Open Graph Tags',
+                description='No Open Graph meta tags for social sharing',
+                fix='Add og:title, og:description, og:image tags for better social media appearance',
+                impact_score=45
+            ))
+        
+        # Check Twitter Card
+        if not meta.get('has_twitter_card'):
+            issues.append(AuditIssue(
+                category='off-page',
+                severity='low',
+                title='Missing Twitter Card',
+                description='No Twitter Card meta tags found',
+                fix='Add Twitter Card tags for better Twitter sharing',
+                impact_score=30
+            ))
+        
+        # Check structured data
+        if not structured_data.get('has_json_ld') and not structured_data.get('has_microdata'):
+            issues.append(AuditIssue(
+                category='off-page',
+                severity='medium',
+                title='Missing Structured Data',
+                description='No Schema.org structured data found',
+                fix='Add JSON-LD structured data for better rich snippet appearance',
+                impact_score=50
+            ))
         
         return issues
 
