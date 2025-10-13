@@ -13,7 +13,7 @@
         "token_received": true,
         "user_email": "admin@rankforge.com"
       },
-      "timestamp": "2025-10-13T13:36:17.325979"
+      "timestamp": "2025-10-13T13:36:44.175833"
     },
     {
       "test": "SEO Settings GET",
@@ -23,7 +23,7 @@
         "title": "RankForge - Updated SEO Platform",
         "keywords_count": 5
       },
-      "timestamp": "2025-10-13T13:36:17.364298"
+      "timestamp": "2025-10-13T13:36:44.216664"
     },
     {
       "test": "SEO Settings UPDATE",
@@ -33,7 +33,7 @@
         "updated_title": "RankForge - Updated SEO Platform",
         "keywords_count": 5
       },
-      "timestamp": "2025-10-13T13:36:17.404435"
+      "timestamp": "2025-10-13T13:36:44.258028"
     },
     {
       "test": "System Stats",
@@ -45,7 +45,7 @@
         "total_audits": 2,
         "revenue": 0.0
       },
-      "timestamp": "2025-10-13T13:36:17.448804"
+      "timestamp": "2025-10-13T13:36:44.299293"
     },
     {
       "test": "Plans Management GET",
@@ -55,7 +55,7 @@
         "plans_count": 0,
         "plan_names": []
       },
-      "timestamp": "2025-10-13T13:36:17.494789"
+      "timestamp": "2025-10-13T13:36:44.341968"
     },
     {
       "test": "Users Management GET",
@@ -65,7 +65,7 @@
         "users_count": 1,
         "sample_user_email": "amis.joys@gmail.com"
       },
-      "timestamp": "2025-10-13T13:36:17.532459"
+      "timestamp": "2025-10-13T13:36:44.380120"
     },
     {
       "test": "Deep Analysis Endpoint",
@@ -74,8 +74,8 @@
       "response_data": {
         "status_code": 401
       },
-      "timestamp": "2025-10-13T13:36:17.570204"
+      "timestamp": "2025-10-13T13:36:44.417453"
     }
   ],
-  "timestamp": "2025-10-13T13:36:17.571157"
+  "timestamp": "2025-10-13T13:36:44.418347"
 }
