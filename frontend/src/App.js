@@ -16,6 +16,10 @@ import Keywords from './pages/Keywords';
 import AIAgents from './pages/AIAgents';
 import Billing from './pages/Billing';
 
+// Admin Pages
+import AdminLogin from './pages/Admin/AdminLogin';
+import AdminDashboard from './pages/Admin/AdminDashboard';
+
 const PrivateRoute = ({ children }) => {
   const { user, loading } = useAuth();
   
