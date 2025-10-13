@@ -6,6 +6,7 @@ from urllib.parse import urlparse
 import asyncio
 from core.config import get_settings
 from schemas.schemas import AuditIssue
+from services.crawler import WebCrawler
 
 settings = get_settings()
 
