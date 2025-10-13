@@ -189,13 +189,14 @@ class OnPageSEOAnalyzer(BaseAnalyzer):
         
         # Check H1 tag
         h1_count = content_data.get('h1_count', 0)
+        h1_text = content_data.get('h1_text', [])
         if h1_count == 0:
             issues.append(AuditIssue(
                 category='on-page',
                 severity='high',
-                title='Missing H1 Tag',
-                description='No H1 heading found on the page',
-                fix='Add a single, keyword-rich H1 tag at the top of your content',
+                title='Missing H1 Heading (Main Title)',
+                description='Your page doesn\'t have an H1 tag! Think of H1 as the main headline of your page - like a newspaper headline. It tells both visitors and Google what your page is about.',
+                fix='HOW TO ADD H1:\n1. Find the main heading/title at the top of your page\n2. In your editor, highlight that text\n3. Change the format from "Normal" or "Paragraph" to "Heading 1" or "H1"\n4. Make sure it includes your main keyword\nExample: "Professional Web Design Services in Boston"\n⏱️ Time: 2 minutes\n🎯 Impact: HIGH - Helps Google understand your page topic',
                 impact_score=75
             ))
         elif h1_count > 1:
