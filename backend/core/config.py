@@ -30,6 +30,10 @@ class Settings(BaseSettings):
     # CORS
     CORS_ORIGINS: str = os.getenv('CORS_ORIGINS', '*')
     
+    # Super Admin
+    SUPER_ADMIN_EMAIL: str = os.getenv('SUPER_ADMIN_EMAIL', 'admin@rankforge.com')
+    SUPER_ADMIN_PASSWORD: str = os.getenv('SUPER_ADMIN_PASSWORD', 'RankForge@Admin2025!Secure')
+    
     class Config:
         env_file = '.env'
 
