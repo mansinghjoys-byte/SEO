@@ -157,14 +157,15 @@ class OnPageSEOAnalyzer(BaseAnalyzer):
             ))
         
         # Check meta description
+        description = meta.get('description', '')
         description_length = meta.get('description_length', 0)
         if not meta.get('has_description'):
             issues.append(AuditIssue(
                 category='on-page',
                 severity='high',
-                title='Missing Meta Description',
-                description='No meta description found',
-                fix='Add compelling meta description (150-160 characters)',
+                title='Missing Meta Description (Important!)',
+                description='Your page doesn\'t have a meta description! This is the gray text that appears under your title in Google search results. It\'s your chance to convince people to click on your link.',
+                fix='HOW TO ADD:\n1. Go to your page\'s SEO settings\n2. Find "Meta Description" field\n3. Write 150-160 characters describing what\'s on the page\nExample: "Discover handmade organic soaps made with natural ingredients. Free shipping on orders over $30. Perfect for sensitive skin."\n⏱️ Time: 5 minutes\n🎯 Impact: HIGH - Improves click-through rate by 30%!',
                 impact_score=70
             ))
         elif description_length < 120:
@@ -172,8 +173,8 @@ class OnPageSEOAnalyzer(BaseAnalyzer):
                 category='on-page',
                 severity='low',
                 title='Meta Description Too Short',
-                description=f'Description is {description_length} characters (optimal: 150-160)',
-                fix='Expand description to provide more context',
+                description=f'Your description is only {description_length} characters. You have space for 150-160 characters - use it! The more compelling your description, the more people will click.',
+                fix=f'Current: "{description}"\nMake it longer by adding:\n• Key benefits\n• What makes you special\n• Call to action\n⏱️ Time: 5 minutes',
                 impact_score=30
             ))
         elif description_length > 160:
@@ -181,8 +182,8 @@ class OnPageSEOAnalyzer(BaseAnalyzer):
                 category='on-page',
                 severity='low',
                 title='Meta Description Too Long',
-                description=f'Description is {description_length} characters (optimal: 150-160)',
-                fix='Shorten description to prevent truncation',
+                description=f'Your description is {description_length} characters. Google will cut it off after 160 characters, so people won\'t see your full message.',
+                fix='Shorten your description to 150-160 characters by removing less important words. Keep the most compelling parts!\n⏱️ Time: 5 minutes',
                 impact_score=30
             ))
         
