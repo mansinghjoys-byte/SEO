@@ -117,6 +117,10 @@ function AppRoutes() {
             </PrivateRoute>
           }
         />
+        
+        {/* Admin Routes */}
+        <Route path="/admin/login" element={<AdminLogin />} />
+        <Route path="/admin/dashboard" element={<AdminDashboard />} />
       </Routes>
       <Toaster position="top-right" />
     </BrowserRouter>
