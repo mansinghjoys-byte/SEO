@@ -417,42 +417,30 @@ class AdminAPITester:
         print("=" * 60)
         
         # Test sequence based on review request priorities
-        tests_passed = 0
-        total_tests = 0
+        test_results = []
         
         # 1. Admin Login (Critical)
-        if self.test_admin_login():
-            tests_passed += 1
-        total_tests += 1
+        test_results.append(self.test_admin_login())
         
         # 2. SEO Settings (Critical)
-        if self.test_seo_settings_get():
-            tests_passed += 1
-        total_tests += 1
-        
-        if self.test_seo_settings_update():
-            tests_passed += 1
-        total_tests += 1
+        test_results.append(self.test_seo_settings_get())
+        test_results.append(self.test_seo_settings_update())
         
         # 3. System Stats (Critical)
-        if self.test_system_stats():
-            tests_passed += 1
-        total_tests += 1
+        test_results.append(self.test_system_stats())
         
         # 4. Plans Management (If time permits)
-        if self.test_plans_management():
-            tests_passed += 1
-        total_tests += 1
+        test_results.append(self.test_plans_management())
         
         # 5. Users Management (If time permits)
-        if self.test_users_management():
-            tests_passed += 1
-        total_tests += 1
+        test_results.append(self.test_users_management())
         
         # 6. Deep Analysis Endpoint (Additional)
-        if self.test_deep_analysis_endpoint():
-            tests_passed += 1
-        total_tests += 1
+        test_results.append(self.test_deep_analysis_endpoint())
+        
+        # Calculate results
+        tests_passed = sum(1 for result in test_results if result)
+        total_tests = len(test_results)
         
         # Summary
         print("\n" + "=" * 60)
