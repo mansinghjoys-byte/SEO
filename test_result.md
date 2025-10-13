@@ -151,6 +151,9 @@ backend:
       - working: true
         agent: "main"
         comment: "Full CRUD operations for pricing plans. Endpoints: GET all plans, POST create, GET by ID, PUT update, DELETE. Includes features, pricing, credits, and limits."
+      - working: true
+        agent: "testing"
+        comment: "✅ TESTED: Plans management working correctly. GET /api/admin/plans returns empty array (no plans created yet). Endpoint structure and authentication working properly. Ready for plan creation via admin UI."
 
   - task: "User Management System"
     implemented: true
