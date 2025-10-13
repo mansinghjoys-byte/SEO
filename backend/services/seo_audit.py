@@ -132,9 +132,9 @@ class OnPageSEOAnalyzer(BaseAnalyzer):
             issues.append(AuditIssue(
                 category='on-page',
                 severity='critical',
-                title='Missing Title Tag',
-                description='No title tag found on the page',
-                fix='Add a unique, descriptive title tag (50-60 characters)',
+                title='Missing Title Tag (Critical!)',
+                description='Your page doesn\'t have a title tag! This is the blue clickable link people see in Google search results. Without it, Google won\'t know what your page is about.',
+                fix='HOW TO FIX:\n1. Open your website editor\n2. Find the "SEO settings" or "Page settings"\n3. Add a title describing your page in 50-60 characters\nExample: "Best Pizza in NYC | Joe\'s Pizzeria"\n⏱️ Time: 2 minutes\n🎯 Impact: CRITICAL - This is the #1 thing Google looks at!',
                 impact_score=100
             ))
         elif title_length < 30:
@@ -142,8 +142,8 @@ class OnPageSEOAnalyzer(BaseAnalyzer):
                 category='on-page',
                 severity='medium',
                 title='Title Tag Too Short',
-                description=f'Title is only {title_length} characters (recommended: 50-60)',
-                fix='Expand title to include more descriptive keywords',
+                description=f'Your title is only {title_length} characters. Google prefers titles between 50-60 characters because they give more information to searchers.',
+                fix=f'Current title: "{title}"\nMake it longer by adding:\n• Your main keyword\n• What makes you unique\n• Your location (if local business)\nExample: "Handmade Organic Soap | Natural Skincare | Portland"\n⏱️ Time: 5 minutes',
                 impact_score=50
             ))
         elif title_length > 60:
@@ -151,8 +151,8 @@ class OnPageSEOAnalyzer(BaseAnalyzer):
                 category='on-page',
                 severity='medium',
                 title='Title Tag Too Long',
-                description=f'Title is {title_length} characters (recommended: 50-60)',
-                fix='Shorten title to avoid truncation in search results',
+                description=f'Your title is {title_length} characters. Google will cut it off after 60 characters, so people won\'t see the full title in search results.',
+                fix=f'Current title: "{title}"\nShorten it by:\n• Removing unnecessary words\n• Keeping only the most important keywords\n• Aim for 50-60 characters\n⏱️ Time: 5 minutes',
                 impact_score=50
             ))
         
