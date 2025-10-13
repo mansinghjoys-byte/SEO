@@ -49,9 +49,9 @@ class TechnicalSEOAnalyzer(BaseAnalyzer):
             issues.append(AuditIssue(
                 category='technical',
                 severity='high',
-                title='Slow Page Load Time',
-                description=f'Page loads in {load_time} seconds (should be <3s)',
-                fix='Optimize images, enable caching, use CDN, minify CSS/JS',
+                title='Slow Page Loading Speed',
+                description=f'Your page takes {load_time:.1f} seconds to load. Visitors expect pages to load in under 3 seconds - many will leave if it\'s slower! Google also ranks faster sites higher.',
+                fix='STEPS TO FIX:\n1. Compress your images (use tinypng.com - it\'s free!)\n2. Enable "caching" in your website settings (ask your hosting provider)\n3. Use a CDN service like Cloudflare (free plan available)\n4. Remove unused plugins or scripts\nExpected time: 30-60 minutes. Impact: BIG improvement in rankings!',
                 impact_score=75
             ))
         
