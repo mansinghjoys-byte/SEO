@@ -112,20 +112,21 @@ class TechnicalSEOAnalyzer(BaseAnalyzer):
 class OnPageSEOAnalyzer(BaseAnalyzer):
     """Analyzes on-page SEO elements"""
     
-    async def analyze(self, url: str, content: str = None) -> List[AuditIssue]:
+    async def analyze(self, url: str, content: str = None, crawl_data: Dict = None) -> List[AuditIssue]:
         issues = []
         
-        if not content:
-            try:
-                async with httpx.AsyncClient(timeout=10.0) as client:
-                    response = await client.get(url)
-                    content = response.text
-            except:
-                return issues
+        if not crawl_data:
+            return issues
+        
+        meta = crawl_data.get('meta', {})
+        content_data = crawl_data.get('content', {})
+        images = crawl_data.get('images', {})
         
         # Check title tag
-        title_match = re.search(r'<title[^>]*>(.*?)</title>', content, re.IGNORECASE)
-        if not title_match:
+        title = meta.get('title', '')
+        title_length = meta.get('title_length', 0)
+        
+        if not meta.get('has_title'):
             issues.append(AuditIssue(
                 category='on-page',
                 severity='critical',
@@ -134,30 +135,28 @@ class OnPageSEOAnalyzer(BaseAnalyzer):
                 fix='Add a unique, descriptive title tag (50-60 characters)',
                 impact_score=100
             ))
-        elif title_match:
-            title = title_match.group(1)
-            if len(title) < 30:
-                issues.append(AuditIssue(
-                    category='on-page',
-                    severity='medium',
-                    title='Title Tag Too Short',
-                    description=f'Title is only {len(title)} characters (recommended: 50-60)',
-                    fix='Expand title to include more descriptive keywords',
-                    impact_score=50
-                ))
-            elif len(title) > 60:
-                issues.append(AuditIssue(
-                    category='on-page',
-                    severity='medium',
-                    title='Title Tag Too Long',
-                    description=f'Title is {len(title)} characters (recommended: 50-60)',
-                    fix='Shorten title to avoid truncation in search results',
-                    impact_score=50
-                ))
+        elif title_length < 30:
+            issues.append(AuditIssue(
+                category='on-page',
+                severity='medium',
+                title='Title Tag Too Short',
+                description=f'Title is only {title_length} characters (recommended: 50-60)',
+                fix='Expand title to include more descriptive keywords',
+                impact_score=50
+            ))
+        elif title_length > 60:
+            issues.append(AuditIssue(
+                category='on-page',
+                severity='medium',
+                title='Title Tag Too Long',
+                description=f'Title is {title_length} characters (recommended: 50-60)',
+                fix='Shorten title to avoid truncation in search results',
+                impact_score=50
+            ))
         
         # Check meta description
-        meta_desc = re.search(r'<meta[^>]*name=["\']description["\'][^>]*content=["\']([^"\'>]*)["\']', content, re.IGNORECASE)
-        if not meta_desc:
+        description_length = meta.get('description_length', 0)
+        if not meta.get('has_description'):
             issues.append(AuditIssue(
                 category='on-page',
                 severity='high',
@@ -166,10 +165,28 @@ class OnPageSEOAnalyzer(BaseAnalyzer):
                 fix='Add compelling meta description (150-160 characters)',
                 impact_score=70
             ))
+        elif description_length < 120:
+            issues.append(AuditIssue(
+                category='on-page',
+                severity='low',
+                title='Meta Description Too Short',
+                description=f'Description is {description_length} characters (optimal: 150-160)',
+                fix='Expand description to provide more context',
+                impact_score=30
+            ))
+        elif description_length > 160:
+            issues.append(AuditIssue(
+                category='on-page',
+                severity='low',
+                title='Meta Description Too Long',
+                description=f'Description is {description_length} characters (optimal: 150-160)',
+                fix='Shorten description to prevent truncation',
+                impact_score=30
+            ))
         
         # Check H1 tag
-        h1_matches = re.findall(r'<h1[^>]*>(.*?)</h1>', content, re.IGNORECASE)
-        if not h1_matches:
+        h1_count = content_data.get('h1_count', 0)
+        if h1_count == 0:
             issues.append(AuditIssue(
                 category='on-page',
                 severity='high',
@@ -178,32 +195,41 @@ class OnPageSEOAnalyzer(BaseAnalyzer):
                 fix='Add a single, keyword-rich H1 tag at the top of your content',
                 impact_score=75
             ))
-        elif len(h1_matches) > 1:
+        elif h1_count > 1:
             issues.append(AuditIssue(
                 category='on-page',
                 severity='medium',
                 title='Multiple H1 Tags',
-                description=f'Found {len(h1_matches)} H1 tags (should have only 1)',
+                description=f'Found {h1_count} H1 tags (should have only 1)',
                 fix='Use only one H1 tag per page for main heading',
                 impact_score=40
             ))
         
+        # Check heading structure
+        if not content_data.get('has_heading_structure'):
+            issues.append(AuditIssue(
+                category='on-page',
+                severity='low',
+                title='Weak Heading Structure',
+                description='Page lacks proper heading hierarchy',
+                fix='Implement logical heading structure (H1 > H2 > H3)',
+                impact_score=35
+            ))
+        
         # Check images without alt tags
-        img_tags = re.findall(r'<img[^>]*>', content, re.IGNORECASE)
-        images_without_alt = [img for img in img_tags if 'alt=' not in img.lower()]
-        if images_without_alt:
+        images_without_alt = images.get('images_without_alt', 0)
+        if images_without_alt > 0:
             issues.append(AuditIssue(
                 category='on-page',
                 severity='medium',
                 title='Images Missing Alt Text',
-                description=f'{len(images_without_alt)} images found without alt attributes',
+                description=f'{images_without_alt} images found without alt attributes',
                 fix='Add descriptive alt text to all images for accessibility and SEO',
                 impact_score=55
             ))
         
         # Check content length
-        text_content = re.sub(r'<[^>]+>', '', content)
-        word_count = len(text_content.split())
+        word_count = content_data.get('word_count', 0)
         if word_count < 300:
             issues.append(AuditIssue(
                 category='on-page',
