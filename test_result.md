@@ -121,6 +121,9 @@ backend:
       - working: true
         agent: "main"
         comment: "Added super admin login endpoint with hardcoded credentials in .env. Admin token includes is_admin flag."
+      - working: true
+        agent: "testing"
+        comment: "✅ TESTED: Admin login working perfectly. Successfully authenticated with admin@rankforge.com and received valid JWT token with is_admin flag. All admin endpoints properly protected with admin middleware."
 
   - task: "SEO Settings Management (CRUD)"
     implemented: true
