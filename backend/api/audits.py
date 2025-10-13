@@ -4,6 +4,7 @@ from core.dependencies import get_current_user
 from core.database import get_database
 from services.billing import CREDIT_COSTS
 from services.seo_audit import SEOAuditService
+from services.advanced_crawler import AdvancedSEOCrawler
 from datetime import datetime, timezone
 import uuid
 from typing import List
