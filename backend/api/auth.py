@@ -97,5 +97,3 @@ async def get_current_user_info(current_user: dict = Depends(get_current_user)):
         credits=current_user.get('credits', 0),
         plan=current_user.get('plan', 'free')
     )
-
-from core.dependencies import get_current_user
