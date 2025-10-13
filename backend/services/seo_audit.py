@@ -37,9 +37,9 @@ class TechnicalSEOAnalyzer(BaseAnalyzer):
             issues.append(AuditIssue(
                 category='technical',
                 severity='high',
-                title='Missing HTTPS',
-                description='Site is not using HTTPS encryption',
-                fix='Install SSL certificate and redirect HTTP to HTTPS',
+                title='Missing HTTPS Security',
+                description='Your website is not using HTTPS (the secure version of HTTP). This makes visitors see "Not Secure" in their browser, which can scare them away. Google also ranks HTTPS sites higher.',
+                fix='EASY FIX: Contact your web hosting company and ask them to "install an SSL certificate" (most offer it free). They can do this in 10 minutes. Once done, make sure all links use https:// instead of http://',
                 impact_score=80
             ))
         
