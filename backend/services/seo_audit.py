@@ -308,6 +308,7 @@ class SEOAuditService:
         
         if not crawl_data.get('success'):
             # Return error if crawl failed
+            error_msg = crawl_data.get('error', 'Unknown error')
             return {
                 'seo_score': 0,
                 'technical_score': 0,
@@ -317,7 +318,7 @@ class SEOAuditService:
                     category='technical',
                     severity='critical',
                     title='Site Unreachable',
-                    description=f'Unable to crawl site: {crawl_data.get(\"error\", \"Unknown error\")}',
+                    description=f'Unable to crawl site: {error_msg}',
                     fix='Check if the site is online and accessible. Ensure URL is correct.',
                     impact_score=100
                 )],
