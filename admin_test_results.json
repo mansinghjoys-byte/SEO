@@ -13,17 +13,17 @@
         "token_received": true,
         "user_email": "admin@rankforge.com"
       },
-      "timestamp": "2025-10-13T13:35:57.412336"
+      "timestamp": "2025-10-13T13:36:10.943153"
     },
     {
       "test": "SEO Settings GET",
       "success": true,
-      "message": "Retrieved SEO settings with title: 'RankForge - AI-Powered SEO Platform'",
+      "message": "Retrieved SEO settings with title: 'RankForge - Updated SEO Platform'",
       "response_data": {
-        "title": "RankForge - AI-Powered SEO Platform",
-        "keywords_count": 4
+        "title": "RankForge - Updated SEO Platform",
+        "keywords_count": 5
       },
-      "timestamp": "2025-10-13T13:35:57.485198"
+      "timestamp": "2025-10-13T13:36:10.983449"
     },
     {
       "test": "SEO Settings UPDATE",
@@ -33,7 +33,7 @@
         "updated_title": "RankForge - Updated SEO Platform",
         "keywords_count": 5
       },
-      "timestamp": "2025-10-13T13:35:57.531194"
+      "timestamp": "2025-10-13T13:36:11.024382"
     },
     {
       "test": "System Stats",
@@ -45,7 +45,7 @@
         "total_audits": 2,
         "revenue": 0.0
       },
-      "timestamp": "2025-10-13T13:35:57.577639"
+      "timestamp": "2025-10-13T13:36:11.070662"
     },
     {
       "test": "Plans Management GET",
@@ -55,7 +55,7 @@
         "plans_count": 0,
         "plan_names": []
       },
-      "timestamp": "2025-10-13T13:35:57.616919"
+      "timestamp": "2025-10-13T13:36:11.112656"
     },
     {
       "test": "Users Management GET",
@@ -65,7 +65,7 @@
         "users_count": 1,
         "sample_user_email": "amis.joys@gmail.com"
       },
-      "timestamp": "2025-10-13T13:35:57.658734"
+      "timestamp": "2025-10-13T13:36:11.153400"
     },
     {
       "test": "Deep Analysis Endpoint",
@@ -74,8 +74,8 @@
       "response_data": {
         "status_code": 401
       },
-      "timestamp": "2025-10-13T13:35:57.735695"
+      "timestamp": "2025-10-13T13:36:11.194876"
     }
   ],
-  "timestamp": "2025-10-13T13:35:57.736643"
+  "timestamp": "2025-10-13T13:36:11.195803"
 }
