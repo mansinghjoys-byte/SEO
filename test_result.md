@@ -166,6 +166,9 @@ backend:
       - working: true
         agent: "main"
         comment: "Admin can view all users with stats, update user credits (add/subtract/set), change user plans, and delete users with all their data."
+      - working: true
+        agent: "testing"
+        comment: "✅ TESTED: User management working perfectly. GET /api/admin/users returns 1 registered user (amis.joys@gmail.com) with proper structure including user_id, email, full_name, credits, plan, and stats. All required fields present and properly formatted."
 
   - task: "System Monitoring & Stats"
     implemented: true
