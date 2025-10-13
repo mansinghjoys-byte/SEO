@@ -7,6 +7,8 @@ import asyncio
 from core.config import get_settings
 from schemas.schemas import AuditIssue
 from services.crawler import WebCrawler
+from services.advanced_crawler import AdvancedSEOCrawler
+from groq import AsyncGroq
 
 settings = get_settings()
 
