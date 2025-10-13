@@ -46,6 +46,7 @@ async def create_audit(audit_data: AuditCreate, current_user: dict = Depends(get
         'offpage_score': result['offpage_score'],
         'issues': [issue.dict() for issue in result['issues']],
         'recommendations': result['recommendations'],
+        'crawl_data': result.get('crawl_data', {}),  # Store crawl data
         'status': 'completed',
         'created_at': datetime.now(timezone.utc).isoformat()
     }
