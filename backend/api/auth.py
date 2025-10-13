@@ -3,6 +3,7 @@ from schemas.schemas import UserRegister, UserLogin, TokenResponse, UserResponse
 from core.security import hash_password, verify_password, create_access_token
 from core.database import get_database
 from core.config import get_settings
+from core.dependencies import get_current_user
 from datetime import datetime, timezone
 import uuid
 
