@@ -167,3 +167,106 @@ class ContentOptimizationResult(BaseModel):
     optimized_title: str
     optimized_meta: str
     optimized_content: str
+
+# Admin Schemas
+class AdminLogin(BaseModel):
+    email: EmailStr
+    password: str
+
+class SEOSettings(BaseModel):
+    model_config = ConfigDict(extra='ignore')
+    setting_id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    title: str = "RankForge - AI-Powered SEO Platform"
+    description: str = "Advanced AI-powered SEO analysis and optimization platform"
+    keywords: List[str] = ["SEO", "AI", "website optimization", "search engine"]
+    og_title: Optional[str] = None
+    og_description: Optional[str] = None
+    og_image: Optional[str] = None
+    twitter_card: str = "summary_large_image"
+    twitter_title: Optional[str] = None
+    twitter_description: Optional[str] = None
+    twitter_image: Optional[str] = None
+    canonical_url: str = "https://rankforge.com"
+    json_ld: Dict[str, Any] = {}
+    robots: str = "index, follow"
+    updated_at: datetime = Field(default_factory=lambda: datetime.now())
+
+class SEOSettingsUpdate(BaseModel):
+    title: Optional[str] = None
+    description: Optional[str] = None
+    keywords: Optional[List[str]] = None
+    og_title: Optional[str] = None
+    og_description: Optional[str] = None
+    og_image: Optional[str] = None
+    twitter_card: Optional[str] = None
+    twitter_title: Optional[str] = None
+    twitter_description: Optional[str] = None
+    twitter_image: Optional[str] = None
+    canonical_url: Optional[str] = None
+    json_ld: Optional[Dict[str, Any]] = None
+    robots: Optional[str] = None
+
+class PricingPlan(BaseModel):
+    model_config = ConfigDict(extra='ignore')
+    plan_id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    name: str
+    price: float
+    credits: int
+    features: List[str]
+    max_sites: int
+    max_keywords: int
+    audit_frequency: str  # monthly, weekly, daily
+    ai_agents: bool = False
+    priority_support: bool = False
+    active: bool = True
+    created_at: datetime = Field(default_factory=lambda: datetime.now())
+    updated_at: datetime = Field(default_factory=lambda: datetime.now())
+
+class PricingPlanCreate(BaseModel):
+    name: str
+    price: float
+    credits: int
+    features: List[str]
+    max_sites: int
+    max_keywords: int
+    audit_frequency: str
+    ai_agents: bool = False
+    priority_support: bool = False
+
+class PricingPlanUpdate(BaseModel):
+    name: Optional[str] = None
+    price: Optional[float] = None
+    credits: Optional[int] = None
+    features: Optional[List[str]] = None
+    max_sites: Optional[int] = None
+    max_keywords: Optional[int] = None
+    audit_frequency: Optional[str] = None
+    ai_agents: Optional[bool] = None
+    priority_support: Optional[bool] = None
+    active: Optional[bool] = None
+
+class UserManagement(BaseModel):
+    user_id: str
+    email: str
+    full_name: str
+    credits: int
+    plan: str
+    created_at: datetime
+    total_sites: int = 0
+    total_audits: int = 0
+    last_login: Optional[datetime] = None
+
+class UserCreditsUpdate(BaseModel):
+    credits: int
+    action: str  # add, subtract, set
+
+class SystemStats(BaseModel):
+    total_users: int
+    total_sites: int
+    total_audits: int
+    total_keywords: int
+    active_agents: int
+    credits_consumed: int
+    revenue: float
+    new_users_today: int
+    audits_today: int
