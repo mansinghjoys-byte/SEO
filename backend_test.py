@@ -81,7 +81,7 @@ class LLMVisibilityTester:
                 else:
                     print(f"   Registration failed: {reg_response.status_code} - {reg_response.text}")
         
-        try:
+            # Process login response
             
             if response.status_code == 200:
                 data = response.json()
