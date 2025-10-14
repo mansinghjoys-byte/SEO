@@ -447,7 +447,7 @@ async def find_community_opportunities(
     )
     
     await db.credit_transactions.insert_one({
-        'user_id': current_user['user_id']},
+        'user_id': current_user['user_id'],
         'amount': -cost,
         'type': 'community_opportunities',
         'description': 'Community opportunities search',
