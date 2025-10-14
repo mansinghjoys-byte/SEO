@@ -499,7 +499,7 @@ async def generate_community_response(
     )
     
     await db.credit_transactions.insert_one({
-        'user_id': current_user['user_id']},
+        'user_id': current_user['user_id'],
         'amount': -cost,
         'type': 'response_generation',
         'description': 'Community response generated',
