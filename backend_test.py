@@ -44,6 +44,7 @@ class LLMVisibilityTester:
         """Test user login endpoint"""
         print("\n🔐 Testing User Login...")
         
+        # First try to register the user if login fails
         try:
             response = requests.post(
                 f"{self.base_url}/auth/login",
@@ -51,6 +52,36 @@ class LLMVisibilityTester:
                 headers=self.headers,
                 timeout=30
             )
+            
+            if response.status_code == 401:
+                # Try to register first
+                print("   Login failed, attempting registration...")
+                register_data = {
+                    "email": USER_CREDENTIALS["email"],
+                    "password": USER_CREDENTIALS["password"],
+                    "full_name": "Test User for LLM Visibility"
+                }
+                
+                reg_response = requests.post(
+                    f"{self.base_url}/auth/register",
+                    json=register_data,
+                    headers=self.headers,
+                    timeout=30
+                )
+                
+                if reg_response.status_code == 200:
+                    print("   Registration successful, now logging in...")
+                    # Try login again
+                    response = requests.post(
+                        f"{self.base_url}/auth/login",
+                        json=USER_CREDENTIALS,
+                        headers=self.headers,
+                        timeout=30
+                    )
+                else:
+                    print(f"   Registration failed: {reg_response.status_code} - {reg_response.text}")
+        
+        try:
             
             if response.status_code == 200:
                 data = response.json()
