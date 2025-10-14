@@ -353,11 +353,15 @@ metadata:
 
 test_plan:
   current_focus:
-    - "Test super admin login"
-    - "Test SEO settings CRUD"
-    - "Test plans management"
-    - "Test user management"
-    - "Test deep analysis endpoint"
+    - "Test Redis installation and connectivity"
+    - "Test LLM visibility check API"
+    - "Test recommendation generation API"
+    - "Test content intelligence APIs (gap analysis, generation, schema)"
+    - "Test community hub APIs"
+    - "Test backlink analysis API"
+    - "Test learning center endpoints"
+    - "Verify credit costs deduction"
+    - "Validate business logic for pricing plans"
   stuck_tasks: []
   test_all: true
   test_priority: "high_first"
