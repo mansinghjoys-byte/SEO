@@ -316,17 +316,26 @@ class LLMVisibilityTester:
             if response.status_code == 200:
                 data = response.json()
                 
-                if data.get("success") and "recommendations" in data:
-                    recommendations = data.get("recommendations", [])
-                    categories = data.get("categories", {})
+                if data.get("success") and "total_recommendations" in data:
+                    total_recs = data.get("total_recommendations", 0)
+                    
+                    # Count recommendations in each category
+                    categories = []
+                    if data.get("quick_wins"): categories.append("quick_wins")
+                    if data.get("high_priority"): categories.append("high_priority")
+                    if data.get("medium_priority"): categories.append("medium_priority")
+                    if data.get("long_term"): categories.append("long_term")
+                    if data.get("content_strategy"): categories.append("content_strategy")
+                    if data.get("technical_seo"): categories.append("technical_seo")
+                    if data.get("link_building"): categories.append("link_building")
                     
                     self.log_test(
                         "Recommendations Generation", 
                         True, 
-                        f"Generated {len(recommendations)} recommendations across {len(categories)} categories",
+                        f"Generated {total_recs} recommendations across {len(categories)} categories",
                         {
-                            "recommendations_count": len(recommendations),
-                            "categories": list(categories.keys()) if categories else []
+                            "total_recommendations": total_recs,
+                            "categories": categories
                         }
                     )
                     return True
