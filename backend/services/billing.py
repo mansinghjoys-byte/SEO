@@ -148,10 +148,22 @@ PRICING_PLANS = {
             '5 websites',
             'Daily site audits',
             '100 keywords tracked',
+            'LLM visibility scorecard',
             'Competitor tracking (3)',
+            'AI content generation (10/month)',
+            'Content enhancement tools',
+            'Community engagement hub',
+            'Backlink strategy tools',
             'AI SEO agents',
-            'White-label reports'
-        ]
+            'White-label reports',
+            'Weekly analytics reports'
+        ],
+        'limits': {
+            'sites': 5,
+            'audits_per_month': 30,
+            'llm_checks': 12,
+            'content_generation': 10
+        }
     },
     'professional': {
         'name': 'Professional',
