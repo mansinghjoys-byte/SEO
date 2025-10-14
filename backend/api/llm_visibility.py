@@ -599,7 +599,7 @@ async def generate_outreach_email(
     )
     
     await db.credit_transactions.insert_one({
-        'user_id': current_user['user_id']},
+        'user_id': current_user['user_id'],
         'amount': -cost,
         'type': 'outreach_email',
         'description': 'Outreach email generated',
