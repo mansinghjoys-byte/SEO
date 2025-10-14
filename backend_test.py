@@ -95,6 +95,9 @@ class LLMVisibilityTester:
                     self.user_id = user_info.get("user_id")
                     self.initial_credits = user_info.get("credits", 0)
                     
+                    print(f"   Token set: {self.user_token[:20]}...")
+                    print(f"   Headers now: {self.headers}")
+                    
                     self.log_test(
                         "User Login", 
                         True, 
