@@ -33,6 +33,7 @@ app.include_router(keywords.router, prefix='/api')
 app.include_router(agents.router, prefix='/api')
 app.include_router(billing.router, prefix='/api')
 app.include_router(admin.router, prefix='/api')
+app.include_router(llm_visibility.router, prefix='/api')
 
 # Root endpoint
 @app.get('/api/')
