@@ -12,7 +12,7 @@
       "response_data": {
         "response": "PONG"
       },
-      "timestamp": "2025-10-14T07:31:27.610226"
+      "timestamp": "2025-10-14T07:32:15.930741"
     },
     {
       "test": "User Login",
@@ -23,15 +23,15 @@
         "user_id": "4067c535-cb9c-49a2-b675-58514a16afd3",
         "credits": 20
       },
-      "timestamp": "2025-10-14T07:31:27.889732"
+      "timestamp": "2025-10-14T07:32:16.204916"
     },
     {
       "test": "Get Sites",
       "success": false,
       "message": "HTTP 403: {\"detail\":\"Not authenticated\"}",
       "response_data": null,
-      "timestamp": "2025-10-14T07:31:27.986180"
+      "timestamp": "2025-10-14T07:32:16.253542"
     }
   ],
-  "timestamp": "2025-10-14T07:31:27.986908"
+  "timestamp": "2025-10-14T07:32:16.254224"
 }
