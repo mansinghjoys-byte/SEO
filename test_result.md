@@ -103,11 +103,24 @@
 #====================================================================================================
 
 user_problem_statement: |
-  Add Super admin to manage SEO for the App (tags, title, JSON-LD, canonical tags, etc.),
-  manage plans, monitor complete system with proper CRUD. 
-  Enhanced crawlers and agents to give detailed analysis with all possible improvements 
-  for added sites to improve Google/Bing rankings. Include LLM-powered crawlers to visit 
-  content and recommend improvements. Make app production-ready and fully mobile responsive.
+  Sync up with the Codebase and implement Best Coding Practices and SOLID principles for code manageability 
+  and code serviceability with Redis and RQ to handle upto 1000+ users async with their tasks. 
+  Add features and functionality from the PRD (Product Requirements Document):
+  
+  **8 Core Modules Implemented:**
+  1. Intelligent Website Crawler & Analyzer - Multi-layer crawling with AI analysis
+  2. LLM Visibility Scorecard - Test visibility across ChatGPT, Claude, Gemini, Perplexity
+  3. Actionable Recommendation Engine - Prioritized step-by-step tasks
+  4. Content Intelligence Module - Gap analysis, AI content generation, schema markup
+  5. Community Action Hub - Reddit, Quora, forum opportunities with AI response generation
+  6. Backlink Strategy Engine - Link gap analysis and outreach automation
+  7. Progress Tracking & Analytics - Visibility trends and ROI calculation
+  8. Learning Center & Support - Knowledge base, tutorials, AI assistant
+  
+  Keep strictly in mind that we are building a webapp with mobile responsiveness so that users get value 
+  and it's useful in real world for SEO and AEO where LLM recommends products and services.
+  
+  All features mapped to pricing plans with appropriate credit costs.
 
 backend:
   - task: "Super Admin Authentication System"
