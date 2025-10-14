@@ -165,6 +165,44 @@ class LLMVisibilityTester:
             
         return False
     
+    def create_test_site(self):
+        """Create a test site for testing"""
+        try:
+            site_data = {
+                "url": "https://example-seo-test.com",
+                "name": "Test Site for LLM Visibility"
+            }
+            
+            response = requests.post(
+                f"{self.base_url}/sites/",
+                json=site_data,
+                headers=self.headers,
+                timeout=30
+            )
+            
+            if response.status_code == 200:
+                site = response.json()
+                self.site_id = site["site_id"]
+                
+                self.log_test(
+                    "Create Test Site", 
+                    True, 
+                    f"Created test site: {site['url']}",
+                    {"site_id": self.site_id, "site_url": site["url"]}
+                )
+                return True
+            else:
+                self.log_test(
+                    "Create Test Site", 
+                    False, 
+                    f"HTTP {response.status_code}: {response.text}"
+                )
+                
+        except requests.exceptions.RequestException as e:
+            self.log_test("Create Test Site", False, f"Request failed: {str(e)}")
+            
+        return False
+    
     def test_redis_connectivity(self):
         """Test Redis connectivity"""
         print("\n🔴 Testing Redis Connectivity...")
