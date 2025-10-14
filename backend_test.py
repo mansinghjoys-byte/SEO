@@ -10,7 +10,7 @@ import sys
 from datetime import datetime
 
 # Configuration
-BACKEND_URL = "https://rank-booster.preview.emergentagent.com/api"
+BACKEND_URL = "https://optimizeai.preview.emergentagent.com/api"
 ADMIN_CREDENTIALS = {
     "email": "admin@rankforge.com",
     "password": "RankForge@Admin2025!Secure"
