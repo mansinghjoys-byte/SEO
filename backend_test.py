@@ -40,14 +40,14 @@ class LLMVisibilityTester:
             "timestamp": datetime.now().isoformat()
         })
         
-    def test_admin_login(self):
-        """Test admin login endpoint"""
-        print("\n🔐 Testing Admin Login...")
+    def test_user_login(self):
+        """Test user login endpoint"""
+        print("\n🔐 Testing User Login...")
         
         try:
             response = requests.post(
-                f"{self.base_url}/admin/login",
-                json=ADMIN_CREDENTIALS,
+                f"{self.base_url}/auth/login",
+                json=USER_CREDENTIALS,
                 headers=self.headers,
                 timeout=30
             )
@@ -57,41 +57,35 @@ class LLMVisibilityTester:
                 
                 # Validate response structure
                 if "access_token" in data and "user" in data:
-                    self.admin_token = data["access_token"]
-                    self.headers["Authorization"] = f"Bearer {self.admin_token}"
+                    self.user_token = data["access_token"]
+                    self.headers["Authorization"] = f"Bearer {self.user_token}"
                     
                     user_info = data["user"]
-                    expected_email = ADMIN_CREDENTIALS["email"]
+                    self.user_id = user_info.get("user_id")
+                    self.initial_credits = user_info.get("credits", 0)
                     
-                    if user_info.get("email") == expected_email:
-                        self.log_test(
-                            "Admin Login", 
-                            True, 
-                            f"Successfully logged in as {expected_email}",
-                            {"token_received": True, "user_email": user_info.get("email")}
-                        )
-                        return True
-                    else:
-                        self.log_test(
-                            "Admin Login", 
-                            False, 
-                            f"Email mismatch: expected {expected_email}, got {user_info.get('email')}"
-                        )
+                    self.log_test(
+                        "User Login", 
+                        True, 
+                        f"Successfully logged in as {user_info.get('email')} with {self.initial_credits} credits",
+                        {"token_received": True, "user_id": self.user_id, "credits": self.initial_credits}
+                    )
+                    return True
                 else:
                     self.log_test(
-                        "Admin Login", 
+                        "User Login", 
                         False, 
                         "Missing access_token or user in response"
                     )
             else:
                 self.log_test(
-                    "Admin Login", 
+                    "User Login", 
                     False, 
                     f"HTTP {response.status_code}: {response.text}"
                 )
                 
         except requests.exceptions.RequestException as e:
-            self.log_test("Admin Login", False, f"Request failed: {str(e)}")
+            self.log_test("User Login", False, f"Request failed: {str(e)}")
             
         return False
     
