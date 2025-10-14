@@ -96,7 +96,8 @@ class Keyword(BaseModel):
 # AI Agent Schemas
 class AgentCreate(BaseModel):
     name: str
-    purpose: str  # audit_assistant, keyword_researcher, content_optimizer
+    purpose: str  # audit_assistant, keyword_researcher, content_optimizer, llm_visibility_optimizer
+    website: Optional[str] = None  # Specific website URL for website-specific agents
     context: Optional[Dict[str, Any]] = None
 
 class Agent(BaseModel):
@@ -105,6 +106,8 @@ class Agent(BaseModel):
     user_id: str
     name: str
     purpose: str
+    website: Optional[str] = None
+    site_id: Optional[str] = None  # Linked site ID for context retrieval
     context: Dict[str, Any] = {}
     active: bool = True
     created_at: datetime = Field(default_factory=lambda: datetime.now())
