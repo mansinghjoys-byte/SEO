@@ -237,6 +237,166 @@ Focus on gaps and opportunities.
             'suggestions': suggestions
         }
 
+
+class LLMVisibilityAgent(BaseAIAgent):
+    """AI Agent specialized in LLM Visibility Optimization - Remembers website-specific context"""
+    
+    async def process_message(self, message: str) -> Dict[str, Any]:
+        # Get comprehensive website data from context
+        website_url = self.context.get('website_url', 'your website')
+        site_id = self.context.get('site_id')
+        
+        # Build comprehensive context from all available data
+        context_parts = [f"Website: {website_url}"]
+        
+        # Latest audit data
+        latest_audit = self.context.get('latest_audit', {})
+        if latest_audit:
+            context_parts.append(f"\nLatest SEO Score: {latest_audit.get('seo_score', 'N/A')}/100")
+            context_parts.append(f"Technical: {latest_audit.get('technical_score', 'N/A')}/100")
+            context_parts.append(f"On-Page: {latest_audit.get('onpage_score', 'N/A')}/100")
+            issues_count = len(latest_audit.get('issues', []))
+            context_parts.append(f"Issues Found: {issues_count}")
+        
+        # LLM Visibility data
+        visibility_data = self.context.get('llm_visibility', {})
+        if visibility_data:
+            context_parts.append(f"\n📊 LLM Visibility Score: {visibility_data.get('overall_score', 'N/A')}/100")
+            llm_breakdown = visibility_data.get('visibility_by_llm', {})
+            if llm_breakdown:
+                context_parts.append("LLM-specific scores:")
+                for llm_name, score in llm_breakdown.items():
+                    context_parts.append(f"  - {llm_name}: {score}/100")
+        
+        # Recommendations
+        recommendations = self.context.get('recommendations', {})
+        if recommendations:
+            total_recs = recommendations.get('total_recommendations', 0)
+            context_parts.append(f"\n💡 Generated Recommendations: {total_recs}")
+            high_priority = recommendations.get('high_priority', [])
+            if high_priority:
+                context_parts.append("Top priority actions:")
+                for i, rec in enumerate(high_priority[:3], 1):
+                    context_parts.append(f"  {i}. {rec.get('title', 'N/A')}")
+        
+        # Content gap analysis
+        content_gaps = self.context.get('content_gaps', {})
+        if content_gaps:
+            gaps = content_gaps.get('gaps', [])
+            if gaps:
+                context_parts.append(f"\n📝 Content Gaps Identified: {len(gaps)}")
+        
+        # Community opportunities
+        community_data = self.context.get('community_opportunities', {})
+        if community_data:
+            opps = community_data.get('opportunities', [])
+            if opps:
+                context_parts.append(f"\n👥 Community Opportunities: {len(opps)}")
+        
+        # Backlink data
+        backlink_data = self.context.get('backlink_analysis', {})
+        if backlink_data:
+            opportunities = backlink_data.get('opportunities', [])
+            if opportunities:
+                context_parts.append(f"\n🔗 Backlink Opportunities: {len(opportunities)}")
+        
+        # Historical data count
+        audit_count = self.context.get('total_audits', 0)
+        if audit_count:
+            context_parts.append(f"\n📊 Total Audits Performed: {audit_count}")
+        
+        context_summary = '\n'.join(context_parts)
+        
+        system_prompt = f"""
+You are an expert LLM Visibility Optimization specialist named {self.name}. 
+
+Your mission is to help improve the visibility and discoverability of websites in AI-powered search engines 
+like ChatGPT, Claude, Gemini, and Perplexity.
+
+WEBSITE-SPECIFIC CONTEXT (This is your memory):
+{context_summary}
+
+IMPORTANT: You REMEMBER all previous audits, analyses, and recommendations for this specific website.
+Use this historical context to provide continuity in your advice.
+
+Your expertise includes:
+- Analyzing LLM visibility scores and providing actionable improvements
+- Identifying content gaps that prevent AI recommendations
+- Optimizing content structure for LLM comprehension
+- Building authority signals that AI systems trust
+- Community engagement strategies for visibility
+- Schema markup and structured data optimization
+- Backlink strategies that improve LLM trust
+
+Always:
+1. Reference specific data from the context above
+2. Track progress over time (compare current vs. historical data)
+3. Provide step-by-step, actionable recommendations
+4. Prioritize high-impact, achievable improvements
+5. Explain WHY each recommendation matters for LLM visibility
+
+If no data is available yet, guide the user to run analyses first.
+"""
+        
+        messages = [
+            {'role': 'system', 'content': system_prompt},
+            *self.conversation_history[-10:],  # More history for better context
+            {'role': 'user', 'content': message}
+        ]
+        
+        response = await self.call_groq(messages)
+        
+        # Update conversation history
+        self.conversation_history.append({'role': 'user', 'content': message})
+        self.conversation_history.append({'role': 'assistant', 'content': response})
+        
+        # Generate smart suggestions based on available data
+        suggestions = await self._generate_smart_suggestions(message, response)
+        
+        return {
+            'response': response,
+            'suggestions': suggestions,
+            'context_loaded': True,
+            'website': website_url
+        }
+    
+    async def _generate_smart_suggestions(self, user_message: str, agent_response: str) -> List[str]:
+        """Generate context-aware follow-up suggestions"""
+        suggestions = []
+        
+        # Check what data we have and suggest next steps
+        if not self.context.get('llm_visibility'):
+            suggestions.append('🤖 Run LLM Visibility Check')
+        
+        if not self.context.get('recommendations'):
+            suggestions.append('💡 Generate Recommendations')
+        
+        if not self.context.get('content_gaps'):
+            suggestions.append('📝 Analyze Content Gaps')
+        
+        if not self.context.get('community_opportunities'):
+            suggestions.append('👥 Find Community Opportunities')
+        
+        if not self.context.get('backlink_analysis'):
+            suggestions.append('🔗 Analyze Backlink Strategy')
+        
+        # If we have visibility data, suggest improvements based on score
+        visibility = self.context.get('llm_visibility', {})
+        if visibility:
+            score = visibility.get('overall_score', 0)
+            if score < 50:
+                suggestions.append('🚀 Quick wins to boost visibility')
+            elif score < 75:
+                suggestions.append('📈 Medium-priority improvements')
+            else:
+                suggestions.append('🎯 Advanced optimization tactics')
+        
+        # Always offer to show progress
+        if self.context.get('total_audits', 0) > 1:
+            suggestions.append('📊 Show improvement progress')
+        
+        return suggestions[:4]  # Top 4 suggestions
+
 # Agent Factory (Dependency Inversion Principle)
 class AgentFactory:
     """Factory for creating appropriate agent instances"""
