@@ -174,10 +174,23 @@ PRICING_PLANS = {
             'Real-time monitoring',
             '500 keywords tracked',
             'Competitor tracking (5)',
+            'Unlimited LLM visibility checks',
+            'Unlimited AI content generation',
+            'Recommendation engine',
+            'Community opportunities (unlimited)',
+            'Backlink gap analysis',
+            'Outreach automation',
+            'Advanced analytics',
             'API access',
             'Link building tools',
             'Dedicated support'
-        ]
+        ],
+        'limits': {
+            'sites': 10,
+            'audits_per_month': 100,
+            'llm_checks': 999,
+            'content_generation': 999
+        }
     },
     'agency': {
         'name': 'Agency',
