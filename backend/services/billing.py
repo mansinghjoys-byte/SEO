@@ -225,11 +225,21 @@ PRICING_PLANS = {
             'Unlimited websites',
             'Custom crawl frequency',
             'Unlimited keywords',
+            'Advanced LLM visibility tracking',
             'Custom ML models',
+            'Dedicated infrastructure',
             'SSO integration',
             'White-label platform',
-            'Dedicated infrastructure'
-        ]
+            'API rate limits removed',
+            'Custom features development',
+            'Enterprise SLA'
+        ],
+        'limits': {
+            'sites': 9999,
+            'audits_per_month': 9999,
+            'llm_checks': 9999,
+            'content_generation': 9999
+        }
     }
 }
 
