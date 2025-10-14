@@ -180,10 +180,24 @@ PRICING_PLANS = {
 }
 
 CREDIT_COSTS = {
+    # Existing features
     'site_audit': 5,
     'keyword_research': 2,
     'content_optimization': 3,
     'competitor_analysis': 4,
     'rank_tracking': 1,
-    'ai_agent_chat': 1
+    'ai_agent_chat': 1,
+    
+    # New LLM Visibility Optimizer features
+    'deep_analysis': 10,
+    'llm_visibility_check': 8,
+    'content_gap_analysis': 6,
+    'content_generation': 4,
+    'content_enhancement': 3,
+    'schema_generation': 2,
+    'community_opportunities': 3,
+    'response_generation': 2,
+    'backlink_analysis': 5,
+    'outreach_email': 1,
+    'weekly_report': 2
 }
