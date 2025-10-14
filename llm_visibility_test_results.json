@@ -1,0 +1,26 @@
+{
+  "summary": {
+    "passed": 0,
+    "total": 1,
+    "success_rate": "0.0%"
+  },
+  "results": [
+    {
+      "test": "Redis Connectivity",
+      "success": true,
+      "message": "Redis is running and responding to ping",
+      "response_data": {
+        "response": "PONG"
+      },
+      "timestamp": "2025-10-14T07:29:58.237383"
+    },
+    {
+      "test": "User Login",
+      "success": false,
+      "message": "HTTP 401: {\"detail\":\"Invalid email or password\"}",
+      "response_data": null,
+      "timestamp": "2025-10-14T07:29:58.313940"
+    }
+  ],
+  "timestamp": "2025-10-14T07:29:58.314590"
+}
