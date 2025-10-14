@@ -1122,22 +1122,22 @@ class LLMVisibilityTester:
 
 def main():
     """Main test execution"""
-    tester = AdminAPITester()
+    tester = LLMVisibilityTester()
     passed, total, results = tester.run_all_tests()
     
     # Save detailed results
-    with open('/app/admin_test_results.json', 'w') as f:
+    with open('/app/llm_visibility_test_results.json', 'w') as f:
         json.dump({
             'summary': {
                 'passed': passed,
                 'total': total,
-                'success_rate': f"{(passed/total)*100:.1f}%"
+                'success_rate': f"{(passed/total)*100:.1f}%" if total > 0 else "0%"
             },
             'results': results,
             'timestamp': datetime.now().isoformat()
         }, f, indent=2)
     
-    print(f"\n📄 Detailed results saved to: /app/admin_test_results.json")
+    print(f"\n📄 Detailed results saved to: /app/llm_visibility_test_results.json")
     
     # Exit with appropriate code
     sys.exit(0 if passed == total else 1)
