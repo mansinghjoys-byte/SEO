@@ -1,8 +1,8 @@
 {
   "summary": {
-    "passed": 0,
-    "total": 1,
-    "success_rate": "0.0%"
+    "passed": 1,
+    "total": 2,
+    "success_rate": "50.0%"
   },
   "results": [
     {
@@ -12,15 +12,26 @@
       "response_data": {
         "response": "PONG"
       },
-      "timestamp": "2025-10-14T07:29:58.237383"
+      "timestamp": "2025-10-14T07:30:22.081008"
     },
     {
       "test": "User Login",
+      "success": true,
+      "message": "Successfully logged in as amis.joys@gmail.com with 20 credits",
+      "response_data": {
+        "token_received": true,
+        "user_id": "4067c535-cb9c-49a2-b675-58514a16afd3",
+        "credits": 20
+      },
+      "timestamp": "2025-10-14T07:30:22.706401"
+    },
+    {
+      "test": "Get Sites",
       "success": false,
-      "message": "HTTP 401: {\"detail\":\"Invalid email or password\"}",
+      "message": "HTTP 403: {\"detail\":\"Not authenticated\"}",
       "response_data": null,
-      "timestamp": "2025-10-14T07:29:58.313940"
+      "timestamp": "2025-10-14T07:30:22.796465"
     }
   ],
-  "timestamp": "2025-10-14T07:29:58.314590"
+  "timestamp": "2025-10-14T07:30:22.797190"
 }
