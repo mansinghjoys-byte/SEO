@@ -201,10 +201,21 @@ PRICING_PLANS = {
             'Unlimited audits',
             '2,500 keywords tracked',
             'Competitor tracking (10)',
+            'White-label LLM reports',
             'Client portal access',
+            'Bulk content generation',
+            'Priority community opportunities',
+            'Advanced backlink intelligence',
             'Team collaboration',
-            'Account manager'
-        ]
+            'Account manager',
+            'Custom integrations'
+        ],
+        'limits': {
+            'sites': 50,
+            'audits_per_month': 999,
+            'llm_checks': 999,
+            'content_generation': 999
+        }
     },
     'enterprise': {
         'name': 'Enterprise',
