@@ -1,8 +1,8 @@
 {
   "summary": {
-    "passed": 9,
+    "passed": 10,
     "total": 10,
-    "success_rate": "90.0%"
+    "success_rate": "100.0%"
   },
   "results": [
     {
@@ -12,7 +12,7 @@
       "response_data": {
         "response": "PONG"
       },
-      "timestamp": "2025-10-14T08:40:06.749260"
+      "timestamp": "2025-10-14T08:42:08.935390"
     },
     {
       "test": "User Login",
@@ -23,7 +23,7 @@
         "user_id": "f4299067-2e96-448a-a451-d10e734ed354",
         "credits": 100
       },
-      "timestamp": "2025-10-14T08:40:07.049878"
+      "timestamp": "2025-10-14T08:42:09.258496"
     },
     {
       "test": "Get Sites",
@@ -34,19 +34,19 @@
         "site_url": "https://example-seo-test.com",
         "total_sites": 1
       },
-      "timestamp": "2025-10-14T08:40:07.091347"
+      "timestamp": "2025-10-14T08:42:09.299015"
     },
     {
       "test": "LLM Visibility Check",
       "success": true,
-      "message": "Visibility check completed - Score: 31.1/100, 5 LLMs tested, 0 recommendations",
+      "message": "Visibility check completed - Score: 31.3/100, 5 LLMs tested, 0 recommendations",
       "response_data": {
-        "overall_score": 31.1,
+        "overall_score": 31.3,
         "llms_tested": 5,
         "recommendations_count": 0,
         "domain": "example-seo-test.com"
       },
-      "timestamp": "2025-10-14T08:40:26.150224"
+      "timestamp": "2025-10-14T08:42:24.851519"
     },
     {
       "test": "Recommendations Generation",
@@ -60,7 +60,7 @@
           "technical_seo"
         ]
       },
-      "timestamp": "2025-10-14T08:40:31.893330"
+      "timestamp": "2025-10-14T08:42:31.092794"
     },
     {
       "test": "Content Gap Analysis",
@@ -70,7 +70,7 @@
         "gaps_found": 0,
         "opportunities": 0
       },
-      "timestamp": "2025-10-14T08:40:34.932988"
+      "timestamp": "2025-10-14T08:42:34.024039"
     },
     {
       "test": "Content Outline Generation",
@@ -81,7 +81,7 @@
         "topic": "AI-powered SEO optimization strategies",
         "content_type": "guide"
       },
-      "timestamp": "2025-10-14T08:40:37.382846"
+      "timestamp": "2025-10-14T08:42:36.700076"
     },
     {
       "test": "Schema Generation",
@@ -91,14 +91,20 @@
         "schema_type": "FAQ",
         "schema_length": 0
       },
-      "timestamp": "2025-10-14T08:40:37.510444"
+      "timestamp": "2025-10-14T08:42:36.779047"
     },
     {
       "test": "Community Opportunities",
-      "success": false,
-      "message": "Search failed or invalid response structure",
-      "response_data": null,
-      "timestamp": "2025-10-14T08:40:37.577199"
+      "success": true,
+      "message": "Found 8 opportunities across 2 platforms",
+      "response_data": {
+        "opportunities_count": 8,
+        "platforms": [
+          "reddit",
+          "quora"
+        ]
+      },
+      "timestamp": "2025-10-14T08:42:36.839875"
     },
     {
       "test": "Backlink Analysis",
@@ -108,7 +114,7 @@
         "link_gaps": 0,
         "opportunities": 6
       },
-      "timestamp": "2025-10-14T08:40:37.638806"
+      "timestamp": "2025-10-14T08:42:36.901191"
     },
     {
       "test": "Learning Center Endpoints",
@@ -118,7 +124,7 @@
         "endpoints_tested": 4,
         "endpoints_passed": 4
       },
-      "timestamp": "2025-10-14T08:40:39.195771"
+      "timestamp": "2025-10-14T08:42:38.304383"
     },
     {
       "test": "Credit Deduction Check",
@@ -129,8 +135,8 @@
         "current_credits": 72,
         "credits_used": 28
       },
-      "timestamp": "2025-10-14T08:40:39.233763"
+      "timestamp": "2025-10-14T08:42:38.348969"
     }
   ],
-  "timestamp": "2025-10-14T08:40:39.234605"
+  "timestamp": "2025-10-14T08:42:38.349798"
 }
