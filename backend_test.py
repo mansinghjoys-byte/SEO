@@ -1,19 +1,20 @@
 #!/usr/bin/env python3
 """
-Backend API Testing for Super Admin System
-Tests admin authentication, SEO settings, system stats, plans, and users management
+Backend API Testing for LLM Visibility Optimizer
+Tests all 8 new LLM visibility modules with comprehensive API coverage
 """
 
 import requests
 import json
 import sys
 from datetime import datetime
+import time
 
 # Configuration
 BACKEND_URL = "https://optimizeai.preview.emergentagent.com/api"
-ADMIN_CREDENTIALS = {
-    "email": "admin@rankforge.com",
-    "password": "RankForge@Admin2025!Secure"
+USER_CREDENTIALS = {
+    "email": "amis.joys@gmail.com",
+    "password": "password123"  # Will try to login or register
 }
 
 class AdminAPITester:
