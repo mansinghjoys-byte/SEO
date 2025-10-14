@@ -66,7 +66,9 @@ class CommunityHubService:
         In production, integrate with real APIs
         """
         category = business_info.get('category', 'software')
-        keywords = business_info.get('keywords', [category])
+        keywords = business_info.get('keywords', [])
+        if not keywords:
+            keywords = [category]
         
         # Simulate opportunities
         opportunities = []
@@ -74,10 +76,11 @@ class CommunityHubService:
         if platform == 'reddit':
             subreddits = self._suggest_subreddits(category)
             for subreddit in subreddits[:5]:
+                keyword = keywords[0] if keywords else category
                 opportunities.append({
                     'platform': 'Reddit',
                     'location': f'r/{subreddit}',
-                    'title': f'Discussion about {random.choice(keywords)}',
+                    'title': f'Discussion about {keyword}',
                     'url': f'https://reddit.com/r/{subreddit}/post123',
                     'relevance_score': random.randint(70, 95),
                     'engagement': f'{random.randint(10, 200)} comments',
