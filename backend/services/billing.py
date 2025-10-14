@@ -107,8 +107,16 @@ PRICING_PLANS = {
             'Monthly site audits',
             '10 keyword tracking',
             'Basic recommendations',
-            'Community support'
-        ]
+            'LLM visibility check (1/month)',
+            'Community support',
+            'Learning center access'
+        ],
+        'limits': {
+            'sites': 1,
+            'audits_per_month': 4,
+            'llm_checks': 1,
+            'content_generation': 0
+        }
     },
     'starter': {
         'name': 'Starter',
