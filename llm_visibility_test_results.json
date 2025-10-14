@@ -1,8 +1,8 @@
 {
   "summary": {
-    "passed": 1,
-    "total": 2,
-    "success_rate": "50.0%"
+    "passed": 7,
+    "total": 10,
+    "success_rate": "70.0%"
   },
   "results": [
     {
@@ -12,7 +12,7 @@
       "response_data": {
         "response": "PONG"
       },
-      "timestamp": "2025-10-14T07:32:42.500552"
+      "timestamp": "2025-10-14T08:37:32.631191"
     },
     {
       "test": "User Login",
@@ -20,18 +20,106 @@
       "message": "Successfully logged in as amis.joys@gmail.com with 20 credits",
       "response_data": {
         "token_received": true,
-        "user_id": "4067c535-cb9c-49a2-b675-58514a16afd3",
+        "user_id": "f4299067-2e96-448a-a451-d10e734ed354",
         "credits": 20
       },
-      "timestamp": "2025-10-14T07:32:42.797430"
+      "timestamp": "2025-10-14T08:37:33.323959"
     },
     {
-      "test": "Get Sites",
+      "test": "Create Test Site",
+      "success": true,
+      "message": "Created test site: https://example-seo-test.com",
+      "response_data": {
+        "site_id": "cb8ee6b1-53df-4341-a5b4-3d8cbe4d2189",
+        "site_url": "https://example-seo-test.com"
+      },
+      "timestamp": "2025-10-14T08:37:33.427587"
+    },
+    {
+      "test": "LLM Visibility Check",
+      "success": true,
+      "message": "Visibility check completed - Score: 29.8/100, 5 LLMs tested, 0 recommendations",
+      "response_data": {
+        "overall_score": 29.8,
+        "llms_tested": 5,
+        "recommendations_count": 0,
+        "domain": "example-seo-test.com"
+      },
+      "timestamp": "2025-10-14T08:37:49.111222"
+    },
+    {
+      "test": "Recommendations Generation",
       "success": false,
-      "message": "HTTP 403: {\"detail\":\"Not authenticated\"}",
+      "message": "Invalid response structure or failed generation",
       "response_data": null,
-      "timestamp": "2025-10-14T07:32:42.848390"
+      "timestamp": "2025-10-14T08:37:54.918755"
+    },
+    {
+      "test": "Content Gap Analysis",
+      "success": true,
+      "message": "Analysis completed - Found 0 gaps and 0 opportunities",
+      "response_data": {
+        "gaps_found": 0,
+        "opportunities": 0
+      },
+      "timestamp": "2025-10-14T08:37:58.362447"
+    },
+    {
+      "test": "Content Outline Generation",
+      "success": true,
+      "message": "Generated outline with 0 sections for topic: AI-powered SEO optimization strategies",
+      "response_data": {
+        "sections_count": 0,
+        "topic": "AI-powered SEO optimization strategies",
+        "content_type": "guide"
+      },
+      "timestamp": "2025-10-14T08:38:00.683967"
+    },
+    {
+      "test": "Schema Generation",
+      "success": true,
+      "message": "Generated FAQ schema markup successfully",
+      "response_data": {
+        "schema_type": "FAQ",
+        "schema_length": 0
+      },
+      "timestamp": "2025-10-14T08:38:00.763332"
+    },
+    {
+      "test": "Community Opportunities",
+      "success": false,
+      "message": "Insufficient credits (expected if user has < 3 credits)",
+      "response_data": null,
+      "timestamp": "2025-10-14T08:38:00.805450"
+    },
+    {
+      "test": "Backlink Analysis",
+      "success": false,
+      "message": "Insufficient credits (expected if user has < 5 credits)",
+      "response_data": null,
+      "timestamp": "2025-10-14T08:38:00.841934"
+    },
+    {
+      "test": "Learning Center Endpoints",
+      "success": true,
+      "message": "All 4/4 learning center endpoints working",
+      "response_data": {
+        "endpoints_tested": 4,
+        "endpoints_passed": 4
+      },
+      "timestamp": "2025-10-14T08:38:02.420295"
+    },
+    {
+      "test": "Credit Deduction Check",
+      "success": true,
+      "message": "Credits properly tracked - Started: 20, Current: 0, Used: 20",
+      "response_data": {
+        "initial_credits": 20,
+        "current_credits": 0,
+        "credits_used": 20
+      },
+      "timestamp": "2025-10-14T08:38:02.457331"
     }
   ],
-  "timestamp": "2025-10-14T07:32:42.849032"
+  "timestamp": "2025-10-14T08:38:02.458067"
 }
