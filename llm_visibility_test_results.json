@@ -1,8 +1,8 @@
 {
   "summary": {
-    "passed": 7,
+    "passed": 9,
     "total": 10,
-    "success_rate": "70.0%"
+    "success_rate": "90.0%"
   },
   "results": [
     {
@@ -12,47 +12,55 @@
       "response_data": {
         "response": "PONG"
       },
-      "timestamp": "2025-10-14T08:37:32.631191"
+      "timestamp": "2025-10-14T08:40:06.749260"
     },
     {
       "test": "User Login",
       "success": true,
-      "message": "Successfully logged in as amis.joys@gmail.com with 20 credits",
+      "message": "Successfully logged in as amis.joys@gmail.com with 100 credits",
       "response_data": {
         "token_received": true,
         "user_id": "f4299067-2e96-448a-a451-d10e734ed354",
-        "credits": 20
+        "credits": 100
       },
-      "timestamp": "2025-10-14T08:37:33.323959"
+      "timestamp": "2025-10-14T08:40:07.049878"
     },
     {
-      "test": "Create Test Site",
+      "test": "Get Sites",
       "success": true,
-      "message": "Created test site: https://example-seo-test.com",
+      "message": "Found 1 sites, using site: https://example-seo-test.com",
       "response_data": {
         "site_id": "cb8ee6b1-53df-4341-a5b4-3d8cbe4d2189",
-        "site_url": "https://example-seo-test.com"
+        "site_url": "https://example-seo-test.com",
+        "total_sites": 1
       },
-      "timestamp": "2025-10-14T08:37:33.427587"
+      "timestamp": "2025-10-14T08:40:07.091347"
     },
     {
       "test": "LLM Visibility Check",
       "success": true,
-      "message": "Visibility check completed - Score: 29.8/100, 5 LLMs tested, 0 recommendations",
+      "message": "Visibility check completed - Score: 31.1/100, 5 LLMs tested, 0 recommendations",
       "response_data": {
-        "overall_score": 29.8,
+        "overall_score": 31.1,
         "llms_tested": 5,
         "recommendations_count": 0,
         "domain": "example-seo-test.com"
       },
-      "timestamp": "2025-10-14T08:37:49.111222"
+      "timestamp": "2025-10-14T08:40:26.150224"
     },
     {
       "test": "Recommendations Generation",
-      "success": false,
-      "message": "Invalid response structure or failed generation",
-      "response_data": null,
-      "timestamp": "2025-10-14T08:37:54.918755"
+      "success": true,
+      "message": "Generated 2 recommendations across 3 categories",
+      "response_data": {
+        "total_recommendations": 2,
+        "categories": [
+          "high_priority",
+          "content_strategy",
+          "technical_seo"
+        ]
+      },
+      "timestamp": "2025-10-14T08:40:31.893330"
     },
     {
       "test": "Content Gap Analysis",
@@ -62,7 +70,7 @@
         "gaps_found": 0,
         "opportunities": 0
       },
-      "timestamp": "2025-10-14T08:37:58.362447"
+      "timestamp": "2025-10-14T08:40:34.932988"
     },
     {
       "test": "Content Outline Generation",
@@ -73,7 +81,7 @@
         "topic": "AI-powered SEO optimization strategies",
         "content_type": "guide"
       },
-      "timestamp": "2025-10-14T08:38:00.683967"
+      "timestamp": "2025-10-14T08:40:37.382846"
     },
     {
       "test": "Schema Generation",
@@ -83,21 +91,24 @@
         "schema_type": "FAQ",
         "schema_length": 0
       },
-      "timestamp": "2025-10-14T08:38:00.763332"
+      "timestamp": "2025-10-14T08:40:37.510444"
     },
     {
       "test": "Community Opportunities",
       "success": false,
-      "message": "Insufficient credits (expected if user has < 3 credits)",
+      "message": "Search failed or invalid response structure",
       "response_data": null,
-      "timestamp": "2025-10-14T08:38:00.805450"
+      "timestamp": "2025-10-14T08:40:37.577199"
     },
     {
       "test": "Backlink Analysis",
-      "success": false,
-      "message": "Insufficient credits (expected if user has < 5 credits)",
-      "response_data": null,
-      "timestamp": "2025-10-14T08:38:00.841934"
+      "success": true,
+      "message": "Analysis completed - Found 0 gaps and 6 opportunities",
+      "response_data": {
+        "link_gaps": 0,
+        "opportunities": 6
+      },
+      "timestamp": "2025-10-14T08:40:37.638806"
     },
     {
       "test": "Learning Center Endpoints",
@@ -107,19 +118,19 @@
         "endpoints_tested": 4,
         "endpoints_passed": 4
       },
-      "timestamp": "2025-10-14T08:38:02.420295"
+      "timestamp": "2025-10-14T08:40:39.195771"
     },
     {
       "test": "Credit Deduction Check",
       "success": true,
-      "message": "Credits properly tracked - Started: 20, Current: 0, Used: 20",
+      "message": "Credits properly tracked - Started: 100, Current: 72, Used: 28",
       "response_data": {
-        "initial_credits": 20,
-        "current_credits": 0,
-        "credits_used": 20
+        "initial_credits": 100,
+        "current_credits": 72,
+        "credits_used": 28
       },
-      "timestamp": "2025-10-14T08:38:02.457331"
+      "timestamp": "2025-10-14T08:40:39.233763"
     }
   ],
-  "timestamp": "2025-10-14T08:38:02.458067"
+  "timestamp": "2025-10-14T08:40:39.234605"
 }
