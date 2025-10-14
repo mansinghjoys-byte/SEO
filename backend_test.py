@@ -732,7 +732,9 @@ class LLMVisibilityTester:
             
         return False
     
-    def test_seo_settings_get(self):
+    # Old admin test methods removed - replaced with LLM visibility tests above
+    
+    def run_all_tests(self):
         """Test GET SEO settings"""
         print("\n📊 Testing SEO Settings GET...")
         
