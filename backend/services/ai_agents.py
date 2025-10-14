@@ -407,7 +407,8 @@ class AgentFactory:
             'audit_assistant': SEOAuditAgent,
             'keyword_researcher': KeywordResearchAgent,
             'content_optimizer': ContentOptimizationAgent,
-            'competitor_analyst': CompetitorAnalysisAgent
+            'competitor_analyst': CompetitorAnalysisAgent,
+            'llm_visibility_optimizer': LLMVisibilityAgent
         }
         
         agent_class = agents.get(purpose, SEOAuditAgent)
