@@ -547,7 +547,7 @@ async def analyze_backlinks(
     )
     
     await db.credit_transactions.insert_one({
-        'user_id': current_user['user_id']},
+        'user_id': current_user['user_id'],
         'amount': -cost,
         'type': 'backlink_analysis',
         'description': f'Backlink analysis for {site["url"]}',
