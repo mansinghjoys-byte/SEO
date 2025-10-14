@@ -15,15 +15,35 @@ active_agents = {}
 
 @router.post('/', response_model=Agent)
 async def create_agent(agent_data: AgentCreate, current_user: dict = Depends(get_current_user)):
-    """Create a new AI agent"""
+    """Create a new AI agent with optional website-specific context"""
     db = await get_database()
     
     agent_id = str(uuid.uuid4())
+    site_id = None
+    
+    # If website is provided, find the matching site
+    if agent_data.website:
+        site = await db.sites.find_one({
+            'user_id': current_user['user_id'],
+            'url': {'$regex': agent_data.website, '$options': 'i'}
+        }, {'_id': 0})
+        
+        if not site:
+            # Try to find by partial match
+            site = await db.sites.find_one({
+                'user_id': current_user['user_id']
+            }, {'_id': 0})
+        
+        if site:
+            site_id = site['site_id']
+    
     agent_doc = {
         'agent_id': agent_id,
         'user_id': current_user['user_id'],
         'name': agent_data.name,
         'purpose': agent_data.purpose,
+        'website': agent_data.website,
+        'site_id': site_id,
         'context': agent_data.context or {},
         'active': True,
         'created_at': datetime.now(timezone.utc).isoformat()
@@ -31,11 +51,16 @@ async def create_agent(agent_data: AgentCreate, current_user: dict = Depends(get
     
     await db.agents.insert_one(agent_doc)
     
-    # Initialize agent instance
+    # Initialize agent instance with context
+    initial_context = agent_data.context or {}
+    if site_id and agent_data.website:
+        initial_context['website_url'] = agent_data.website
+        initial_context['site_id'] = site_id
+    
     agent_instance = AgentFactory.create_agent(
         agent_data.purpose,
         agent_data.name,
-        agent_data.context
+        initial_context
     )
     active_agents[agent_id] = agent_instance
     
