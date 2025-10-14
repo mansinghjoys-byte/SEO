@@ -354,7 +354,7 @@ async def enhance_content(
     )
     
     await db.credit_transactions.insert_one({
-        'user_id': current_user['user_id']},
+        'user_id': current_user['user_id'],
         'amount': -cost,
         'type': 'content_enhancement',
         'description': 'Content enhancement',
