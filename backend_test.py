@@ -17,12 +17,15 @@ USER_CREDENTIALS = {
     "password": "password123"  # Will try to login or register
 }
 
-class AdminAPITester:
+class LLMVisibilityTester:
     def __init__(self):
         self.base_url = BACKEND_URL
-        self.admin_token = None
+        self.user_token = None
         self.headers = {"Content-Type": "application/json"}
         self.test_results = []
+        self.user_id = None
+        self.site_id = None
+        self.initial_credits = 0
         
     def log_test(self, test_name, success, message, response_data=None):
         """Log test results"""
