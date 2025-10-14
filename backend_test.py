@@ -1051,49 +1051,72 @@ class LLMVisibilityTester:
         return False
     
     def run_all_tests(self):
-        """Run all admin backend tests"""
-        print("🚀 Starting Super Admin Backend API Tests")
+        """Run all LLM Visibility Optimizer backend tests"""
+        print("🚀 Starting LLM Visibility Optimizer Backend API Tests")
         print(f"🌐 Backend URL: {self.base_url}")
-        print(f"👤 Admin Email: {ADMIN_CREDENTIALS['email']}")
-        print("=" * 60)
+        print(f"👤 User Email: {USER_CREDENTIALS['email']}")
+        print("=" * 80)
         
         # Test sequence based on review request priorities
         test_results = []
         
-        # 1. Admin Login (Critical)
-        test_results.append(self.test_admin_login())
+        # 1. Redis Connectivity (Critical Infrastructure)
+        test_results.append(self.test_redis_connectivity())
         
-        # 2. SEO Settings (Critical)
-        test_results.append(self.test_seo_settings_get())
-        test_results.append(self.test_seo_settings_update())
+        # 2. User Authentication (Critical)
+        if not self.test_user_login():
+            print("❌ Cannot proceed without authentication")
+            return 0, 1, self.test_results
         
-        # 3. System Stats (Critical)
-        test_results.append(self.test_system_stats())
+        # 3. Get Sites (Required for most tests)
+        if not self.test_get_sites():
+            print("❌ Cannot proceed without site data")
+            return 1, 2, self.test_results
         
-        # 4. Plans Management (If time permits)
-        test_results.append(self.test_plans_management())
+        # 4. LLM Visibility Check (8 credits) - Priority 1
+        test_results.append(self.test_llm_visibility_check())
         
-        # 5. Users Management (If time permits)
-        test_results.append(self.test_users_management())
+        # 5. Recommendations Generation - Priority 2
+        test_results.append(self.test_recommendations_generation())
         
-        # 6. Deep Analysis Endpoint (Additional)
-        test_results.append(self.test_deep_analysis_endpoint())
+        # 6. Content Gap Analysis (6 credits) - Priority 3
+        test_results.append(self.test_content_gap_analysis())
         
-        # Calculate results
+        # 7. Content Outline Generation (4 credits) - Priority 4
+        test_results.append(self.test_content_outline_generation())
+        
+        # 8. Schema Generation (2 credits) - Priority 5
+        test_results.append(self.test_schema_generation())
+        
+        # 9. Community Opportunities (3 credits) - Priority 6
+        test_results.append(self.test_community_opportunities())
+        
+        # 10. Backlink Analysis (5 credits) - Priority 7
+        test_results.append(self.test_backlink_analysis())
+        
+        # 11. Learning Center (free) - Priority 8
+        test_results.append(self.test_learning_center_endpoints())
+        
+        # 12. Credit Deduction Verification
+        test_results.append(self.check_credit_deduction())
+        
+        # Calculate results (excluding login and get_sites from count)
         tests_passed = sum(1 for result in test_results if result)
         total_tests = len(test_results)
         
         # Summary
-        print("\n" + "=" * 60)
-        print("📊 TEST SUMMARY")
-        print("=" * 60)
+        print("\n" + "=" * 80)
+        print("📊 LLM VISIBILITY OPTIMIZER TEST SUMMARY")
+        print("=" * 80)
         print(f"✅ Tests Passed: {tests_passed}/{total_tests}")
         print(f"❌ Tests Failed: {total_tests - tests_passed}/{total_tests}")
         
         if tests_passed == total_tests:
-            print("🎉 ALL TESTS PASSED! Super Admin backend is working correctly.")
+            print("🎉 ALL LLM VISIBILITY TESTS PASSED! All 8 modules are working correctly.")
+        elif tests_passed >= total_tests * 0.7:
+            print("✅ Most tests passed. Some features may need attention.")
         else:
-            print("⚠️  Some tests failed. Check the details above.")
+            print("⚠️  Multiple tests failed. Check the details above.")
             
         return tests_passed, total_tests, self.test_results
 
