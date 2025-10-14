@@ -126,9 +126,19 @@ PRICING_PLANS = {
             '3 websites',
             'Weekly site audits',
             '50 keywords tracked',
-            'AI content optimization',
+            'LLM visibility tracking',
+            'Content gap analysis',
+            'AI content outlines (3/month)',
+            'Schema markup generator',
+            'Community opportunities',
             'Priority support'
-        ]
+        ],
+        'limits': {
+            'sites': 3,
+            'audits_per_month': 12,
+            'llm_checks': 4,
+            'content_generation': 3
+        }
     },
     'growth': {
         'name': 'Growth',
