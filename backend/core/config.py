@@ -15,9 +15,10 @@ class Settings(BaseSettings):
     JWT_ALGORITHM: str = 'HS256'
     JWT_EXPIRATION: int = 86400  # 24 hours
     
-    # Groq AI
+    # AI LLM
     GROQ_API_KEY: str = os.getenv('GROQ_API_KEY', '')
     GROQ_MODEL: str = 'llama-3.3-70b-versatile'
+    EMERGENT_LLM_KEY: str = os.getenv('EMERGENT_LLM_KEY', '')
     
     # PayPal
     PAYPAL_CLIENT_ID: str = os.getenv('PAYPAL_CLIENT_ID', '')
