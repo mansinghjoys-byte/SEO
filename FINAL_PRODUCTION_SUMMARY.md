@@ -396,7 +396,7 @@ All limitations have clear upgrade paths and don't prevent production deployment
 
 ### Admin Access
 ```
-URL: https://seo-api-validation.preview.emergentagent.com
+URL: https://agent-domain-fix.preview.emergentagent.com
 Admin Email: admin@rankforge.com
 Admin Password: RankForge@Admin2025!Secure
 ```
