@@ -67,6 +67,7 @@ async def create_agent(agent_data: AgentCreate, current_user: dict = Depends(get
     
     return Agent(**agent_doc)
 
+@router.get('', response_model=List[Agent])
 @router.get('/', response_model=List[Agent])
 async def get_agents(current_user: dict = Depends(get_current_user)):
     """Get all agents for current user"""
