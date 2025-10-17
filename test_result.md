@@ -369,6 +369,21 @@ backend:
         agent: "main"
         comment: "Updated PRICING_PLANS with new features mapped to each tier (Free, Starter, Growth, Professional, Agency, Enterprise). Added credit costs for all new features: llm_visibility_check (8), content_gap_analysis (6), content_generation (4), schema_generation (2), community_opportunities (3), backlink_analysis (5), etc. Business logic validated."
 
+  - task: "FastAPI 307 Redirect Fix & Authentication"
+    implemented: true
+    working: true
+    file: "/app/backend/server.py, /app/backend/api/sites.py, /app/backend/api/agents.py"
+    stuck_count: 0
+    priority: "critical"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "main"
+        comment: "Fixed FastAPI 307 redirect issues by adding redirect_slashes=False and duplicate route handlers for both with/without trailing slashes for sites and agents endpoints. Installed Redis with RQ workers."
+      - working: true
+        agent: "testing"
+        comment: "✅ TESTED: All authentication and routing fixes working perfectly. 9/9 tests passed. CRITICAL: GET /api/sites (no trailing slash) returns 200 OK with no 307 redirect - main issue resolved. Authentication headers preserved, both trailing slash variants work, agent chat returns 200 OK. Zero 307 redirects detected across all endpoints."
+
 metadata:
   created_by: "main_agent"
   version: "1.0"
