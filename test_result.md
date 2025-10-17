@@ -593,6 +593,21 @@ agent_communication:
       All endpoints are protected and integrated with existing auth system.
   - agent: "main"
     message: |
+      🔧 PRODUCTION READINESS FIXES IN PROGRESS
+      
+      User requested:
+      1. Fix RQ worker error for `tasks.cleanup_old_data`
+      2. Verify agents work correctly (create for one website, guide users, use tools)
+      
+      COMPLETED SO FAR:
+      ✅ Redis server installed and configured
+      ✅ Redis added to supervisor for auto-restart
+      ✅ Cleaned stale RQ jobs
+      ✅ Verified agent implementation matches requirements
+      
+      NEXT: Test agent workflow and ensure production-ready
+  - agent: "main"
+    message: |
       🎉 ALL 8 LLM VISIBILITY MODULES FULLY TESTED AND OPERATIONAL
       
       COMPREHENSIVE TESTING COMPLETED: 10/10 TESTS PASSED ✅
