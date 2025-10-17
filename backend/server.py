@@ -13,7 +13,8 @@ settings = get_settings()
 app = FastAPI(
     title='AI SEO Platform',
     description='Production-ready AI-powered SEO services platform',
-    version='1.0.0'
+    version='1.0.0',
+    redirect_slashes=False  # Prevent 307 redirects that lose auth headers
 )
 
 # CORS middleware
