@@ -1,8 +1,8 @@
 {
   "summary": {
-    "passed": 1,
-    "total": 2,
-    "success_rate": "50.0%"
+    "passed": 7,
+    "total": 8,
+    "success_rate": "87.5%"
   },
   "results": [
     {
@@ -12,14 +12,14 @@
       "response_data": {
         "response": "PONG"
       },
-      "timestamp": "2025-10-17T12:47:11.552487"
+      "timestamp": "2025-10-17T12:48:43.337181"
     },
     {
       "test": "Redis Queue Operations",
       "success": true,
       "message": "Redis SET/GET/DEL operations working correctly",
       "response_data": null,
-      "timestamp": "2025-10-17T12:47:11.573852"
+      "timestamp": "2025-10-17T12:48:43.352620"
     },
     {
       "test": "User Login",
@@ -29,15 +29,88 @@
         "user_id": "23e7f1b8-64c3-4f8a-babd-068316655f0a",
         "credits": 97
       },
-      "timestamp": "2025-10-17T12:47:11.901308"
+      "timestamp": "2025-10-17T12:48:43.633214"
     },
     {
       "test": "Get Sites",
+      "success": true,
+      "message": "Found 1 sites, using: https://example-business.com",
+      "response_data": {
+        "site_id": "2a728bd6-48fe-4771-a73b-1ed9ef339fb8",
+        "site_url": "https://example-business.com"
+      },
+      "timestamp": "2025-10-17T12:48:43.679099"
+    },
+    {
+      "test": "Core SEO Endpoints",
+      "success": true,
+      "message": "Core endpoints working: 1/2",
+      "response_data": {
+        "endpoints_passed": 1,
+        "endpoints_tested": 2
+      },
+      "timestamp": "2025-10-17T12:48:43.757810"
+    },
+    {
+      "test": "Create Agent",
+      "success": true,
+      "message": "Created agent 'SEO Assistant for Testing' for website https://example-agent-test.com",
+      "response_data": {
+        "agent_id": "c9d52289-140b-4b89-ad6e-9b66f1fee4af",
+        "name": "SEO Assistant for Testing",
+        "purpose": "llm_visibility_optimizer",
+        "website": "https://example-agent-test.com"
+      },
+      "timestamp": "2025-10-17T12:48:43.797812"
+    },
+    {
+      "test": "Agent Chat",
+      "success": true,
+      "message": "Agent responded with 3378 characters and 4 suggestions",
+      "response_data": {
+        "agent_id": "c9d52289-140b-4b89-ad6e-9b66f1fee4af",
+        "message_length": 3378,
+        "suggestions_count": 4,
+        "has_context": true
+      },
+      "timestamp": "2025-10-17T12:49:05.957037"
+    },
+    {
+      "test": "Agent History",
+      "success": true,
+      "message": "Retrieved chat history with 1 messages",
+      "response_data": {
+        "history_count": 1,
+        "has_messages": true
+      },
+      "timestamp": "2025-10-17T12:49:06.037926"
+    },
+    {
+      "test": "List Agents",
+      "success": true,
+      "message": "Retrieved 6 agents, our agent found: True",
+      "response_data": {
+        "total_agents": 6,
+        "our_agent_found": true
+      },
+      "timestamp": "2025-10-17T12:49:06.080359"
+    },
+    {
+      "test": "Delete Agent",
+      "success": true,
+      "message": "Agent deleted successfully: Agent deleted successfully",
+      "response_data": {
+        "agent_id": "c9d52289-140b-4b89-ad6e-9b66f1fee4af"
+      },
+      "timestamp": "2025-10-17T12:49:06.120949"
+    },
+    {
+      "test": "Backend Logs Check",
       "success": false,
-      "message": "HTTP 403: {\"detail\":\"Not authenticated\"}",
+      "message": "Found 3 error lines in recent logs",
       "response_data": null,
-      "timestamp": "2025-10-17T12:47:11.987723"
+      "timestamp": "2025-10-17T12:49:06.125823"
     }
   ],
-  "timestamp": "2025-10-17T12:47:11.988613"
+  "timestamp": "2025-10-17T12:49:06.125972"
 }
