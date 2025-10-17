@@ -27,37 +27,39 @@ class BaseAIAgent(ABC):
     async def call_llm(self, messages: List[Dict[str, str]], temperature: float = 0.7) -> str:
         """Call LLM API with messages using Emergent LLM key"""
         try:
-            # Use Emergent LLM key with OpenAI API
+            # Extract system message and user messages
+            system_message = ""
+            user_messages_text = []
+            
+            for msg in messages:
+                if msg['role'] == 'system':
+                    system_message = msg['content']
+                elif msg['role'] == 'user':
+                    user_messages_text.append(msg['content'])
+                elif msg['role'] == 'assistant':
+                    # Include assistant responses in context
+                    user_messages_text.append(f"[Previous response: {msg['content']}]")
+            
+            # Combine all user messages into one
+            combined_message = "\n\n".join(user_messages_text)
+            
+            # Use Emergent LLM integration
             emergent_key = settings.EMERGENT_LLM_KEY
             
-            async with httpx.AsyncClient() as client:
-                response = await client.post(
-                    'https://api.openai.com/v1/chat/completions',
-                    headers={
-                        'Authorization': f'Bearer {emergent_key}',
-                        'Content-Type': 'application/json'
-                    },
-                    json={
-                        'model': 'gpt-4o-mini',
-                        'messages': messages,
-                        'temperature': temperature,
-                        'max_tokens': 2000
-                    },
-                    timeout=60.0
-                )
-                
-                if response.status_code != 200:
-                    error_detail = response.text
-                    raise Exception(f"LLM API error ({response.status_code}): {error_detail}")
-                
-                result = response.json()
-                
-                if 'choices' not in result or not result['choices']:
-                    raise Exception(f"Invalid LLM API response: {result}")
-                
-                return result['choices'][0]['message']['content']
-        except httpx.TimeoutException:
-            raise Exception("LLM API timeout. Please try again.")
+            # Create unique session ID for this agent
+            session_id = f"agent_{self.name}_{hash(self.purpose)}"
+            
+            chat = LlmChat(
+                api_key=emergent_key,
+                session_id=session_id,
+                system_message=system_message
+            ).with_model("openai", "gpt-4o-mini")
+            
+            user_message = UserMessage(text=combined_message)
+            response = await chat.send_message(user_message)
+            
+            return response
+            
         except Exception as e:
             # Log error but provide friendly message
             import logging
