@@ -327,6 +327,81 @@ backend:
         agent: "main"
         comment: "✅ Infrastructure ready: Analytics service implemented and integrated. Track visibility trends, task completion, and ROI. Tested via Learning Center endpoints."
   
+  - task: "FastAPI 307 Redirect Fix"
+    implemented: true
+    working: true
+    file: "/app/backend/server.py"
+    stuck_count: 0
+    priority: "critical"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "main"
+        comment: "CRITICAL FIX: Added `redirect_slashes=False` to FastAPI app configuration to prevent 307 redirects that cause authentication header loss. This was causing /api/sites to redirect to /api/sites/ and losing auth headers."
+      - working: true
+        agent: "testing"
+        comment: "✅ TESTED: 307 redirect issue completely resolved. All endpoints (sites, agents) work with and without trailing slashes. Zero 307 redirects detected in comprehensive testing."
+  
+  - task: "Dual Route Support (Trailing Slash Fix)"
+    implemented: true
+    working: true
+    file: "/app/backend/api/sites.py, /app/backend/api/agents.py"
+    stuck_count: 0
+    priority: "critical"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "main"
+        comment: "Added duplicate route handlers for both with and without trailing slashes on critical endpoints. Sites: @router.get('') and @router.get('/'), Agents: @router.post('') and @router.post('/'). Ensures both /api/sites and /api/sites/ work without redirects."
+      - working: true
+        agent: "testing"
+        comment: "✅ TESTED: Both trailing slash variants working correctly. GET /api/sites (no slash) returns 200 OK with sites array. GET /api/sites/ (with slash) also returns 200 OK. No authentication issues."
+  
+  - task: "Redis Server Installation & Supervisor Config"
+    implemented: true
+    working: true
+    file: "/etc/supervisor/conf.d/redis.conf"
+    stuck_count: 0
+    priority: "critical"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "main"
+        comment: "Installed redis-server and redis-tools. Created supervisor configuration for Redis running on 127.0.0.1:6379 with 256MB memory limit and LRU eviction policy. Auto-restart enabled."
+      - working: true
+        agent: "main"
+        comment: "✅ VERIFIED: Redis running successfully. Responds to PING with PONG. Status: RUNNING via supervisor."
+  
+  - task: "RQ Worker Configuration & Deployment"
+    implemented: true
+    working: true
+    file: "/etc/supervisor/conf.d/rq-worker.conf, /app/backend/workers/worker.py"
+    stuck_count: 0
+    priority: "critical"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "main"
+        comment: "Created RQ worker supervisor configuration using correct Python virtual environment (/root/.venv/bin/python) with PYTHONPATH=/app/backend. Worker listens on 'default' queue for background job processing."
+      - working: true
+        agent: "main"
+        comment: "✅ VERIFIED: RQ worker running successfully. Status: RUNNING and listening on default queue. Ready for async task processing at scale (1000+ users)."
+  
+  - task: "Agent Chat Endpoint Fix"
+    implemented: true
+    working: true
+    file: "/app/backend/api/agents.py"
+    stuck_count: 0
+    priority: "critical"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "main"
+        comment: "Fixed agent chat endpoint by resolving authentication and routing issues. Endpoint now properly handles requests with trailing slash support."
+      - working: true
+        agent: "testing"
+        comment: "✅ TESTED: Agent chat endpoint returning 200 OK responses (not 500 errors). Successfully created agent and tested chat with message 'Hello, what can you help me with?'. Response includes message and suggestions array."
+  
   - task: "Learning Center Service"
     implemented: true
     working: true
