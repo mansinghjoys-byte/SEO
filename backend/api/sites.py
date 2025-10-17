@@ -37,6 +37,7 @@ async def create_site(site_data: SiteCreate, current_user: dict = Depends(get_cu
     
     return Site(**site_doc)
 
+@router.get('', response_model=List[Site])
 @router.get('/', response_model=List[Site])
 async def get_sites(current_user: dict = Depends(get_current_user)):
     """Get all sites for current user"""
