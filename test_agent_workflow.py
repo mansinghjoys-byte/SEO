@@ -14,7 +14,7 @@ def test_agent_workflow():
     # Step 1: Login
     print("\n1️⃣ Login...")
     login_response = requests.post(f"{BASE_URL}/auth/login", json={
-        "email": "amis.joys@gmail.com",
+        "email": "test@rankforge.com",
         "password": "Test@123"
     })
     
