@@ -499,9 +499,9 @@ class AgentBackendTester:
         endpoints_tested = 0
         endpoints_passed = 0
         
-        # Test GET /api/sites
+        # Test GET /api/sites/
         try:
-            response = requests.get(f"{self.base_url}/sites", headers=self.headers, timeout=30)
+            response = requests.get(f"{self.base_url}/sites/", headers=self.headers, timeout=30)
             endpoints_tested += 1
             if response.status_code == 200:
                 endpoints_passed += 1
