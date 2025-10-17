@@ -3,7 +3,11 @@ from typing import Dict, Any, List
 import httpx
 from core.config import get_settings
 import json
+from emergentintegrations.llm.chat import LlmChat, UserMessage
+from dotenv import load_dotenv
+import os
 
+load_dotenv()
 settings = get_settings()
 
 class BaseAIAgent(ABC):
