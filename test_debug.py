@@ -4,7 +4,7 @@ import json
 
 class DebugTester:
     def __init__(self):
-        self.base_url = "https://agent-domain-fix.preview.emergentagent.com/api"
+        self.base_url = "https://auth-redirect-fix-3.preview.emergentagent.com/api"
         self.headers = {"Content-Type": "application/json"}
         self.user_token = None
         self.site_id = None

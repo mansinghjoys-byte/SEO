@@ -6,7 +6,7 @@ Debug authentication flow
 import requests
 import json
 
-BACKEND_URL = "https://agent-domain-fix.preview.emergentagent.com/api"
+BACKEND_URL = "https://auth-redirect-fix-3.preview.emergentagent.com/api"
 TEST_USER_CREDENTIALS = {
     "email": "test@rankforge.com",
     "password": "Test@123"

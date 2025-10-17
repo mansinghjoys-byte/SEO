@@ -11,7 +11,7 @@ from datetime import datetime
 import time
 
 # Configuration
-BACKEND_URL = "https://agent-domain-fix.preview.emergentagent.com/api"
+BACKEND_URL = "https://auth-redirect-fix-3.preview.emergentagent.com/api"
 USER_CREDENTIALS = {
     "email": "amis.joys@gmail.com",
     "password": "password123"  # Will try to login or register

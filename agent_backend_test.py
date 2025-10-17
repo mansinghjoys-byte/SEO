@@ -12,7 +12,7 @@ from datetime import datetime
 import time
 
 # Configuration from review request
-BACKEND_URL = "https://agent-domain-fix.preview.emergentagent.com/api"
+BACKEND_URL = "https://auth-redirect-fix-3.preview.emergentagent.com/api"
 TEST_USER_CREDENTIALS = {
     "email": "test@rankforge.com",
     "password": "Test@123"
