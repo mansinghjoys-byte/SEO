@@ -1,18 +1,117 @@
 {
   "summary": {
-    "passed": 0,
-    "total": 1,
-    "success_rate": "0.0%",
+    "passed": 9,
+    "total": 9,
+    "success_rate": "100.0%",
     "focus": "FastAPI 307 redirect fixes for sites and agents endpoints"
   },
   "results": [
     {
       "test": "User Registration/Login",
-      "success": false,
-      "message": "HTTP 502: ",
-      "response_data": null,
-      "timestamp": "2025-10-17T13:06:49.302249"
+      "success": true,
+      "message": "Successfully authenticated as tester@test.com with token",
+      "response_data": {
+        "token_received": true,
+        "user_id": "d1f885ae-9bf0-4847-a814-3f0dc630b15a"
+      },
+      "timestamp": "2025-10-17T13:07:48.991327"
+    },
+    {
+      "test": "Auth Me Endpoint",
+      "success": true,
+      "message": "Successfully retrieved user data for tester@test.com",
+      "response_data": {
+        "user_data": {
+          "user_id": "d1f885ae-9bf0-4847-a814-3f0dc630b15a",
+          "email": "tester@test.com",
+          "full_name": "Test User",
+          "credits": 20,
+          "plan": "free"
+        }
+      },
+      "timestamp": "2025-10-17T13:07:49.035587"
+    },
+    {
+      "test": "Sites Without Trailing Slash",
+      "success": true,
+      "message": "\u2705 SUCCESS: No 307 redirect! Returned 0 sites",
+      "response_data": {
+        "sites_count": 0,
+        "no_redirect": true
+      },
+      "timestamp": "2025-10-17T13:07:49.073881"
+    },
+    {
+      "test": "Sites With Trailing Slash",
+      "success": true,
+      "message": "Successfully returned 0 sites with trailing slash",
+      "response_data": {
+        "sites_count": 0,
+        "no_redirect": true
+      },
+      "timestamp": "2025-10-17T13:07:49.147959"
+    },
+    {
+      "test": "Create Site",
+      "success": true,
+      "message": "Successfully created site: https://example.com",
+      "response_data": {
+        "site_id": "06eadcc1-8ba9-4f61-9d02-48fa1fae3626",
+        "site_url": "https://example.com"
+      },
+      "timestamp": "2025-10-17T13:07:49.198689"
+    },
+    {
+      "test": "Agents Without Trailing Slash",
+      "success": true,
+      "message": "Successfully returned 0 agents without trailing slash",
+      "response_data": {
+        "agents_count": 0,
+        "no_redirect": true
+      },
+      "timestamp": "2025-10-17T13:07:49.234217"
+    },
+    {
+      "test": "Agents With Trailing Slash",
+      "success": true,
+      "message": "Successfully returned 0 agents with trailing slash",
+      "response_data": {
+        "agents_count": 0,
+        "no_redirect": true
+      },
+      "timestamp": "2025-10-17T13:07:49.272441"
+    },
+    {
+      "test": "Create Agent",
+      "success": true,
+      "message": "Successfully created agent: Test Agent for https://example.com",
+      "response_data": {
+        "agent_id": "d6abdce3-ec56-45b4-bb90-dfda8a8a5dd0",
+        "agent_name": "Test Agent"
+      },
+      "timestamp": "2025-10-17T13:07:49.329203"
+    },
+    {
+      "test": "Agent Chat Endpoint",
+      "success": true,
+      "message": "Successfully received chat response from agent",
+      "response_data": {
+        "agent_id": "d6abdce3-ec56-45b4-bb90-dfda8a8a5dd0",
+        "response_received": true,
+        "has_suggestions": true
+      },
+      "timestamp": "2025-10-17T13:07:53.517456"
+    },
+    {
+      "test": "No 307 Redirects Verification",
+      "success": true,
+      "message": "\u2705 SUCCESS: No 307 redirects detected in any of the 9 tests",
+      "response_data": {
+        "total_tests": 9,
+        "redirect_failures": 0
+      },
+      "timestamp": "2025-10-17T13:07:53.518219"
     }
   ],
-  "timestamp": "2025-10-17T13:06:49.303021"
+  "timestamp": "2025-10-17T13:07:53.518367"
 }
