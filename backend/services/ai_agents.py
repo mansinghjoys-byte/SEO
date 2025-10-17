@@ -105,7 +105,7 @@ Base your advice on the REAL data provided above.
             {'role': 'user', 'content': message}
         ]
         
-        response = await self.call_groq(messages)
+        response = await self.call_llm(messages)
         
         # Update conversation history
         self.conversation_history.append({'role': 'user', 'content': message})
@@ -167,7 +167,7 @@ Focus on long-tail keywords and semantic variations.
             {'role': 'user', 'content': message}
         ]
         
-        response = await self.call_groq(messages)
+        response = await self.call_llm(messages)
         
         self.conversation_history.append({'role': 'user', 'content': message})
         self.conversation_history.append({'role': 'assistant', 'content': response})
@@ -206,7 +206,7 @@ Provide specific recommendations for improving content, including:
             {'role': 'user', 'content': message}
         ]
         
-        response = await self.call_groq(messages)
+        response = await self.call_llm(messages)
         
         self.conversation_history.append({'role': 'user', 'content': message})
         self.conversation_history.append({'role': 'assistant', 'content': response})
@@ -241,7 +241,7 @@ Focus on gaps and opportunities.
             {'role': 'user', 'content': message}
         ]
         
-        response = await self.call_groq(messages)
+        response = await self.call_llm(messages)
         
         self.conversation_history.append({'role': 'user', 'content': message})
         self.conversation_history.append({'role': 'assistant', 'content': response})
@@ -364,7 +364,7 @@ If no data is available yet, guide the user to run analyses first.
             {'role': 'user', 'content': message}
         ]
         
-        response = await self.call_groq(messages)
+        response = await self.call_llm(messages)
         
         # Update conversation history
         self.conversation_history.append({'role': 'user', 'content': message})
