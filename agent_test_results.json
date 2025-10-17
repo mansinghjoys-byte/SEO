@@ -1,0 +1,43 @@
+{
+  "summary": {
+    "passed": 1,
+    "total": 2,
+    "success_rate": "50.0%"
+  },
+  "results": [
+    {
+      "test": "Redis PING",
+      "success": true,
+      "message": "Redis server responding to PING command",
+      "response_data": {
+        "response": "PONG"
+      },
+      "timestamp": "2025-10-17T12:47:11.552487"
+    },
+    {
+      "test": "Redis Queue Operations",
+      "success": true,
+      "message": "Redis SET/GET/DEL operations working correctly",
+      "response_data": null,
+      "timestamp": "2025-10-17T12:47:11.573852"
+    },
+    {
+      "test": "User Login",
+      "success": true,
+      "message": "Successfully logged in as test@rankforge.com with 97 credits",
+      "response_data": {
+        "user_id": "23e7f1b8-64c3-4f8a-babd-068316655f0a",
+        "credits": 97
+      },
+      "timestamp": "2025-10-17T12:47:11.901308"
+    },
+    {
+      "test": "Get Sites",
+      "success": false,
+      "message": "HTTP 403: {\"detail\":\"Not authenticated\"}",
+      "response_data": null,
+      "timestamp": "2025-10-17T12:47:11.987723"
+    }
+  ],
+  "timestamp": "2025-10-17T12:47:11.988613"
+}
