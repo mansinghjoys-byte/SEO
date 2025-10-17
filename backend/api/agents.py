@@ -13,6 +13,7 @@ router = APIRouter(prefix='/agents', tags=['AI Agents'])
 # Store active agents in memory (in production, use Redis)
 active_agents = {}
 
+@router.post('', response_model=Agent)
 @router.post('/', response_model=Agent)
 async def create_agent(agent_data: AgentCreate, current_user: dict = Depends(get_current_user)):
     """Create a new AI agent with optional website-specific context"""
