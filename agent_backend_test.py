@@ -508,9 +508,9 @@ class AgentBackendTester:
         except:
             endpoints_tested += 1
         
-        # Test GET /api/audits
+        # Test GET /api/audits/
         try:
-            response = requests.get(f"{self.base_url}/audits", headers=self.headers, timeout=30)
+            response = requests.get(f"{self.base_url}/audits/", headers=self.headers, timeout=30)
             endpoints_tested += 1
             if response.status_code == 200:
                 endpoints_passed += 1
