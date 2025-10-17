@@ -9,6 +9,7 @@ from workers.tasks import process_site_audit
 
 router = APIRouter(prefix='/sites', tags=['Sites'])
 
+@router.post('', response_model=Site)
 @router.post('/', response_model=Site)
 async def create_site(site_data: SiteCreate, current_user: dict = Depends(get_current_user)):
     """Add a new site"""
