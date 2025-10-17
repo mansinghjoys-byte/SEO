@@ -20,18 +20,21 @@ class BaseAIAgent(ABC):
         """Process user message and return response"""
         pass
     
-    async def call_groq(self, messages: List[Dict[str, str]], temperature: float = 0.7) -> str:
-        """Call Groq API with messages"""
+    async def call_llm(self, messages: List[Dict[str, str]], temperature: float = 0.7) -> str:
+        """Call LLM API with messages using Emergent LLM key"""
         try:
+            # Use Emergent LLM key with OpenAI API
+            emergent_key = settings.EMERGENT_LLM_KEY
+            
             async with httpx.AsyncClient() as client:
                 response = await client.post(
-                    'https://api.groq.com/openai/v1/chat/completions',
+                    'https://api.openai.com/v1/chat/completions',
                     headers={
-                        'Authorization': f'Bearer {settings.GROQ_API_KEY}',
+                        'Authorization': f'Bearer {emergent_key}',
                         'Content-Type': 'application/json'
                     },
                     json={
-                        'model': settings.GROQ_MODEL,
+                        'model': 'gpt-4o-mini',
                         'messages': messages,
                         'temperature': temperature,
                         'max_tokens': 2000
@@ -41,20 +44,20 @@ class BaseAIAgent(ABC):
                 
                 if response.status_code != 200:
                     error_detail = response.text
-                    raise Exception(f"Groq API error ({response.status_code}): {error_detail}")
+                    raise Exception(f"LLM API error ({response.status_code}): {error_detail}")
                 
                 result = response.json()
                 
                 if 'choices' not in result or not result['choices']:
-                    raise Exception(f"Invalid Groq API response: {result}")
+                    raise Exception(f"Invalid LLM API response: {result}")
                 
                 return result['choices'][0]['message']['content']
         except httpx.TimeoutException:
-            raise Exception("Groq API timeout. Please try again.")
+            raise Exception("LLM API timeout. Please try again.")
         except Exception as e:
             # Log error but provide friendly message
             import logging
-            logging.error(f"Groq API call failed: {str(e)}")
+            logging.error(f"LLM API call failed: {str(e)}")
             raise Exception(f"AI service error: {str(e)}")
 
 class SEOAuditAgent(BaseAIAgent):
