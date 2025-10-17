@@ -183,7 +183,7 @@ class AgentBackendTester:
         try:
             # First try to get existing sites
             response = requests.get(
-                f"{self.base_url}/sites",
+                f"{self.base_url}/sites/",
                 headers=self.headers,
                 timeout=30
             )
