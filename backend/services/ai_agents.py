@@ -22,23 +22,40 @@ class BaseAIAgent(ABC):
     
     async def call_groq(self, messages: List[Dict[str, str]], temperature: float = 0.7) -> str:
         """Call Groq API with messages"""
-        async with httpx.AsyncClient() as client:
-            response = await client.post(
-                'https://api.groq.com/openai/v1/chat/completions',
-                headers={
-                    'Authorization': f'Bearer {settings.GROQ_API_KEY}',
-                    'Content-Type': 'application/json'
-                },
-                json={
-                    'model': settings.GROQ_MODEL,
-                    'messages': messages,
-                    'temperature': temperature,
-                    'max_tokens': 2000
-                },
-                timeout=60.0
-            )
-            result = response.json()
-            return result['choices'][0]['message']['content']
+        try:
+            async with httpx.AsyncClient() as client:
+                response = await client.post(
+                    'https://api.groq.com/openai/v1/chat/completions',
+                    headers={
+                        'Authorization': f'Bearer {settings.GROQ_API_KEY}',
+                        'Content-Type': 'application/json'
+                    },
+                    json={
+                        'model': settings.GROQ_MODEL,
+                        'messages': messages,
+                        'temperature': temperature,
+                        'max_tokens': 2000
+                    },
+                    timeout=60.0
+                )
+                
+                if response.status_code != 200:
+                    error_detail = response.text
+                    raise Exception(f"Groq API error ({response.status_code}): {error_detail}")
+                
+                result = response.json()
+                
+                if 'choices' not in result or not result['choices']:
+                    raise Exception(f"Invalid Groq API response: {result}")
+                
+                return result['choices'][0]['message']['content']
+        except httpx.TimeoutException:
+            raise Exception("Groq API timeout. Please try again.")
+        except Exception as e:
+            # Log error but provide friendly message
+            import logging
+            logging.error(f"Groq API call failed: {str(e)}")
+            raise Exception(f"AI service error: {str(e)}")
 
 class SEOAuditAgent(BaseAIAgent):
     """AI Agent specialized in SEO audits and recommendations"""
