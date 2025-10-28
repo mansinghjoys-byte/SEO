@@ -171,6 +171,14 @@ rollback() {
 # Pre-flight Checks
 ################################################################################
 
+print_bold "╔════════════════════════════════════════════════════════════════╗"
+print_bold "║     RankForge SEO Platform - Production Deployment v2.0       ║"
+print_bold "╚════════════════════════════════════════════════════════════════╝"
+echo ""
+
+print_info "Deployment log: $DEPLOY_LOG"
+echo ""
+
 print_step "Running pre-flight checks..."
 
 # Check if running as root or with sudo
@@ -179,16 +187,33 @@ if [[ $EUID -ne 0 ]]; then
    exit 1
 fi
 
+print_success "Running with root privileges"
+
 # Check required commands
-check_command git
-check_command node
-check_command npm
-check_command python3
-check_command redis-server
-check_command nginx
-check_command docker
+MISSING_COMMANDS=()
+
+print_info "Checking required commands..."
+for cmd in git node npm python3 nginx docker; do
+    if check_command $cmd; then
+        print_success "$cmd is installed"
+    else
+        MISSING_COMMANDS+=("$cmd")
+    fi
+done
+
+if [ ${#MISSING_COMMANDS[@]} -gt 0 ]; then
+    print_error "Missing required commands: ${MISSING_COMMANDS[*]}"
+    print_info "Install them before running this script"
+    exit 1
+fi
+
+# Optional commands (warn if missing)
+if ! command -v yarn &> /dev/null; then
+    print_warning "yarn not found, will use npm instead"
+fi
 
 print_success "All required commands are available"
+echo ""
 
 ################################################################################
 # 1. Clone/Update Repository
