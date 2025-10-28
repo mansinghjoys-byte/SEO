@@ -81,10 +81,15 @@ watchfiles==1.1.0
 emergentintegrations
 
 # Competitor Analysis & Web Scraping
-exa-py==1.0.9
-praw==7.8.1
-tweepy==4.14.0
-newspaper3k==0.2.8
-selenium==4.27.1
-webdriver-manager==4.0.2
-aiohttp==3.11.11
+exa-py
+praw
+tweepy
+newspaper3k
+selenium
+webdriver-manager
+aiohappyeyeballs
+aiosignal
+frozenlist
+multidict
+propcache
+yarl
