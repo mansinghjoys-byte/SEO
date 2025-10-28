@@ -19,7 +19,7 @@ export default function AIAgents() {
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [newAgentName, setNewAgentName] = useState('');
   const [newAgentPurpose, setNewAgentPurpose] = useState('audit_assistant');
-  const [newAgentWebsite, setNewAgentWebsite] = useState('');
+  const [newAgentWebsite, setNewAgentWebsite] = useState('none');
   const [sites, setSites] = useState([]);
 
   useEffect(() => {
