@@ -154,6 +154,7 @@ PRICING_PLANS = {
             'Content enhancement tools',
             'Community engagement hub',
             'Backlink strategy tools',
+            'Trusted backlinks identifier',
             'AI SEO agents',
             'White-label reports',
             'Weekly analytics reports'
