@@ -1159,13 +1159,13 @@ class LLMVisibilityTester:
         
         # Summary
         print("\n" + "=" * 80)
-        print("📊 LLM VISIBILITY OPTIMIZER TEST SUMMARY")
+        print("📊 LLM VISIBILITY OPTIMIZER + TRUSTED BACKLINKS TEST SUMMARY")
         print("=" * 80)
         print(f"✅ Tests Passed: {tests_passed}/{total_tests}")
         print(f"❌ Tests Failed: {total_tests - tests_passed}/{total_tests}")
         
         if tests_passed == total_tests:
-            print("🎉 ALL LLM VISIBILITY TESTS PASSED! All 8 modules are working correctly.")
+            print("🎉 ALL TESTS PASSED! All 8 LLM modules + Trusted Backlinks feature working correctly.")
         elif tests_passed >= total_tests * 0.7:
             print("✅ Most tests passed. Some features may need attention.")
         else:
