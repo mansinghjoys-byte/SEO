@@ -572,16 +572,14 @@ metadata:
 
 test_plan:
   current_focus:
-    - "Test competitor discovery endpoint"
-    - "Test competitor backlink analysis endpoint"
-    - "Test competitor content analysis endpoint"
-    - "Test competitor social media analysis endpoint"
-    - "Test comprehensive competitor analysis report"
-    - "Verify all API credentials working (Exa.ai, Reddit, Twitter)"
-    - "Test credit costs deduction for new features"
-  stuck_tasks: []
-  test_all: true
-  test_priority: "high_first"
+    - "Fix LLM API configuration issues (OpenAI vs Groq)"
+    - "Resolve Exa.ai API parameter warnings"
+    - "Address Redis CLI availability for testing"
+  stuck_tasks: 
+    - "Content Gap Analysis - LLM API key configuration issue"
+    - "Content Outline Generation - LLM API key configuration issue"
+  test_all: false
+  test_priority: "stuck_first"
 
 frontend:
   - task: "Admin Login Page"
