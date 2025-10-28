@@ -610,6 +610,135 @@ async def generate_outreach_email(
     return result
 
 
+# Trusted Backlinks Endpoints
+class TrustedBacklinksRequest(BaseModel):
+    site_id: str
+    deep_scan: bool = False
+
+
+@router.post('/backlinks/trusted-sources')
+async def identify_trusted_backlinks(
+    request: TrustedBacklinksRequest,
+    current_user: dict = Depends(get_current_user)
+):
+    """Identify backlinks from trusted sources like Reddit, Quora, Wikipedia, etc."""
+    db = await get_database()
+    
+    # Check credits
+    cost = CREDIT_COSTS['trusted_backlinks']
+    if current_user['credits'] < cost:
+        raise HTTPException(
+            status_code=status.HTTP_402_PAYMENT_REQUIRED,
+            detail=f'Insufficient credits. Need {cost} credits.'
+        )
+    
+    # Get site
+    site = await db.sites.find_one(
+        {'site_id': request.site_id, 'user_id': current_user['user_id']},
+        {'_id': 0}
+    )
+    if not site:
+        raise HTTPException(status_code=404, detail='Site not found')
+    
+    service = TrustedBacklinksService()
+    result = await service.identify_trusted_backlinks(
+        site['url'],
+        request.deep_scan
+    )
+    
+    # Store result for future reference
+    backlink_doc = {
+        'backlink_scan_id': str(uuid.uuid4()),
+        'user_id': current_user['user_id'],
+        'site_id': request.site_id,
+        'scan_type': 'trusted_sources',
+        'result': result,
+        'created_at': datetime.now(timezone.utc)
+    }
+    await db.trusted_backlinks.insert_one(backlink_doc)
+    
+    # Deduct credits
+    await db.users.update_one(
+        {'user_id': current_user['user_id']},
+        {'$inc': {'credits': -cost}}
+    )
+    
+    await db.credit_transactions.insert_one({
+        'user_id': current_user['user_id'],
+        'amount': -cost,
+        'type': 'trusted_backlinks',
+        'description': f'Trusted backlinks scan for {site["url"]}',
+        'timestamp': datetime.now(timezone.utc).isoformat()
+    })
+    
+    return result
+
+
+@router.get('/backlinks/trusted-sources/{site_id}')
+async def get_latest_trusted_backlinks(
+    site_id: str,
+    current_user: dict = Depends(get_current_user)
+):
+    """Get latest trusted backlinks scan results"""
+    db = await get_database()
+    
+    # Verify site ownership
+    site = await db.sites.find_one(
+        {'site_id': site_id, 'user_id': current_user['user_id']},
+        {'_id': 0}
+    )
+    if not site:
+        raise HTTPException(status_code=404, detail='Site not found')
+    
+    # Get latest scan
+    scan = await db.trusted_backlinks.find_one(
+        {'site_id': site_id, 'user_id': current_user['user_id']},
+        {'_id': 0},
+        sort=[('created_at', -1)]
+    )
+    
+    if not scan:
+        return {
+            'success': True,
+            'has_data': False,
+            'message': 'No trusted backlinks scan found. Run a scan first.'
+        }
+    
+    return {
+        'success': True,
+        'has_data': True,
+        'scan': scan
+    }
+
+
+@router.get('/backlinks/opportunities')
+async def get_backlink_opportunities(
+    category: Optional[str] = None,
+    current_user: dict = Depends(get_current_user)
+):
+    """Get opportunities to earn backlinks from trusted sources"""
+    service = TrustedBacklinksService()
+    
+    # Get user's first site for context
+    db = await get_database()
+    site = await db.sites.find_one(
+        {'user_id': current_user['user_id']},
+        {'_id': 0}
+    )
+    
+    domain = ''
+    if site:
+        domain = site['url'].replace('https://', '').replace('http://', '').split('/')[0]
+    
+    opportunities = await service.get_backlink_opportunities(domain, category)
+    
+    return {
+        'success': True,
+        'opportunities': opportunities,
+        'total': len(opportunities)
+    }
+
+
 # Learning Center Endpoints
 @router.get('/learning/knowledge-base')
 async def get_knowledge_base(current_user: dict = Depends(get_current_user)):
