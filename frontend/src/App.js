@@ -87,6 +87,14 @@ function AppRoutes() {
           }
         />
         <Route
+          path="/sites/:siteId"
+          element={
+            <PrivateRoute>
+              <SiteDetail />
+            </PrivateRoute>
+          }
+        />
+        <Route
           path="/audits/:siteId"
           element={
             <PrivateRoute>
