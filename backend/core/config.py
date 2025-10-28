@@ -35,6 +35,18 @@ class Settings(BaseSettings):
     SUPER_ADMIN_EMAIL: str = os.getenv('SUPER_ADMIN_EMAIL', 'admin@rankforge.com')
     SUPER_ADMIN_PASSWORD: str = os.getenv('SUPER_ADMIN_PASSWORD', 'RankForge@Admin2025!Secure')
     
+    # Competitor Analysis APIs
+    EXA_API_KEY: str = os.getenv('EXA_API_KEY', '')
+    
+    # Reddit API
+    REDDIT_CLIENT_ID: str = os.getenv('REDDIT_CLIENT_ID', '')
+    REDDIT_CLIENT_SECRET: str = os.getenv('REDDIT_CLIENT_SECRET', '')
+    REDDIT_USER_AGENT: str = os.getenv('REDDIT_USER_AGENT', 'RankForge SEO Platform v1.0')
+    
+    # Twitter/X API
+    TWITTER_CLIENT_ID: str = os.getenv('TWITTER_CLIENT_ID', '')
+    TWITTER_CLIENT_SECRET: str = os.getenv('TWITTER_CLIENT_SECRET', '')
+    
     class Config:
         env_file = '.env'
 
