@@ -1,8 +1,8 @@
 {
   "summary": {
-    "passed": 10,
-    "total": 10,
-    "success_rate": "100.0%"
+    "passed": 8,
+    "total": 14,
+    "success_rate": "57.1%"
   },
   "results": [
     {
@@ -12,76 +12,61 @@
       "response_data": {
         "response": "PONG"
       },
-      "timestamp": "2025-10-14T08:42:08.935390"
+      "timestamp": "2025-10-28T06:31:09.796266"
     },
     {
       "test": "User Login",
       "success": true,
-      "message": "Successfully logged in as amis.joys@gmail.com with 100 credits",
+      "message": "Successfully logged in as amis.joys@gmail.com with 20 credits",
       "response_data": {
         "token_received": true,
-        "user_id": "f4299067-2e96-448a-a451-d10e734ed354",
-        "credits": 100
+        "user_id": "2f8c17de-54b9-4e5b-b67d-f2fa4c89e53b",
+        "credits": 20
       },
-      "timestamp": "2025-10-14T08:42:09.258496"
+      "timestamp": "2025-10-28T06:31:10.486918"
     },
     {
-      "test": "Get Sites",
+      "test": "Create Test Site",
       "success": true,
-      "message": "Found 1 sites, using site: https://example-seo-test.com",
+      "message": "Created test site: https://example-seo-test.com",
       "response_data": {
-        "site_id": "cb8ee6b1-53df-4341-a5b4-3d8cbe4d2189",
-        "site_url": "https://example-seo-test.com",
-        "total_sites": 1
+        "site_id": "cddc19cf-9784-4dec-8679-9ae90091a074",
+        "site_url": "https://example-seo-test.com"
       },
-      "timestamp": "2025-10-14T08:42:09.299015"
+      "timestamp": "2025-10-28T06:31:10.631052"
     },
     {
       "test": "LLM Visibility Check",
       "success": true,
-      "message": "Visibility check completed - Score: 31.3/100, 5 LLMs tested, 0 recommendations",
+      "message": "Visibility check completed - Score: 29.0/100, 5 LLMs tested, 0 recommendations",
       "response_data": {
-        "overall_score": 31.3,
+        "overall_score": 29.0,
         "llms_tested": 5,
         "recommendations_count": 0,
         "domain": "example-seo-test.com"
       },
-      "timestamp": "2025-10-14T08:42:24.851519"
+      "timestamp": "2025-10-28T06:31:11.050117"
     },
     {
       "test": "Recommendations Generation",
-      "success": true,
-      "message": "Generated 2 recommendations across 3 categories",
-      "response_data": {
-        "total_recommendations": 2,
-        "categories": [
-          "high_priority",
-          "content_strategy",
-          "technical_seo"
-        ]
-      },
-      "timestamp": "2025-10-14T08:42:31.092794"
+      "success": false,
+      "message": "Invalid response structure or failed generation",
+      "response_data": null,
+      "timestamp": "2025-10-28T06:31:11.217753"
     },
     {
       "test": "Content Gap Analysis",
-      "success": true,
-      "message": "Analysis completed - Found 0 gaps and 0 opportunities",
-      "response_data": {
-        "gaps_found": 0,
-        "opportunities": 0
-      },
-      "timestamp": "2025-10-14T08:42:34.024039"
+      "success": false,
+      "message": "Analysis failed or invalid response",
+      "response_data": null,
+      "timestamp": "2025-10-28T06:31:11.348470"
     },
     {
       "test": "Content Outline Generation",
-      "success": true,
-      "message": "Generated outline with 0 sections for topic: AI-powered SEO optimization strategies",
-      "response_data": {
-        "sections_count": 0,
-        "topic": "AI-powered SEO optimization strategies",
-        "content_type": "guide"
-      },
-      "timestamp": "2025-10-14T08:42:36.700076"
+      "success": false,
+      "message": "Generation failed or invalid response structure",
+      "response_data": null,
+      "timestamp": "2025-10-28T06:31:11.483468"
     },
     {
       "test": "Schema Generation",
@@ -91,30 +76,66 @@
         "schema_type": "FAQ",
         "schema_length": 0
       },
-      "timestamp": "2025-10-14T08:42:36.779047"
+      "timestamp": "2025-10-28T06:31:11.548242"
     },
     {
       "test": "Community Opportunities",
-      "success": true,
-      "message": "Found 8 opportunities across 2 platforms",
-      "response_data": {
-        "opportunities_count": 8,
-        "platforms": [
-          "reddit",
-          "quora"
-        ]
-      },
-      "timestamp": "2025-10-14T08:42:36.839875"
+      "success": false,
+      "message": "Insufficient credits (expected if user has < 3 credits)",
+      "response_data": null,
+      "timestamp": "2025-10-28T06:31:11.624558"
     },
     {
       "test": "Backlink Analysis",
+      "success": false,
+      "message": "Insufficient credits (expected if user has < 5 credits)",
+      "response_data": null,
+      "timestamp": "2025-10-28T06:31:11.701829"
+    },
+    {
+      "test": "Agent Creation with Website",
       "success": true,
-      "message": "Analysis completed - Found 0 gaps and 6 opportunities",
+      "message": "Agent created successfully with website https://example-seo-test.com and site_id cddc19cf-9784-4dec-8679-9ae90091a074",
       "response_data": {
-        "link_gaps": 0,
-        "opportunities": 6
+        "agent_id": "f1b0a841-e402-4573-809e-5d7df8f84f8a",
+        "name": "Trusted Backlinks Specialist",
+        "website": "https://example-seo-test.com",
+        "site_id": "cddc19cf-9784-4dec-8679-9ae90091a074",
+        "purpose": "llm_visibility_optimizer"
       },
-      "timestamp": "2025-10-14T08:42:36.901191"
+      "timestamp": "2025-10-28T06:31:11.808177"
+    },
+    {
+      "test": "Trusted Backlinks Scan",
+      "success": false,
+      "message": "Insufficient credits (expected if user has < 5 credits)",
+      "response_data": null,
+      "timestamp": "2025-10-28T06:31:11.845500"
+    },
+    {
+      "test": "Get Trusted Backlinks",
+      "success": true,
+      "message": "No previous scan found (expected for new sites)",
+      "response_data": {
+        "has_data": false,
+        "message": "No trusted backlinks scan found. Run a scan first."
+      },
+      "timestamp": "2025-10-28T06:31:11.924614"
+    },
+    {
+      "test": "Backlink Opportunities",
+      "success": true,
+      "message": "Retrieved 10 total opportunities, 1 community opportunities",
+      "response_data": {
+        "total_opportunities": 10,
+        "community_opportunities": 1,
+        "sample_sources": [
+          "Reddit",
+          "Quora",
+          "Wikipedia"
+        ]
+      },
+      "timestamp": "2025-10-28T06:31:12.043563"
     },
     {
       "test": "Learning Center Endpoints",
@@ -124,19 +145,19 @@
         "endpoints_tested": 4,
         "endpoints_passed": 4
       },
-      "timestamp": "2025-10-14T08:42:38.304383"
+      "timestamp": "2025-10-28T06:31:12.361611"
     },
     {
       "test": "Credit Deduction Check",
       "success": true,
-      "message": "Credits properly tracked - Started: 100, Current: 72, Used: 28",
+      "message": "Credits properly tracked - Started: 20, Current: 0, Used: 20",
       "response_data": {
-        "initial_credits": 100,
-        "current_credits": 72,
-        "credits_used": 28
+        "initial_credits": 20,
+        "current_credits": 0,
+        "credits_used": 20
       },
-      "timestamp": "2025-10-14T08:42:38.348969"
+      "timestamp": "2025-10-28T06:31:12.401644"
     }
   ],
-  "timestamp": "2025-10-14T08:42:38.349798"
+  "timestamp": "2025-10-28T06:31:12.402402"
 }
