@@ -679,6 +679,290 @@ class LLMVisibilityTester:
             
         return False
     
+    def test_trusted_backlinks_scan(self):
+        """Test trusted backlinks identification endpoint (5 credits)"""
+        print("\n🔍 Testing Trusted Backlinks Scan...")
+        
+        if not self.user_token or not self.site_id:
+            self.log_test("Trusted Backlinks Scan", False, "Missing token or site_id")
+            return False
+            
+        try:
+            request_data = {
+                "site_id": self.site_id,
+                "deep_scan": False
+            }
+            
+            response = requests.post(
+                f"{self.base_url}/llm/backlinks/trusted-sources",
+                json=request_data,
+                headers=self.headers,
+                timeout=45
+            )
+            
+            if response.status_code == 200:
+                data = response.json()
+                
+                if data.get("success"):
+                    summary = data.get("summary", {})
+                    backlinks = data.get("backlinks", [])
+                    by_category = data.get("by_category", {})
+                    insights = data.get("insights", {})
+                    recommendations = data.get("recommendations", [])
+                    
+                    total_trusted = summary.get("total_trusted_backlinks", 0)
+                    avg_authority = summary.get("average_authority", 0)
+                    categories = summary.get("categories_represented", 0)
+                    
+                    self.log_test(
+                        "Trusted Backlinks Scan", 
+                        True, 
+                        f"Scan completed - Found {total_trusted} trusted backlinks, avg authority {avg_authority}, {categories} categories, {len(recommendations)} recommendations",
+                        {
+                            "total_trusted_backlinks": total_trusted,
+                            "average_authority": avg_authority,
+                            "categories_represented": categories,
+                            "backlinks_count": len(backlinks),
+                            "categories": list(by_category.keys()) if by_category else [],
+                            "has_insights": bool(insights),
+                            "recommendations_count": len(recommendations)
+                        }
+                    )
+                    return True
+                else:
+                    self.log_test(
+                        "Trusted Backlinks Scan", 
+                        False, 
+                        "Scan failed or invalid response structure"
+                    )
+            elif response.status_code == 402:
+                self.log_test(
+                    "Trusted Backlinks Scan", 
+                    False, 
+                    "Insufficient credits (expected if user has < 5 credits)"
+                )
+            else:
+                self.log_test(
+                    "Trusted Backlinks Scan", 
+                    False, 
+                    f"HTTP {response.status_code}: {response.text}"
+                )
+                
+        except requests.exceptions.RequestException as e:
+            self.log_test("Trusted Backlinks Scan", False, f"Request failed: {str(e)}")
+            
+        return False
+    
+    def test_get_trusted_backlinks(self):
+        """Test get latest trusted backlinks scan endpoint"""
+        print("\n📋 Testing Get Latest Trusted Backlinks...")
+        
+        if not self.user_token or not self.site_id:
+            self.log_test("Get Trusted Backlinks", False, "Missing token or site_id")
+            return False
+            
+        try:
+            response = requests.get(
+                f"{self.base_url}/llm/backlinks/trusted-sources/{self.site_id}",
+                headers=self.headers,
+                timeout=30
+            )
+            
+            if response.status_code == 200:
+                data = response.json()
+                
+                if data.get("success"):
+                    has_data = data.get("has_data", False)
+                    
+                    if has_data:
+                        scan = data.get("scan", {})
+                        scan_result = scan.get("result", {})
+                        
+                        self.log_test(
+                            "Get Trusted Backlinks", 
+                            True, 
+                            f"Retrieved latest scan successfully - Has data: {has_data}",
+                            {
+                                "has_data": has_data,
+                                "scan_id": scan.get("backlink_scan_id"),
+                                "scan_type": scan.get("scan_type"),
+                                "created_at": scan.get("created_at")
+                            }
+                        )
+                    else:
+                        self.log_test(
+                            "Get Trusted Backlinks", 
+                            True, 
+                            "No previous scan found (expected for new sites)",
+                            {"has_data": has_data, "message": data.get("message")}
+                        )
+                    return True
+                else:
+                    self.log_test(
+                        "Get Trusted Backlinks", 
+                        False, 
+                        "Failed to retrieve scan data"
+                    )
+            else:
+                self.log_test(
+                    "Get Trusted Backlinks", 
+                    False, 
+                    f"HTTP {response.status_code}: {response.text}"
+                )
+                
+        except requests.exceptions.RequestException as e:
+            self.log_test("Get Trusted Backlinks", False, f"Request failed: {str(e)}")
+            
+        return False
+    
+    def test_backlink_opportunities(self):
+        """Test backlink opportunities endpoint"""
+        print("\n🎯 Testing Backlink Opportunities...")
+        
+        if not self.user_token:
+            self.log_test("Backlink Opportunities", False, "No user token available")
+            return False
+            
+        try:
+            # Test without category filter
+            response = requests.get(
+                f"{self.base_url}/llm/backlinks/opportunities",
+                headers=self.headers,
+                timeout=30
+            )
+            
+            if response.status_code == 200:
+                data = response.json()
+                
+                if data.get("success"):
+                    opportunities = data.get("opportunities", [])
+                    total = data.get("total", 0)
+                    
+                    # Test with category filter
+                    category_response = requests.get(
+                        f"{self.base_url}/llm/backlinks/opportunities?category=Community",
+                        headers=self.headers,
+                        timeout=30
+                    )
+                    
+                    category_count = 0
+                    if category_response.status_code == 200:
+                        category_data = category_response.json()
+                        if category_data.get("success"):
+                            category_count = len(category_data.get("opportunities", []))
+                    
+                    self.log_test(
+                        "Backlink Opportunities", 
+                        True, 
+                        f"Retrieved {total} total opportunities, {category_count} community opportunities",
+                        {
+                            "total_opportunities": total,
+                            "community_opportunities": category_count,
+                            "sample_sources": [opp.get("source") for opp in opportunities[:3]] if opportunities else []
+                        }
+                    )
+                    return True
+                else:
+                    self.log_test(
+                        "Backlink Opportunities", 
+                        False, 
+                        "Failed to retrieve opportunities"
+                    )
+            else:
+                self.log_test(
+                    "Backlink Opportunities", 
+                    False, 
+                    f"HTTP {response.status_code}: {response.text}"
+                )
+                
+        except requests.exceptions.RequestException as e:
+            self.log_test("Backlink Opportunities", False, f"Request failed: {str(e)}")
+            
+        return False
+    
+    def test_agent_creation_with_website(self):
+        """Test agent creation with website field"""
+        print("\n🤖 Testing Agent Creation with Website Field...")
+        
+        if not self.user_token or not self.site_id:
+            self.log_test("Agent Creation with Website", False, "Missing token or site_id")
+            return False
+            
+        try:
+            # Get site URL for testing
+            site_response = requests.get(
+                f"{self.base_url}/sites",
+                headers=self.headers,
+                timeout=30
+            )
+            
+            if site_response.status_code != 200:
+                self.log_test("Agent Creation with Website", False, "Could not retrieve site data")
+                return False
+            
+            sites = site_response.json()
+            if not sites:
+                self.log_test("Agent Creation with Website", False, "No sites available")
+                return False
+            
+            test_site_url = sites[0]["url"]
+            
+            agent_data = {
+                "name": "Trusted Backlinks Specialist",
+                "purpose": "llm_visibility_optimizer",
+                "website": test_site_url,
+                "context": {
+                    "specialization": "trusted_backlinks",
+                    "focus": "Reddit, Quora, Wikipedia backlinks"
+                }
+            }
+            
+            response = requests.post(
+                f"{self.base_url}/agents",
+                json=agent_data,
+                headers=self.headers,
+                timeout=30
+            )
+            
+            if response.status_code == 200:
+                data = response.json()
+                
+                # Validate response structure
+                required_fields = ["agent_id", "name", "purpose", "website", "site_id"]
+                missing_fields = [field for field in required_fields if field not in data]
+                
+                if not missing_fields:
+                    self.log_test(
+                        "Agent Creation with Website", 
+                        True, 
+                        f"Agent created successfully with website {data.get('website')} and site_id {data.get('site_id')}",
+                        {
+                            "agent_id": data.get("agent_id"),
+                            "name": data.get("name"),
+                            "website": data.get("website"),
+                            "site_id": data.get("site_id"),
+                            "purpose": data.get("purpose")
+                        }
+                    )
+                    return True
+                else:
+                    self.log_test(
+                        "Agent Creation with Website", 
+                        False, 
+                        f"Missing required fields in response: {missing_fields}"
+                    )
+            else:
+                self.log_test(
+                    "Agent Creation with Website", 
+                    False, 
+                    f"HTTP {response.status_code}: {response.text}"
+                )
+                
+        except requests.exceptions.RequestException as e:
+            self.log_test("Agent Creation with Website", False, f"Request failed: {str(e)}")
+            
+        return False
+    
     def test_learning_center_endpoints(self):
         """Test learning center endpoints (free)"""
         print("\n📚 Testing Learning Center Endpoints...")
