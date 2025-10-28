@@ -263,5 +263,7 @@ CREDIT_COSTS = {
     'response_generation': 2,
     'backlink_analysis': 5,
     'outreach_email': 1,
-    'weekly_report': 2
+    'weekly_report': 2,
+    'trusted_backlinks': 5  # New feature: Identify backlinks from trusted sources
+}
 }
