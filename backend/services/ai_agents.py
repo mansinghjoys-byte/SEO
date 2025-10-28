@@ -326,6 +326,45 @@ class LLMVisibilityAgent(BaseAIAgent):
             if opportunities:
                 context_parts.append(f"\n🔗 Backlink Opportunities: {len(opportunities)}")
         
+        # COMPETITOR ANALYSIS DATA - NEW
+        competitor_discovery = self.context.get('competitor_discovery', {})
+        if competitor_discovery:
+            total_competitors = competitor_discovery.get('total_found', 0)
+            context_parts.append(f"\n🎯 Competitors Discovered: {total_competitors}")
+            competitors = competitor_discovery.get('competitors', [])
+            if competitors:
+                context_parts.append("Top competitors:")
+                for comp in competitors[:5]:
+                    context_parts.append(f"  - {comp.get('domain', 'N/A')} (relevance: {comp.get('relevance_score', 0):.1f})")
+        
+        competitor_backlinks = self.context.get('competitor_backlinks', [])
+        if competitor_backlinks:
+            context_parts.append(f"\n🔗 Competitor Backlink Analyses: {len(competitor_backlinks)}")
+            for analysis in competitor_backlinks[:2]:
+                domain = analysis.get('competitor_domain', 'N/A')
+                total = analysis.get('total_backlinks', 0)
+                context_parts.append(f"  - {domain}: {total} backlinks analyzed")
+        
+        competitor_content = self.context.get('competitor_content', [])
+        if competitor_content:
+            context_parts.append(f"\n📝 Competitor Content Analyses: {len(competitor_content)}")
+            for analysis in competitor_content[:2]:
+                domain = analysis.get('competitor_domain', 'N/A')
+                gaps = len(analysis.get('content_gaps', []))
+                context_parts.append(f"  - {domain}: {gaps} content gaps identified")
+        
+        competitor_social = self.context.get('competitor_social', [])
+        if competitor_social:
+            context_parts.append(f"\n📱 Competitor Social Analyses: {len(competitor_social)}")
+        
+        comprehensive_report = self.context.get('comprehensive_competitor_report', {})
+        if comprehensive_report:
+            analyzed = comprehensive_report.get('competitors_analyzed', 0)
+            context_parts.append(f"\n📊 Comprehensive Competitor Report: {analyzed} competitors analyzed")
+            summary = comprehensive_report.get('executive_summary', '')
+            if summary:
+                context_parts.append(f"Executive Summary: {summary[:200]}...")
+        
         # Historical data count
         audit_count = self.context.get('total_audits', 0)
         if audit_count:
