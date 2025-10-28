@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """
-Backend API Testing for LLM Visibility Optimizer
-Tests all 8 new LLM visibility modules with comprehensive API coverage
+Backend API Testing for RankForge SEO Platform
+Tests new production-ready competitor analysis endpoints + existing LLM visibility modules
+Focus: Competitor Discovery, Backlink Analysis, Content Analysis, Social Analysis, Comprehensive Reports
 """
 
 import requests
@@ -17,7 +18,7 @@ USER_CREDENTIALS = {
     "password": "password123"  # Will try to login or register
 }
 
-class LLMVisibilityTester:
+class RankForgeCompetitorTester:
     def __init__(self):
         self.base_url = BACKEND_URL
         self.user_token = None
