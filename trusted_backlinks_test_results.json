@@ -1,0 +1,77 @@
+{
+  "summary": {
+    "passed": 5,
+    "total": 5,
+    "success_rate": "100.0%"
+  },
+  "results": [
+    {
+      "test": "Agent Creation with Website",
+      "success": true,
+      "message": "Agent created successfully with website https://example-seo-test.com and site_id cddc19cf-9784-4dec-8679-9ae90091a074",
+      "response_data": {
+        "agent_id": "7e533f25-2a47-4d82-a7eb-bbf33ebc6b56",
+        "name": "Trusted Backlinks Specialist",
+        "website": "https://example-seo-test.com",
+        "site_id": "cddc19cf-9784-4dec-8679-9ae90091a074",
+        "purpose": "llm_visibility_optimizer"
+      },
+      "timestamp": "2025-10-28T06:33:00.427498"
+    },
+    {
+      "test": "Backlink Opportunities",
+      "success": true,
+      "message": "Retrieved 10 total opportunities, 1 community opportunities",
+      "response_data": {
+        "total_opportunities": 10,
+        "community_opportunities": 1,
+        "sample_sources": [
+          "Reddit",
+          "Quora",
+          "Wikipedia"
+        ]
+      },
+      "timestamp": "2025-10-28T06:33:00.544988"
+    },
+    {
+      "test": "Get Latest Scan",
+      "success": true,
+      "message": "No previous scan found (expected for new sites)",
+      "response_data": {
+        "has_data": false,
+        "message": "No trusted backlinks scan found. Run a scan first."
+      },
+      "timestamp": "2025-10-28T06:33:00.587164"
+    },
+    {
+      "test": "Trusted Backlinks Scan",
+      "success": true,
+      "message": "Scan completed - Found 2 trusted backlinks, avg authority 91.5, 2 categories",
+      "response_data": {
+        "total_trusted_backlinks": 2,
+        "average_authority": 91.5,
+        "categories_represented": 2,
+        "backlinks_count": 2,
+        "categories": [
+          "Q&A",
+          "Tech News"
+        ],
+        "recommendations_count": 3,
+        "highest_authority_source": "Quora"
+      },
+      "timestamp": "2025-10-28T06:33:00.666106"
+    },
+    {
+      "test": "Get Latest Scan",
+      "success": true,
+      "message": "Retrieved latest scan successfully",
+      "response_data": {
+        "has_data": true,
+        "scan_id": "938ad6e1-3476-4550-91dd-9b19e41b5262",
+        "scan_type": "trusted_sources"
+      },
+      "timestamp": "2025-10-28T06:33:00.703550"
+    }
+  ],
+  "timestamp": "2025-10-28T06:33:00.741422"
+}
