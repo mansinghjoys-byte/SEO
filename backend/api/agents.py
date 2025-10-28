@@ -203,6 +203,82 @@ async def chat_with_agent(chat_data: ChatRequest, current_user: dict = Depends(g
                 'user_id': current_user['user_id']
             })
             context['total_audits'] = total_audits
+            
+            # COMPETITOR ANALYSIS DATA - Added for real-world usefulness
+            
+            # Get latest competitor discovery
+            competitor_discovery = await db.competitor_discoveries.find_one(
+                {'site_id': site_id, 'user_id': current_user['user_id']},
+                {'_id': 0},
+                sort=[('created_at', -1)]
+            )
+            if competitor_discovery:
+                context['competitor_discovery'] = {
+                    'total_found': competitor_discovery.get('total_found', 0),
+                    'competitors': competitor_discovery.get('competitors', [])[:10],  # Top 10
+                    'keywords': competitor_discovery.get('keywords', [])
+                }
+            
+            # Get competitor backlink analyses
+            competitor_backlinks = await db.competitor_backlink_analyses.find(
+                {'site_id': site_id, 'user_id': current_user['user_id']},
+                {'_id': 0}
+            ).sort('created_at', -1).limit(3).to_list(3)
+            if competitor_backlinks:
+                context['competitor_backlinks'] = [
+                    {
+                        'competitor_domain': analysis.get('competitor_domain'),
+                        'total_backlinks': analysis.get('total_backlinks', 0),
+                        'opportunities': analysis.get('opportunities', [])[:5],
+                        'metrics': analysis.get('metrics', {})
+                    }
+                    for analysis in competitor_backlinks
+                ]
+            
+            # Get competitor content analyses
+            competitor_content = await db.competitor_content_analyses.find(
+                {'site_id': site_id, 'user_id': current_user['user_id']},
+                {'_id': 0}
+            ).sort('created_at', -1).limit(3).to_list(3)
+            if competitor_content:
+                context['competitor_content'] = [
+                    {
+                        'competitor_domain': analysis.get('competitor_domain'),
+                        'content_gaps': analysis.get('content_gaps', [])[:5],
+                        'top_content': analysis.get('top_content', [])[:5],
+                        'themes': analysis.get('themes', [])
+                    }
+                    for analysis in competitor_content
+                ]
+            
+            # Get competitor social analyses
+            competitor_social = await db.competitor_social_analyses.find(
+                {'site_id': site_id, 'user_id': current_user['user_id']},
+                {'_id': 0}
+            ).sort('created_at', -1).limit(3).to_list(3)
+            if competitor_social:
+                context['competitor_social'] = [
+                    {
+                        'competitor_domain': analysis.get('competitor_domain'),
+                        'platforms': list(analysis.get('by_platform', {}).keys()),
+                        'insights': analysis.get('insights', {})
+                    }
+                    for analysis in competitor_social
+                ]
+            
+            # Get latest comprehensive competitor report
+            comprehensive_report = await db.comprehensive_competitor_reports.find_one(
+                {'site_id': site_id, 'user_id': current_user['user_id']},
+                {'_id': 0},
+                sort=[('created_at', -1)]
+            )
+            if comprehensive_report:
+                context['comprehensive_competitor_report'] = {
+                    'competitors_analyzed': comprehensive_report.get('competitors_analyzed', 0),
+                    'executive_summary': comprehensive_report.get('executive_summary', ''),
+                    'recommendations': comprehensive_report.get('recommendations', [])[:5],
+                    'competitive_landscape': comprehensive_report.get('competitive_landscape', {})
+                }
     
     # Legacy support for audit_assistant
     elif agent_doc['purpose'] == 'audit_assistant':
