@@ -267,4 +267,4 @@ CREDIT_COSTS = {
     'weekly_report': 2,
     'trusted_backlinks': 5  # New feature: Identify backlinks from trusted sources
 }
-}
+
