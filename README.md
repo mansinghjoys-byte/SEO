@@ -166,7 +166,7 @@ CORS_ORIGINS="*"
 
 ### Frontend (.env)
 ```bash
-REACT_APP_BACKEND_URL=https://codebase-sync-32.preview.emergentagent.com
+REACT_APP_BACKEND_URL=https://domain-insight-hub.preview.emergentagent.com
 ```
 
 ## API Endpoints
@@ -268,14 +268,14 @@ tail -f /var/log/supervisor/frontend.out.log
 
 ### Test User Registration
 ```bash
-curl -X POST https://codebase-sync-32.preview.emergentagent.com/api/auth/register \
+curl -X POST https://domain-insight-hub.preview.emergentagent.com/api/auth/register \
   -H "Content-Type: application/json" \
   -d '{"email":"test@example.com","password":"test123","full_name":"Test User"}'
 ```
 
 ### Test Login
 ```bash
-curl -X POST https://codebase-sync-32.preview.emergentagent.com/api/auth/login \
+curl -X POST https://domain-insight-hub.preview.emergentagent.com/api/auth/login \
   -H "Content-Type: application/json" \
   -d '{"email":"test@example.com","password":"test123"}'
 ```
@@ -327,7 +327,7 @@ curl -X POST https://codebase-sync-32.preview.emergentagent.com/api/auth/login \
 
 For issues or questions:
 - Check logs: `/var/log/supervisor/`
-- API docs: `https://codebase-sync-32.preview.emergentagent.com/api/docs`
+- API docs: `https://domain-insight-hub.preview.emergentagent.com/api/docs`
 - Test endpoints: Use Postman or curl
 
 ## License

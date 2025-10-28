@@ -396,7 +396,7 @@ All limitations have clear upgrade paths and don't prevent production deployment
 
 ### Admin Access
 ```
-URL: https://codebase-sync-32.preview.emergentagent.com
+URL: https://domain-insight-hub.preview.emergentagent.com
 Admin Email: admin@rankforge.com
 Admin Password: RankForge@Admin2025!Secure
 ```

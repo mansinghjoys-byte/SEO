@@ -10,7 +10,7 @@ import sys
 from datetime import datetime
 
 # Configuration
-BACKEND_URL = "https://codebase-sync-32.preview.emergentagent.com/api"
+BACKEND_URL = "https://domain-insight-hub.preview.emergentagent.com/api"
 USER_CREDENTIALS = {
     "email": "amis.joys@gmail.com",
     "password": "password123"
