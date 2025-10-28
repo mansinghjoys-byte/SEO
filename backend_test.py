@@ -1637,11 +1637,11 @@ class RankForgeCompetitorTester:
 
 def main():
     """Main test execution"""
-    tester = LLMVisibilityTester()
+    tester = RankForgeCompetitorTester()
     passed, total, results = tester.run_all_tests()
     
     # Save detailed results
-    with open('/app/llm_visibility_test_results.json', 'w') as f:
+    with open('/app/competitor_analysis_test_results.json', 'w') as f:
         json.dump({
             'summary': {
                 'passed': passed,
@@ -1652,7 +1652,7 @@ def main():
             'timestamp': datetime.now().isoformat()
         }, f, indent=2)
     
-    print(f"\n📄 Detailed results saved to: /app/llm_visibility_test_results.json")
+    print(f"\n📄 Detailed results saved to: /app/competitor_analysis_test_results.json")
     
     # Exit with appropriate code
     sys.exit(0 if passed == total else 1)
