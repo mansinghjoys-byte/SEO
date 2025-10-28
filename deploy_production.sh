@@ -4,15 +4,19 @@
 # RankForge SEO Platform - Production Deployment Script
 # Author: Deployment Automation
 # Description: Complete deployment from GitHub to production
+# Version: 2.0.0 - Enhanced with Redis configuration and error handling
 ################################################################################
 
-set -e  # Exit on any error
+# Don't exit on error - we'll handle errors manually for better control
+set +e
 
 # Color codes for output
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
+CYAN='\033[0;36m'
+BOLD='\033[1m'
 NC='\033[0m' # No Color
 
 # Configuration
@@ -27,9 +31,19 @@ MONGO_HOST="localhost"
 MONGO_PORT="27018"
 DB_NAME="seo_platform"
 
+# Redis Configuration (will be set by user input)
+REDIS_HOST="localhost"
+REDIS_PORT=""
+USE_EXISTING_REDIS=""
+REDIS_PASSWORD=""
+INSTALL_NEW_REDIS=""
+
 # Super Admin Credentials
 SUPER_ADMIN_EMAIL="admin@rankforge.com"
 SUPER_ADMIN_PASSWORD="RankForge@Admin2025!Secure"
+
+# Log file for this deployment
+DEPLOY_LOG="/tmp/rankforge_deploy_$(date +%Y%m%d_%H%M%S).log"
 
 ################################################################################
 # Helper Functions
