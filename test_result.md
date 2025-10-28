@@ -488,6 +488,7 @@ test_plan:
     - "Test content intelligence APIs (gap analysis, generation, schema)"
     - "Test community hub APIs"
     - "Test backlink analysis API"
+    - "Test trusted backlinks feature (NEW)"
     - "Test learning center endpoints"
     - "Verify credit costs deduction"
     - "Validate business logic for pricing plans"
