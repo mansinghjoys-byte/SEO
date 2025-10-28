@@ -150,7 +150,7 @@ export default function AIAgents() {
                         <SelectValue placeholder="Select a website" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="">None (General Agent)</SelectItem>
+                        <SelectItem value="none">None (General Agent)</SelectItem>
                         {sites.map((site) => (
                           <SelectItem key={site.site_id} value={site.url}>
                             {site.url}
