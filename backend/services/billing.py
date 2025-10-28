@@ -265,6 +265,13 @@ CREDIT_COSTS = {
     'backlink_analysis': 5,
     'outreach_email': 1,
     'weekly_report': 2,
-    'trusted_backlinks': 5  # New feature: Identify backlinks from trusted sources
+    'trusted_backlinks': 5,  # Identify backlinks from trusted sources
+    
+    # Advanced Competitor Analysis Features (Production-Ready)
+    'competitor_discovery': 10,  # Discover competitors via search engines + Exa.ai
+    'competitor_backlink_analysis': 15,  # Analyze competitor backlinks in depth
+    'competitor_content_analysis': 12,  # Analyze competitor content strategy
+    'competitor_social_analysis': 8,  # Analyze social media presence (Reddit, Twitter, Quora)
+    'comprehensive_competitor_analysis': 50  # Full comprehensive competitor report
 }
 
