@@ -15,6 +15,7 @@ from services.community_hub import CommunityHubService
 from services.backlink_strategy import BacklinkStrategyService
 from services.analytics_service import AnalyticsService
 from services.learning_center import LearningCenterService
+from services.trusted_backlinks import TrustedBacklinksService
 from datetime import datetime, timezone
 import uuid
 
