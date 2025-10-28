@@ -1043,6 +1043,425 @@ class LLMVisibilityTester:
             )
             return False
     
+    def test_competitor_discovery(self):
+        """Test competitor discovery endpoint (10 credits)"""
+        print("\n🔍 Testing Competitor Discovery...")
+        
+        if not self.user_token or not self.site_id:
+            self.log_test("Competitor Discovery", False, "Missing token or site_id")
+            return False
+            
+        try:
+            request_data = {
+                "site_id": self.site_id,
+                "keywords": ["seo", "marketing"],
+                "industry": "software",
+                "max_competitors": 20
+            }
+            
+            response = requests.post(
+                f"{self.base_url}/competitors/discover",
+                json=request_data,
+                headers=self.headers,
+                timeout=90  # Longer timeout for competitor discovery
+            )
+            
+            if response.status_code == 200:
+                data = response.json()
+                
+                if data.get("success"):
+                    competitors = data.get("competitors", [])
+                    total_found = data.get("total_found", 0)
+                    discovery_methods = data.get("discovery_methods_used", {})
+                    
+                    self.log_test(
+                        "Competitor Discovery", 
+                        True, 
+                        f"Discovery completed - Found {total_found} competitors using {len(discovery_methods)} methods",
+                        {
+                            "competitors_found": len(competitors),
+                            "total_found": total_found,
+                            "discovery_methods": list(discovery_methods.keys()) if discovery_methods else [],
+                            "sample_competitors": [comp.get("domain") for comp in competitors[:3]] if competitors else []
+                        }
+                    )
+                    return True
+                else:
+                    self.log_test(
+                        "Competitor Discovery", 
+                        False, 
+                        "Discovery failed or invalid response structure"
+                    )
+            elif response.status_code == 402:
+                self.log_test(
+                    "Competitor Discovery", 
+                    False, 
+                    "Insufficient credits (expected if user has < 10 credits)"
+                )
+            else:
+                self.log_test(
+                    "Competitor Discovery", 
+                    False, 
+                    f"HTTP {response.status_code}: {response.text}"
+                )
+                
+        except requests.exceptions.RequestException as e:
+            self.log_test("Competitor Discovery", False, f"Request failed: {str(e)}")
+            
+        return False
+    
+    def test_competitor_backlink_analysis(self):
+        """Test competitor backlink analysis endpoint (15 credits)"""
+        print("\n🔗 Testing Competitor Backlink Analysis...")
+        
+        if not self.user_token or not self.site_id:
+            self.log_test("Competitor Backlink Analysis", False, "Missing token or site_id")
+            return False
+            
+        try:
+            request_data = {
+                "site_id": self.site_id,
+                "competitor_domain": "moz.com"
+            }
+            
+            response = requests.post(
+                f"{self.base_url}/competitors/analyze-backlinks",
+                json=request_data,
+                headers=self.headers,
+                timeout=90
+            )
+            
+            if response.status_code == 200:
+                data = response.json()
+                
+                if data.get("success"):
+                    metrics = data.get("metrics", {})
+                    total_backlinks = data.get("total_backlinks", 0)
+                    backlinks = data.get("backlinks", [])
+                    opportunities = data.get("link_gap_opportunities", [])
+                    insights = data.get("insights", {})
+                    
+                    self.log_test(
+                        "Competitor Backlink Analysis", 
+                        True, 
+                        f"Analysis completed - {total_backlinks} backlinks found, {len(opportunities)} opportunities, insights generated",
+                        {
+                            "total_backlinks": total_backlinks,
+                            "backlinks_analyzed": len(backlinks),
+                            "opportunities_found": len(opportunities),
+                            "has_metrics": bool(metrics),
+                            "has_insights": bool(insights),
+                            "competitor_domain": request_data["competitor_domain"]
+                        }
+                    )
+                    return True
+                else:
+                    self.log_test(
+                        "Competitor Backlink Analysis", 
+                        False, 
+                        "Analysis failed or invalid response structure"
+                    )
+            elif response.status_code == 402:
+                self.log_test(
+                    "Competitor Backlink Analysis", 
+                    False, 
+                    "Insufficient credits (expected if user has < 15 credits)"
+                )
+            else:
+                self.log_test(
+                    "Competitor Backlink Analysis", 
+                    False, 
+                    f"HTTP {response.status_code}: {response.text}"
+                )
+                
+        except requests.exceptions.RequestException as e:
+            self.log_test("Competitor Backlink Analysis", False, f"Request failed: {str(e)}")
+            
+        return False
+    
+    def test_competitor_content_analysis(self):
+        """Test competitor content analysis endpoint (12 credits)"""
+        print("\n📝 Testing Competitor Content Analysis...")
+        
+        if not self.user_token or not self.site_id:
+            self.log_test("Competitor Content Analysis", False, "Missing token or site_id")
+            return False
+            
+        try:
+            request_data = {
+                "site_id": self.site_id,
+                "competitor_domain": "moz.com",
+                "keywords": ["seo", "backlinks"]
+            }
+            
+            response = requests.post(
+                f"{self.base_url}/competitors/analyze-content",
+                json=request_data,
+                headers=self.headers,
+                timeout=90
+            )
+            
+            if response.status_code == 200:
+                data = response.json()
+                
+                if data.get("success"):
+                    top_content = data.get("top_content", [])
+                    content_themes = data.get("content_themes", {})
+                    content_gaps = data.get("content_gaps", [])
+                    quality_metrics = data.get("quality_metrics", {})
+                    schema_analysis = data.get("schema_analysis", {})
+                    insights = data.get("insights", {})
+                    
+                    self.log_test(
+                        "Competitor Content Analysis", 
+                        True, 
+                        f"Analysis completed - {len(top_content)} top content pieces, {len(content_gaps)} gaps found, quality metrics & schema analysis included",
+                        {
+                            "top_content_count": len(top_content),
+                            "content_gaps_found": len(content_gaps),
+                            "themes_identified": len(content_themes) if content_themes else 0,
+                            "has_quality_metrics": bool(quality_metrics),
+                            "has_schema_analysis": bool(schema_analysis),
+                            "has_insights": bool(insights),
+                            "competitor_domain": request_data["competitor_domain"]
+                        }
+                    )
+                    return True
+                else:
+                    self.log_test(
+                        "Competitor Content Analysis", 
+                        False, 
+                        "Analysis failed or invalid response structure"
+                    )
+            elif response.status_code == 402:
+                self.log_test(
+                    "Competitor Content Analysis", 
+                    False, 
+                    "Insufficient credits (expected if user has < 12 credits)"
+                )
+            else:
+                self.log_test(
+                    "Competitor Content Analysis", 
+                    False, 
+                    f"HTTP {response.status_code}: {response.text}"
+                )
+                
+        except requests.exceptions.RequestException as e:
+            self.log_test("Competitor Content Analysis", False, f"Request failed: {str(e)}")
+            
+        return False
+    
+    def test_competitor_social_analysis(self):
+        """Test competitor social media analysis endpoint (8 credits)"""
+        print("\n📱 Testing Competitor Social Media Analysis...")
+        
+        if not self.user_token:
+            self.log_test("Competitor Social Analysis", False, "No user token available")
+            return False
+            
+        try:
+            request_data = {
+                "competitor_domain": "moz.com",
+                "brand_name": "Moz"
+            }
+            
+            response = requests.post(
+                f"{self.base_url}/competitors/analyze-social",
+                json=request_data,
+                headers=self.headers,
+                timeout=90
+            )
+            
+            if response.status_code == 200:
+                data = response.json()
+                
+                if data.get("success"):
+                    reddit_analysis = data.get("reddit_analysis", {})
+                    twitter_analysis = data.get("twitter_analysis", {})
+                    quora_analysis = data.get("quora_analysis", {})
+                    social_metrics = data.get("social_metrics", {})
+                    insights = data.get("insights", {})
+                    
+                    platforms_analyzed = sum([
+                        1 if reddit_analysis else 0,
+                        1 if twitter_analysis else 0,
+                        1 if quora_analysis else 0
+                    ])
+                    
+                    self.log_test(
+                        "Competitor Social Analysis", 
+                        True, 
+                        f"Analysis completed - {platforms_analyzed} platforms analyzed (Reddit, Twitter, Quora), social metrics & insights generated",
+                        {
+                            "platforms_analyzed": platforms_analyzed,
+                            "has_reddit_analysis": bool(reddit_analysis),
+                            "has_twitter_analysis": bool(twitter_analysis),
+                            "has_quora_analysis": bool(quora_analysis),
+                            "has_social_metrics": bool(social_metrics),
+                            "has_insights": bool(insights),
+                            "competitor_domain": request_data["competitor_domain"],
+                            "brand_name": request_data["brand_name"]
+                        }
+                    )
+                    return True
+                else:
+                    self.log_test(
+                        "Competitor Social Analysis", 
+                        False, 
+                        "Analysis failed or invalid response structure"
+                    )
+            elif response.status_code == 402:
+                self.log_test(
+                    "Competitor Social Analysis", 
+                    False, 
+                    "Insufficient credits (expected if user has < 8 credits)"
+                )
+            else:
+                self.log_test(
+                    "Competitor Social Analysis", 
+                    False, 
+                    f"HTTP {response.status_code}: {response.text}"
+                )
+                
+        except requests.exceptions.RequestException as e:
+            self.log_test("Competitor Social Analysis", False, f"Request failed: {str(e)}")
+            
+        return False
+    
+    def test_comprehensive_competitor_report(self):
+        """Test comprehensive competitor analysis report endpoint (50 credits)"""
+        print("\n📊 Testing Comprehensive Competitor Report...")
+        
+        if not self.user_token or not self.site_id:
+            self.log_test("Comprehensive Competitor Report", False, "Missing token or site_id")
+            return False
+            
+        try:
+            request_data = {
+                "site_id": self.site_id,
+                "keywords": ["seo"],
+                "industry": "software",
+                "analyze_top_n": 3
+            }
+            
+            response = requests.post(
+                f"{self.base_url}/competitors/comprehensive-report",
+                json=request_data,
+                headers=self.headers,
+                timeout=180  # Very long timeout for comprehensive analysis
+            )
+            
+            if response.status_code == 200:
+                data = response.json()
+                
+                if data.get("success"):
+                    competitors_analyzed = data.get("competitors_analyzed", 0)
+                    competitors = data.get("competitors", [])
+                    cross_insights = data.get("cross_competitor_insights", {})
+                    landscape = data.get("competitive_landscape", {})
+                    recommendations = data.get("actionable_recommendations", [])
+                    executive_summary = data.get("executive_summary", {})
+                    
+                    self.log_test(
+                        "Comprehensive Competitor Report", 
+                        True, 
+                        f"Comprehensive analysis completed - {competitors_analyzed} competitors analyzed, {len(recommendations)} recommendations, executive summary included",
+                        {
+                            "competitors_analyzed": competitors_analyzed,
+                            "total_competitors_found": len(competitors),
+                            "has_cross_insights": bool(cross_insights),
+                            "has_competitive_landscape": bool(landscape),
+                            "recommendations_count": len(recommendations),
+                            "has_executive_summary": bool(executive_summary),
+                            "analyze_top_n": request_data["analyze_top_n"]
+                        }
+                    )
+                    return True
+                else:
+                    self.log_test(
+                        "Comprehensive Competitor Report", 
+                        False, 
+                        "Comprehensive analysis failed or invalid response structure"
+                    )
+            elif response.status_code == 402:
+                self.log_test(
+                    "Comprehensive Competitor Report", 
+                    False, 
+                    "Insufficient credits (expected if user has < 50 credits)"
+                )
+            else:
+                self.log_test(
+                    "Comprehensive Competitor Report", 
+                    False, 
+                    f"HTTP {response.status_code}: {response.text}"
+                )
+                
+        except requests.exceptions.RequestException as e:
+            self.log_test("Comprehensive Competitor Report", False, f"Request failed: {str(e)}")
+            
+        return False
+    
+    def test_get_competitor_reports(self):
+        """Test get historical competitor reports endpoint (Free)"""
+        print("\n📋 Testing Get Historical Competitor Reports...")
+        
+        if not self.user_token or not self.site_id:
+            self.log_test("Get Competitor Reports", False, "Missing token or site_id")
+            return False
+            
+        try:
+            response = requests.get(
+                f"{self.base_url}/competitors/{self.site_id}/reports",
+                headers=self.headers,
+                timeout=30
+            )
+            
+            if response.status_code == 200:
+                data = response.json()
+                
+                if data.get("success"):
+                    reports = data.get("reports", {})
+                    
+                    # Count different types of reports
+                    discoveries = len(reports.get("discoveries", []))
+                    backlink_analyses = len(reports.get("backlink_analyses", []))
+                    content_analyses = len(reports.get("content_analyses", []))
+                    comprehensive_reports = len(reports.get("comprehensive_reports", []))
+                    
+                    total_reports = discoveries + backlink_analyses + content_analyses + comprehensive_reports
+                    
+                    self.log_test(
+                        "Get Competitor Reports", 
+                        True, 
+                        f"Retrieved {total_reports} historical reports - {discoveries} discoveries, {backlink_analyses} backlink analyses, {content_analyses} content analyses, {comprehensive_reports} comprehensive reports",
+                        {
+                            "total_reports": total_reports,
+                            "discoveries": discoveries,
+                            "backlink_analyses": backlink_analyses,
+                            "content_analyses": content_analyses,
+                            "comprehensive_reports": comprehensive_reports,
+                            "site_id": self.site_id
+                        }
+                    )
+                    return True
+                else:
+                    self.log_test(
+                        "Get Competitor Reports", 
+                        False, 
+                        "Failed to retrieve reports"
+                    )
+            else:
+                self.log_test(
+                    "Get Competitor Reports", 
+                    False, 
+                    f"HTTP {response.status_code}: {response.text}"
+                )
+                
+        except requests.exceptions.RequestException as e:
+            self.log_test("Get Competitor Reports", False, f"Request failed: {str(e)}")
+            
+        return False
+
     def check_credit_deduction(self):
         """Check if credits were properly deducted"""
         print("\n💳 Checking Credit Deduction...")
