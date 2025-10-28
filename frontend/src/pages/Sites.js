@@ -104,8 +104,8 @@ export default function Sites() {
                 <div className="mb-4"><h3 className="font-semibold text-lg mb-1">{site.name}</h3><a href={site.url} target="_blank" rel="noopener noreferrer" className="text-sm text-blue-600 hover:underline flex items-center"><span className="truncate">{site.url}</span><ExternalLink className="w-3 h-3 ml-1" /></a></div>
                 {site.seo_score && (<div className="mb-4 p-3 bg-slate-50 rounded-lg"><div className="text-sm text-slate-600 mb-1">SEO Score</div><div className={`text-2xl font-bold ${site.seo_score >= 80 ? 'text-green-600' : site.seo_score >= 60 ? 'text-amber-600' : 'text-red-600'}`}>{site.seo_score}/100</div></div>)}
                 <div className="flex space-x-2">
-                  <Link to={`/audits/${site.site_id}`} className="flex-1"><Button variant="outline" className="w-full" size="sm">View Audits</Button></Link>
-                  <Link to={`/keywords/${site.site_id}`} className="flex-1"><Button variant="outline" className="w-full" size="sm">Keywords</Button></Link>
+                  <Link to={`/sites/${site.site_id}`} className="flex-1"><Button variant="default" className="w-full" size="sm">Backlinks</Button></Link>
+                  <Link to={`/audits/${site.site_id}`} className="flex-1"><Button variant="outline" className="w-full" size="sm">Audits</Button></Link>
                   <Button variant="ghost" size="sm" onClick={() => handleDelete(site.site_id)}><Trash2 className="w-4 h-4 text-red-600" /></Button>
                 </div>
               </div>
