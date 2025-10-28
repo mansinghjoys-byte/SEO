@@ -19,10 +19,22 @@ export default function AIAgents() {
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [newAgentName, setNewAgentName] = useState('');
   const [newAgentPurpose, setNewAgentPurpose] = useState('audit_assistant');
+  const [newAgentWebsite, setNewAgentWebsite] = useState('');
+  const [sites, setSites] = useState([]);
 
   useEffect(() => {
     fetchAgents();
+    fetchSites();
   }, []);
+
+  const fetchSites = async () => {
+    try {
+      const response = await api.get('/sites');
+      setSites(response.data);
+    } catch (error) {
+      console.error('Failed to load sites');
+    }
+  };
 
   const fetchAgents = async () => {
     try {
