@@ -64,12 +64,12 @@ export default function AIAgents() {
       const response = await api.post('/agents/', {
         name: newAgentName,
         purpose: newAgentPurpose,
-        website: newAgentWebsite || null,
+        website: newAgentWebsite && newAgentWebsite !== 'none' ? newAgentWebsite : null,
         context: {}
       });
       toast.success('AI Agent created!');
       setNewAgentName('');
-      setNewAgentWebsite('');
+      setNewAgentWebsite('none');
       setIsCreateOpen(false);
       fetchAgents();
     } catch (error) {
