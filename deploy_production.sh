@@ -49,27 +49,122 @@ DEPLOY_LOG="/tmp/rankforge_deploy_$(date +%Y%m%d_%H%M%S).log"
 # Helper Functions
 ################################################################################
 
+log_to_file() {
+    echo "[$(date '+%Y-%m-%d %H:%M:%S')] $1" >> "$DEPLOY_LOG"
+}
+
 print_step() {
     echo -e "${BLUE}==>${NC} $1"
+    log_to_file "STEP: $1"
 }
 
 print_success() {
     echo -e "${GREEN}✓${NC} $1"
+    log_to_file "SUCCESS: $1"
 }
 
 print_error() {
     echo -e "${RED}✗${NC} $1"
+    log_to_file "ERROR: $1"
 }
 
 print_warning() {
     echo -e "${YELLOW}⚠${NC} $1"
+    log_to_file "WARNING: $1"
+}
+
+print_info() {
+    echo -e "${CYAN}ℹ${NC} $1"
+    log_to_file "INFO: $1"
+}
+
+print_bold() {
+    echo -e "${BOLD}$1${NC}"
 }
 
 check_command() {
     if ! command -v $1 &> /dev/null; then
         print_error "$1 is not installed. Please install it first."
-        exit 1
+        print_info "Install with: apt-get install $1"
+        return 1
     fi
+    return 0
+}
+
+# Function to check if a port is in use
+check_port_in_use() {
+    local port=$1
+    if netstat -tuln 2>/dev/null | grep -q ":$port " || ss -tuln 2>/dev/null | grep -q ":$port "; then
+        return 0  # Port is in use
+    else
+        return 1  # Port is free
+    fi
+}
+
+# Function to get process using a port
+get_port_process() {
+    local port=$1
+    lsof -i :$port 2>/dev/null | grep LISTEN | awk '{print $1, $2}' | head -1
+}
+
+# Function to prompt user for yes/no with default
+prompt_yes_no() {
+    local prompt="$1"
+    local default="${2:-n}"
+    local response
+    
+    if [ "$default" = "y" ]; then
+        prompt="$prompt [Y/n]: "
+    else
+        prompt="$prompt [y/N]: "
+    fi
+    
+    read -p "$prompt" response
+    response=${response:-$default}
+    
+    if [[ "$response" =~ ^[Yy]$ ]]; then
+        return 0
+    else
+        return 1
+    fi
+}
+
+# Function to prompt for input with default
+prompt_input() {
+    local prompt="$1"
+    local default="$2"
+    local response
+    
+    if [ -n "$default" ]; then
+        read -p "$prompt [$default]: " response
+        response=${response:-$default}
+    else
+        read -p "$prompt: " response
+    fi
+    
+    echo "$response"
+}
+
+# Function to validate port number
+validate_port() {
+    local port=$1
+    if [[ "$port" =~ ^[0-9]+$ ]] && [ "$port" -ge 1 ] && [ "$port" -le 65535 ]; then
+        return 0
+    else
+        return 1
+    fi
+}
+
+# Rollback function in case of failure
+rollback() {
+    print_error "Deployment failed. Rolling back changes..."
+    
+    # Stop services if they were started
+    systemctl stop rankforge-backend 2>/dev/null || true
+    systemctl stop rankforge-worker 2>/dev/null || true
+    
+    print_warning "Partial deployment completed. Check logs at: $DEPLOY_LOG"
+    exit 1
 }
 
 ################################################################################
