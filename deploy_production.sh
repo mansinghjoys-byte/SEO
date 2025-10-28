@@ -237,38 +237,229 @@ else
 fi
 
 ################################################################################
-# 2. Check and Start Redis
+# 2. Redis Configuration (Interactive)
 ################################################################################
 
-print_step "Step 2: Checking Redis..."
+print_bold "╔════════════════════════════════════════════════════════════════╗"
+print_bold "║                    Redis Configuration                         ║"
+print_bold "╚════════════════════════════════════════════════════════════════╝"
+echo ""
 
-if systemctl is-active --quiet redis-server; then
-    print_success "Redis is already running"
-elif systemctl is-active --quiet redis; then
-    print_success "Redis is already running"
+print_info "RankForge requires Redis for background job processing"
+echo ""
+
+# Check if Redis is already installed
+REDIS_INSTALLED=false
+if command -v redis-server &> /dev/null || command -v redis-cli &> /dev/null; then
+    REDIS_INSTALLED=true
+    print_success "Redis is already installed on this system"
 else
-    print_step "Starting Redis..."
-    systemctl start redis-server || systemctl start redis
-    sleep 2
+    print_warning "Redis is not installed on this system"
+fi
+
+# Check for running Redis instances
+print_step "Checking for running Redis instances..."
+RUNNING_REDIS_PORTS=()
+
+# Check common Redis ports
+for port in 6379 6380 6381; do
+    if check_port_in_use $port; then
+        # Try to connect to see if it's Redis
+        if redis-cli -p $port ping &>/dev/null; then
+            RUNNING_REDIS_PORTS+=($port)
+            print_info "Redis detected on port $port"
+        fi
+    fi
+done
+
+# Interactive Redis configuration
+echo ""
+print_bold "Redis Setup Options:"
+echo ""
+
+if [ ${#RUNNING_REDIS_PORTS[@]} -gt 0 ]; then
+    echo "Detected running Redis instance(s) on port(s): ${RUNNING_REDIS_PORTS[*]}"
+    echo ""
+    echo "Options:"
+    echo "  1) Use existing Redis instance"
+    echo "  2) Install and configure new Redis instance"
+    echo "  3) Configure custom Redis connection"
+    echo ""
     
-    if systemctl is-active --quiet redis-server || systemctl is-active --quiet redis; then
-        print_success "Redis started successfully"
+    REDIS_CHOICE=$(prompt_input "Select option (1-3)" "1")
+else
+    echo "No running Redis instances detected."
+    echo ""
+    echo "Options:"
+    echo "  1) Install and configure new Redis instance (recommended)"
+    echo "  2) Configure custom Redis connection (existing remote Redis)"
+    echo ""
+    
+    REDIS_CHOICE=$(prompt_input "Select option (1-2)" "1")
+    
+    # Adjust choice for consistency
+    if [ "$REDIS_CHOICE" = "2" ]; then
+        REDIS_CHOICE="3"
     else
-        print_error "Failed to start Redis"
-        exit 1
+        REDIS_CHOICE="2"
     fi
 fi
 
-# Enable Redis on boot
-systemctl enable redis-server 2>/dev/null || systemctl enable redis 2>/dev/null
+echo ""
 
-# Test Redis connection
-if redis-cli ping > /dev/null 2>&1; then
-    print_success "Redis is responding to PING"
+case $REDIS_CHOICE in
+    1)
+        # Use existing Redis
+        if [ ${#RUNNING_REDIS_PORTS[@]} -eq 1 ]; then
+            REDIS_PORT=${RUNNING_REDIS_PORTS[0]}
+            print_info "Using existing Redis on port $REDIS_PORT"
+        else
+            echo "Available Redis ports: ${RUNNING_REDIS_PORTS[*]}"
+            REDIS_PORT=$(prompt_input "Enter Redis port to use" "${RUNNING_REDIS_PORTS[0]}")
+            
+            if ! validate_port "$REDIS_PORT"; then
+                print_error "Invalid port number"
+                exit 1
+            fi
+        fi
+        
+        USE_EXISTING_REDIS="yes"
+        REDIS_HOST="localhost"
+        
+        # Test connection
+        if redis-cli -h $REDIS_HOST -p $REDIS_PORT ping &>/dev/null; then
+            print_success "Successfully connected to Redis on $REDIS_HOST:$REDIS_PORT"
+        else
+            print_error "Cannot connect to Redis on $REDIS_HOST:$REDIS_PORT"
+            exit 1
+        fi
+        ;;
+        
+    2)
+        # Install new Redis
+        print_step "Installing new Redis instance..."
+        
+        # Ask for port
+        REDIS_PORT=$(prompt_input "Enter port for Redis" "6379")
+        
+        if ! validate_port "$REDIS_PORT"; then
+            print_error "Invalid port number"
+            exit 1
+        fi
+        
+        # Check if port is available
+        if check_port_in_use $REDIS_PORT; then
+            PROCESS_INFO=$(get_port_process $REDIS_PORT)
+            print_error "Port $REDIS_PORT is already in use by: $PROCESS_INFO"
+            
+            if prompt_yes_no "Try another port?" "y"; then
+                REDIS_PORT=$(prompt_input "Enter alternative port" "6380")
+                
+                if ! validate_port "$REDIS_PORT"; then
+                    print_error "Invalid port number"
+                    exit 1
+                fi
+                
+                if check_port_in_use $REDIS_PORT; then
+                    print_error "Port $REDIS_PORT is also in use. Please free up a port first."
+                    exit 1
+                fi
+            else
+                exit 1
+            fi
+        fi
+        
+        print_success "Port $REDIS_PORT is available"
+        
+        # Ask for password
+        if prompt_yes_no "Enable Redis password authentication?" "n"; then
+            REDIS_PASSWORD=$(prompt_input "Enter Redis password" "")
+            if [ -z "$REDIS_PASSWORD" ]; then
+                print_warning "No password set, Redis will be accessible without authentication"
+            fi
+        fi
+        
+        # Install Redis if not already installed
+        if [ "$REDIS_INSTALLED" = false ]; then
+            print_step "Installing Redis server..."
+            apt-get update > /dev/null 2>&1
+            apt-get install -y redis-server redis-tools > /dev/null 2>&1
+            
+            if [ $? -eq 0 ]; then
+                print_success "Redis installed successfully"
+                REDIS_INSTALLED=true
+            else
+                print_error "Failed to install Redis"
+                exit 1
+            fi
+        fi
+        
+        INSTALL_NEW_REDIS="yes"
+        USE_EXISTING_REDIS="no"
+        REDIS_HOST="localhost"
+        ;;
+        
+    3)
+        # Custom Redis connection
+        print_info "Configure custom Redis connection"
+        
+        REDIS_HOST=$(prompt_input "Enter Redis host" "localhost")
+        REDIS_PORT=$(prompt_input "Enter Redis port" "6379")
+        
+        if ! validate_port "$REDIS_PORT"; then
+            print_error "Invalid port number"
+            exit 1
+        fi
+        
+        if prompt_yes_no "Does Redis require password?" "n"; then
+            REDIS_PASSWORD=$(prompt_input "Enter Redis password" "")
+        fi
+        
+        # Test connection
+        print_step "Testing Redis connection..."
+        if [ -n "$REDIS_PASSWORD" ]; then
+            if redis-cli -h $REDIS_HOST -p $REDIS_PORT -a $REDIS_PASSWORD ping &>/dev/null; then
+                print_success "Successfully connected to Redis"
+            else
+                print_error "Cannot connect to Redis at $REDIS_HOST:$REDIS_PORT"
+                exit 1
+            fi
+        else
+            if redis-cli -h $REDIS_HOST -p $REDIS_PORT ping &>/dev/null; then
+                print_success "Successfully connected to Redis"
+            else
+                print_error "Cannot connect to Redis at $REDIS_HOST:$REDIS_PORT"
+                exit 1
+            fi
+        fi
+        
+        USE_EXISTING_REDIS="yes"
+        ;;
+        
+    *)
+        print_error "Invalid option selected"
+        exit 1
+        ;;
+esac
+
+# Display final Redis configuration
+echo ""
+print_bold "Redis Configuration:"
+echo "  Host: $REDIS_HOST"
+echo "  Port: $REDIS_PORT"
+if [ -n "$REDIS_PASSWORD" ]; then
+    echo "  Password: ******* (protected)"
 else
-    print_error "Redis is not responding"
-    exit 1
+    echo "  Password: (none)"
 fi
+echo ""
+
+if ! prompt_yes_no "Proceed with this configuration?" "y"; then
+    print_warning "Deployment cancelled by user"
+    exit 0
+fi
+
+echo ""
 
 ################################################################################
 # 3. Setup Backend
