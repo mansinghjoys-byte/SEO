@@ -453,6 +453,16 @@ If no data is available yet, guide the user to run analyses first.
         if not self.context.get('recommendations'):
             suggestions.append('💡 Generate Recommendations')
         
+        # COMPETITOR ANALYSIS SUGGESTIONS - NEW
+        if not self.context.get('competitor_discovery'):
+            suggestions.append('🎯 Discover Competitors')
+        
+        if self.context.get('competitor_discovery') and not self.context.get('competitor_backlinks'):
+            suggestions.append('🔗 Analyze Competitor Backlinks')
+        
+        if self.context.get('competitor_discovery') and not self.context.get('competitor_content'):
+            suggestions.append('📝 Analyze Competitor Content')
+        
         if not self.context.get('content_gaps'):
             suggestions.append('📝 Analyze Content Gaps')
         
