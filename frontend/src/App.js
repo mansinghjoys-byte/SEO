@@ -11,6 +11,7 @@ import Dashboard from './pages/Dashboard';
 import Login from './pages/Auth/Login';
 import Register from './pages/Auth/Register';
 import Sites from './pages/Sites';
+import SiteDetail from './pages/SiteDetail';
 import Audits from './pages/Audits';
 import Keywords from './pages/Keywords';
 import AIAgents from './pages/AIAgents';
