@@ -1506,8 +1506,8 @@ class LLMVisibilityTester:
         return False
     
     def run_all_tests(self):
-        """Run all LLM Visibility Optimizer backend tests"""
-        print("🚀 Starting LLM Visibility Optimizer Backend API Tests")
+        """Run all backend tests including new competitor analysis endpoints"""
+        print("🚀 Starting RankForge SEO Platform Backend API Tests")
         print(f"🌐 Backend URL: {self.base_url}")
         print(f"👤 User Email: {USER_CREDENTIALS['email']}")
         print("=" * 80)
@@ -1528,48 +1528,76 @@ class LLMVisibilityTester:
             print("❌ Cannot proceed without site data")
             return 1, 2, self.test_results
         
-        # 4. LLM Visibility Check (8 credits) - Priority 1
-        test_results.append(self.test_llm_visibility_check())
+        # NEW COMPETITOR ANALYSIS ENDPOINTS (PRIORITY TESTING)
+        print("\n" + "="*80)
+        print("🎯 TESTING NEW PRODUCTION-READY COMPETITOR ANALYSIS ENDPOINTS")
+        print("="*80)
         
-        # 5. Recommendations Generation - Priority 2
-        test_results.append(self.test_recommendations_generation())
+        # 4. Competitor Discovery (10 credits) - Priority 1
+        test_results.append(self.test_competitor_discovery())
         
-        # 6. Content Gap Analysis (6 credits) - Priority 3
-        test_results.append(self.test_content_gap_analysis())
+        # 5. Competitor Backlink Analysis (15 credits) - Priority 2
+        test_results.append(self.test_competitor_backlink_analysis())
         
-        # 7. Content Outline Generation (4 credits) - Priority 4
-        test_results.append(self.test_content_outline_generation())
+        # 6. Competitor Content Analysis (12 credits) - Priority 3
+        test_results.append(self.test_competitor_content_analysis())
         
-        # 8. Schema Generation (2 credits) - Priority 5
-        test_results.append(self.test_schema_generation())
+        # 7. Competitor Social Media Analysis (8 credits) - Priority 4
+        test_results.append(self.test_competitor_social_analysis())
         
-        # 9. Community Opportunities (3 credits) - Priority 6
-        test_results.append(self.test_community_opportunities())
+        # 8. Comprehensive Competitor Report (50 credits) - Priority 5
+        test_results.append(self.test_comprehensive_competitor_report())
         
-        # 10. Backlink Analysis (5 credits) - Priority 7
-        test_results.append(self.test_backlink_analysis())
+        # 9. Get Historical Reports (Free) - Priority 6
+        test_results.append(self.test_get_competitor_reports())
         
-        # 11. Trusted Backlinks Tests (NEW FEATURE)
+        # EXISTING LLM VISIBILITY MODULES (SECONDARY TESTING)
         print("\n" + "="*60)
-        print("🔍 TESTING NEW TRUSTED BACKLINKS FEATURE")
+        print("🤖 TESTING EXISTING LLM VISIBILITY MODULES")
         print("="*60)
         
-        # 11a. Agent Creation with Website Field
+        # 10. LLM Visibility Check (8 credits)
+        test_results.append(self.test_llm_visibility_check())
+        
+        # 11. Recommendations Generation
+        test_results.append(self.test_recommendations_generation())
+        
+        # 12. Content Gap Analysis (6 credits)
+        test_results.append(self.test_content_gap_analysis())
+        
+        # 13. Content Outline Generation (4 credits)
+        test_results.append(self.test_content_outline_generation())
+        
+        # 14. Schema Generation (2 credits)
+        test_results.append(self.test_schema_generation())
+        
+        # 15. Community Opportunities (3 credits)
+        test_results.append(self.test_community_opportunities())
+        
+        # 16. Backlink Analysis (5 credits)
+        test_results.append(self.test_backlink_analysis())
+        
+        # TRUSTED BACKLINKS FEATURE
+        print("\n" + "="*60)
+        print("🔍 TESTING TRUSTED BACKLINKS FEATURE")
+        print("="*60)
+        
+        # 17. Agent Creation with Website Field
         test_results.append(self.test_agent_creation_with_website())
         
-        # 11b. Trusted Backlinks Scan (5 credits)
+        # 18. Trusted Backlinks Scan (5 credits)
         test_results.append(self.test_trusted_backlinks_scan())
         
-        # 11c. Get Latest Trusted Backlinks Scan
+        # 19. Get Latest Trusted Backlinks Scan
         test_results.append(self.test_get_trusted_backlinks())
         
-        # 11d. Backlink Opportunities
+        # 20. Backlink Opportunities
         test_results.append(self.test_backlink_opportunities())
         
-        # 12. Learning Center (free) - Priority 8
+        # 21. Learning Center (free)
         test_results.append(self.test_learning_center_endpoints())
         
-        # 13. Credit Deduction Verification
+        # 22. Credit Deduction Verification
         test_results.append(self.check_credit_deduction())
         
         # Calculate results (excluding login and get_sites from count)
@@ -1578,17 +1606,31 @@ class LLMVisibilityTester:
         
         # Summary
         print("\n" + "=" * 80)
-        print("📊 LLM VISIBILITY OPTIMIZER + TRUSTED BACKLINKS TEST SUMMARY")
+        print("📊 RANKFORGE SEO PLATFORM COMPREHENSIVE TEST SUMMARY")
         print("=" * 80)
         print(f"✅ Tests Passed: {tests_passed}/{total_tests}")
         print(f"❌ Tests Failed: {total_tests - tests_passed}/{total_tests}")
         
+        # Detailed breakdown
+        competitor_tests = 6  # First 6 tests are competitor analysis
+        llm_tests = 8  # Next 8 tests are LLM visibility
+        trusted_backlinks_tests = 4  # Next 4 tests are trusted backlinks
+        other_tests = 4  # Learning center + credit check + infrastructure
+        
+        print(f"\n📈 Test Breakdown:")
+        print(f"   🎯 Competitor Analysis: {sum(test_results[:competitor_tests])}/{competitor_tests}")
+        print(f"   🤖 LLM Visibility: {sum(test_results[competitor_tests:competitor_tests+llm_tests])}/{llm_tests}")
+        print(f"   🔍 Trusted Backlinks: {sum(test_results[competitor_tests+llm_tests:competitor_tests+llm_tests+trusted_backlinks_tests])}/{trusted_backlinks_tests}")
+        print(f"   🔧 Infrastructure & Other: {sum(test_results[competitor_tests+llm_tests+trusted_backlinks_tests:])}/{other_tests}")
+        
         if tests_passed == total_tests:
-            print("🎉 ALL TESTS PASSED! All 8 LLM modules + Trusted Backlinks feature working correctly.")
-        elif tests_passed >= total_tests * 0.7:
-            print("✅ Most tests passed. Some features may need attention.")
+            print("🎉 ALL TESTS PASSED! Complete RankForge SEO platform working correctly.")
+        elif tests_passed >= total_tests * 0.8:
+            print("✅ Most tests passed. Platform is largely operational.")
+        elif tests_passed >= total_tests * 0.6:
+            print("⚠️  Some tests failed. Check competitor analysis endpoints.")
         else:
-            print("⚠️  Multiple tests failed. Check the details above.")
+            print("❌ Multiple critical tests failed. Platform needs attention.")
             
         return tests_passed, total_tests, self.test_results
 
