@@ -1,0 +1,227 @@
+{
+  "summary": {
+    "passed": 9,
+    "total": 20,
+    "success_rate": "45.0%"
+  },
+  "results": [
+    {
+      "test": "Redis Connectivity",
+      "success": false,
+      "message": "Redis test failed: [Errno 2] No such file or directory: 'redis-cli'",
+      "response_data": null,
+      "timestamp": "2025-10-28T07:44:40.437561"
+    },
+    {
+      "test": "User Login",
+      "success": true,
+      "message": "Successfully logged in as amis.joys@gmail.com with 20 credits",
+      "response_data": {
+        "token_received": true,
+        "user_id": "7536474c-65b6-4723-8d21-7fa4a8c01372",
+        "credits": 20
+      },
+      "timestamp": "2025-10-28T07:44:41.126888"
+    },
+    {
+      "test": "Create Test Site",
+      "success": true,
+      "message": "Created test site: https://example-seo-test.com",
+      "response_data": {
+        "site_id": "34e00170-6067-40b2-82b9-3c0e4e746c44",
+        "site_url": "https://example-seo-test.com"
+      },
+      "timestamp": "2025-10-28T07:44:41.237989"
+    },
+    {
+      "test": "Competitor Discovery",
+      "success": true,
+      "message": "Discovery completed - Found 10 competitors using 3 methods",
+      "response_data": {
+        "competitors_found": 10,
+        "total_found": 10,
+        "discovery_methods": [
+          "search_engines",
+          "exa_ai",
+          "similar_content"
+        ],
+        "sample_competitors": [
+          "seotest.com",
+          "seo-test1.com",
+          "testsiteurl.com"
+        ]
+      },
+      "timestamp": "2025-10-28T07:44:56.335276"
+    },
+    {
+      "test": "Competitor Backlink Analysis",
+      "success": false,
+      "message": "Insufficient credits (expected if user has < 15 credits)",
+      "response_data": null,
+      "timestamp": "2025-10-28T07:44:56.397768"
+    },
+    {
+      "test": "Competitor Content Analysis",
+      "success": false,
+      "message": "Insufficient credits (expected if user has < 12 credits)",
+      "response_data": null,
+      "timestamp": "2025-10-28T07:44:56.435997"
+    },
+    {
+      "test": "Competitor Social Analysis",
+      "success": true,
+      "message": "Analysis completed - 3 platforms analyzed (Reddit, Twitter, Quora), social metrics & insights generated",
+      "response_data": {
+        "platforms_analyzed": 3,
+        "has_reddit_analysis": true,
+        "has_twitter_analysis": true,
+        "has_quora_analysis": true,
+        "has_social_metrics": true,
+        "has_insights": true,
+        "competitor_domain": "moz.com",
+        "brand_name": "Moz"
+      },
+      "timestamp": "2025-10-28T07:44:57.752750"
+    },
+    {
+      "test": "Comprehensive Competitor Report",
+      "success": false,
+      "message": "Insufficient credits (expected if user has < 50 credits)",
+      "response_data": null,
+      "timestamp": "2025-10-28T07:44:57.788311"
+    },
+    {
+      "test": "Get Competitor Reports",
+      "success": true,
+      "message": "Retrieved 1 historical reports - 1 discoveries, 0 backlink analyses, 0 content analyses, 0 comprehensive reports",
+      "response_data": {
+        "total_reports": 1,
+        "discoveries": 1,
+        "backlink_analyses": 0,
+        "content_analyses": 0,
+        "comprehensive_reports": 0,
+        "site_id": "34e00170-6067-40b2-82b9-3c0e4e746c44"
+      },
+      "timestamp": "2025-10-28T07:44:57.832482"
+    },
+    {
+      "test": "LLM Visibility Check",
+      "success": false,
+      "message": "Insufficient credits (expected behavior if user has < 8 credits)",
+      "response_data": null,
+      "timestamp": "2025-10-28T07:44:57.906403"
+    },
+    {
+      "test": "Recommendations Generation",
+      "success": false,
+      "message": "Invalid response structure or failed generation",
+      "response_data": null,
+      "timestamp": "2025-10-28T07:44:58.059227"
+    },
+    {
+      "test": "Content Gap Analysis",
+      "success": false,
+      "message": "Insufficient credits (expected if user has < 6 credits)",
+      "response_data": null,
+      "timestamp": "2025-10-28T07:44:58.096984"
+    },
+    {
+      "test": "Content Outline Generation",
+      "success": false,
+      "message": "Insufficient credits (expected if user has < 4 credits)",
+      "response_data": null,
+      "timestamp": "2025-10-28T07:44:58.133656"
+    },
+    {
+      "test": "Schema Generation",
+      "success": true,
+      "message": "Generated FAQ schema markup successfully",
+      "response_data": {
+        "schema_type": "FAQ",
+        "schema_length": 0
+      },
+      "timestamp": "2025-10-28T07:44:58.190404"
+    },
+    {
+      "test": "Community Opportunities",
+      "success": false,
+      "message": "Insufficient credits (expected if user has < 3 credits)",
+      "response_data": null,
+      "timestamp": "2025-10-28T07:44:58.230489"
+    },
+    {
+      "test": "Backlink Analysis",
+      "success": false,
+      "message": "Insufficient credits (expected if user has < 5 credits)",
+      "response_data": null,
+      "timestamp": "2025-10-28T07:44:58.269122"
+    },
+    {
+      "test": "Agent Creation with Website",
+      "success": true,
+      "message": "Agent created successfully with website https://example-seo-test.com and site_id 34e00170-6067-40b2-82b9-3c0e4e746c44",
+      "response_data": {
+        "agent_id": "3b816801-444e-46aa-96f5-06087dafcc84",
+        "name": "Trusted Backlinks Specialist",
+        "website": "https://example-seo-test.com",
+        "site_id": "34e00170-6067-40b2-82b9-3c0e4e746c44",
+        "purpose": "llm_visibility_optimizer"
+      },
+      "timestamp": "2025-10-28T07:44:58.368753"
+    },
+    {
+      "test": "Trusted Backlinks Scan",
+      "success": false,
+      "message": "Insufficient credits (expected if user has < 5 credits)",
+      "response_data": null,
+      "timestamp": "2025-10-28T07:44:58.407533"
+    },
+    {
+      "test": "Get Trusted Backlinks",
+      "success": true,
+      "message": "No previous scan found (expected for new sites)",
+      "response_data": {
+        "has_data": false,
+        "message": "No trusted backlinks scan found. Run a scan first."
+      },
+      "timestamp": "2025-10-28T07:44:58.485626"
+    },
+    {
+      "test": "Backlink Opportunities",
+      "success": true,
+      "message": "Retrieved 10 total opportunities, 1 community opportunities",
+      "response_data": {
+        "total_opportunities": 10,
+        "community_opportunities": 1,
+        "sample_sources": [
+          "Reddit",
+          "Quora",
+          "Wikipedia"
+        ]
+      },
+      "timestamp": "2025-10-28T07:44:58.599270"
+    },
+    {
+      "test": "Learning Center Endpoints",
+      "success": true,
+      "message": "All 4/4 learning center endpoints working",
+      "response_data": {
+        "endpoints_tested": 4,
+        "endpoints_passed": 4
+      },
+      "timestamp": "2025-10-28T07:44:58.892239"
+    },
+    {
+      "test": "Credit Deduction Check",
+      "success": true,
+      "message": "Credits properly tracked - Started: 20, Current: 0, Used: 20",
+      "response_data": {
+        "initial_credits": 20,
+        "current_credits": 0,
+        "credits_used": 20
+      },
+      "timestamp": "2025-10-28T07:44:58.930416"
+    }
+  ],
+  "timestamp": "2025-10-28T07:44:58.931145"
+}
