@@ -1130,10 +1130,27 @@ class LLMVisibilityTester:
         # 10. Backlink Analysis (5 credits) - Priority 7
         test_results.append(self.test_backlink_analysis())
         
-        # 11. Learning Center (free) - Priority 8
+        # 11. Trusted Backlinks Tests (NEW FEATURE)
+        print("\n" + "="*60)
+        print("🔍 TESTING NEW TRUSTED BACKLINKS FEATURE")
+        print("="*60)
+        
+        # 11a. Agent Creation with Website Field
+        test_results.append(self.test_agent_creation_with_website())
+        
+        # 11b. Trusted Backlinks Scan (5 credits)
+        test_results.append(self.test_trusted_backlinks_scan())
+        
+        # 11c. Get Latest Trusted Backlinks Scan
+        test_results.append(self.test_get_trusted_backlinks())
+        
+        # 11d. Backlink Opportunities
+        test_results.append(self.test_backlink_opportunities())
+        
+        # 12. Learning Center (free) - Priority 8
         test_results.append(self.test_learning_center_endpoints())
         
-        # 12. Credit Deduction Verification
+        # 13. Credit Deduction Verification
         test_results.append(self.check_credit_deduction())
         
         # Calculate results (excluding login and get_sites from count)
