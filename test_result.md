@@ -459,6 +459,21 @@ backend:
         agent: "testing"
         comment: "✅ TESTED: All authentication and routing fixes working perfectly. 9/9 tests passed. CRITICAL: GET /api/sites (no trailing slash) returns 200 OK with no 307 redirect - main issue resolved. Authentication headers preserved, both trailing slash variants work, agent chat returns 200 OK. Zero 307 redirects detected across all endpoints."
 
+  - task: "Trusted Backlinks Feature"
+    implemented: true
+    working: true
+    file: "/app/backend/services/trusted_backlinks.py, /app/backend/api/llm_visibility.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "main"
+        comment: "NEW FEATURE: Implemented trusted backlinks identification service with three endpoints: POST /api/llm/backlinks/trusted-sources (identify backlinks, 5 credits), GET /api/llm/backlinks/trusted-sources/{site_id} (get latest scan), GET /api/llm/backlinks/opportunities (get opportunities). Supports 23 trusted sources including Reddit, Quora, Wikipedia, etc."
+      - working: true
+        agent: "testing"
+        comment: "✅ TESTED: All trusted backlinks endpoints working perfectly. 5/5 tests passed. Agent creation with website field working (✅), backlink opportunities endpoint returns 10 sources (✅), trusted backlinks scan costs 5 credits and found 2 backlinks with avg authority 91.5 from Quora and Hacker News (✅), get latest scan retrieves stored results (✅). Credit deduction accurate (50→45 credits). Feature fully operational."
+
 metadata:
   created_by: "main_agent"
   version: "1.0"
