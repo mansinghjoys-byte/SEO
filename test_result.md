@@ -554,16 +554,13 @@ metadata:
 
 test_plan:
   current_focus:
-    - "Test Redis installation and connectivity"
-    - "Test LLM visibility check API"
-    - "Test recommendation generation API"
-    - "Test content intelligence APIs (gap analysis, generation, schema)"
-    - "Test community hub APIs"
-    - "Test backlink analysis API"
-    - "Test trusted backlinks feature (NEW)"
-    - "Test learning center endpoints"
-    - "Verify credit costs deduction"
-    - "Validate business logic for pricing plans"
+    - "Test competitor discovery endpoint"
+    - "Test competitor backlink analysis endpoint"
+    - "Test competitor content analysis endpoint"
+    - "Test competitor social media analysis endpoint"
+    - "Test comprehensive competitor analysis report"
+    - "Verify all API credentials working (Exa.ai, Reddit, Twitter)"
+    - "Test credit costs deduction for new features"
   stuck_tasks: []
   test_all: true
   test_priority: "high_first"
