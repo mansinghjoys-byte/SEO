@@ -93,3 +93,9 @@ frozenlist
 multidict
 propcache
 yarl
+
+# Report Generation
+reportlab
+python-docx
+jinja2
+Pillow
