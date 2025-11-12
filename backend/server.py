@@ -36,6 +36,7 @@ app.include_router(billing.router, prefix='/api')
 app.include_router(admin.router, prefix='/api')
 app.include_router(llm_visibility.router, prefix='/api')
 app.include_router(competitors.router)
+app.include_router(reports.router, prefix='/api')
 
 # Root endpoint
 @app.get('/api/')
