@@ -5,7 +5,7 @@ from core.database import mongo_client
 import logging
 
 # Import routers
-from api import auth, sites, audits, keywords, agents, billing, admin, llm_visibility, competitors
+from api import auth, sites, audits, keywords, agents, billing, admin, llm_visibility, competitors, reports
 
 settings = get_settings()
 
