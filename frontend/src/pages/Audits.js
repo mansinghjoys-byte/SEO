@@ -14,6 +14,8 @@ export default function Audits() {
   const [currentAudit, setCurrentAudit] = useState(null);
   const [loading, setLoading] = useState(false);
   const [expandedIssue, setExpandedIssue] = useState(null);
+  const [generatingReport, setGeneratingReport] = useState(false);
+  const [reportId, setReportId] = useState(null);
 
   useEffect(() => {
     fetchSiteAndAudits();
