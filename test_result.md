@@ -564,6 +564,18 @@ backend:
         agent: "testing"
         comment: "✅ TESTED: All API credentials working correctly. Exa.ai API responding (with minor parameter warnings), Reddit API working (with async warnings), Twitter API working. Historical reports endpoint working - retrieved 5 reports (2 discoveries, 1 backlink analysis, 1 content analysis, 1 comprehensive report). Credit system accurately tracking usage (128 credits used across all tests)."
 
+  - task: "Comprehensive SEO Report Generation (PDF/DOCX)"
+    implemented: true
+    working: "NA"
+    file: "/app/backend/services/comprehensive_report_generator.py, /app/backend/api/reports.py"
+    stuck_count: 0
+    priority: "critical"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "NEW PRODUCTION FEATURE: Implemented comprehensive SEO report generator that creates downloadable PDF and DOCX reports. Service collects data from all modules (audits, deep analysis, LLM visibility, recommendations, competitors, backlinks, content gaps). Report includes 10 major sections: Executive Summary, Technical SEO, Core Web Vitals, On-Page SEO, Website Content, Off-Page SEO, GEO & AEO, Competitor Analysis, Action Plan, Analytics. Endpoints: POST /api/reports/generate/{site_id} (15 credits), GET /api/reports/download/{report_id}/pdf, GET /api/reports/download/{report_id}/docx, GET /api/reports/history/{site_id}, GET /api/reports/all. Installed libraries: reportlab, python-docx, jinja2, Pillow. Frontend integration added to Audits page with Download PDF and Download DOCX buttons."
+
 metadata:
   created_by: "main_agent"
   version: "1.0"
