@@ -44,46 +44,53 @@ class ComprehensiveReportGenerator:
             raise ValueError("Site not found")
         
         # Get latest audit
-        latest_audit = await db.audits.find_one(
+        audits = await db.audits.find(
             {'site_id': site_id, 'user_id': user_id},
             {'_id': 0}
-        ).sort('created_at', -1)
+        ).sort('created_at', -1).limit(1).to_list(1)
+        latest_audit = audits[0] if audits else None
         
         # Get deep analysis if available
-        deep_analysis = await db.deep_analyses.find_one(
+        deep_analyses = await db.deep_analyses.find(
             {'site_id': site_id, 'user_id': user_id},
             {'_id': 0}
-        ).sort('created_at', -1)
+        ).sort('created_at', -1).limit(1).to_list(1)
+        deep_analysis = deep_analyses[0] if deep_analyses else None
         
         # Get LLM visibility data
-        llm_visibility = await db.llm_visibility_checks.find_one(
+        llm_visibility_checks = await db.llm_visibility_checks.find(
             {'site_id': site_id, 'user_id': user_id},
             {'_id': 0}
-        ).sort('created_at', -1)
+        ).sort('created_at', -1).limit(1).to_list(1)
+        llm_visibility = llm_visibility_checks[0] if llm_visibility_checks else None
         
         # Get recommendations
-        recommendations = await db.recommendations.find_one(
+        recommendation_docs = await db.recommendations.find(
             {'site_id': site_id, 'user_id': user_id},
             {'_id': 0}
-        ).sort('created_at', -1)
+        ).sort('created_at', -1).limit(1).to_list(1)
+        recommendations = recommendation_docs[0] if recommendation_docs else None
         
         # Get competitor data
-        competitor_discovery = await db.competitor_analyses.find_one(
+        competitor_docs = await db.competitor_analyses.find(
             {'site_id': site_id, 'user_id': user_id, 'analysis_type': 'discovery'},
             {'_id': 0}
-        ).sort('created_at', -1)
+        ).sort('created_at', -1).limit(1).to_list(1)
+        competitor_discovery = competitor_docs[0] if competitor_docs else None
         
         # Get backlink data
-        backlink_analysis = await db.backlink_analyses.find_one(
+        backlink_docs = await db.backlink_analyses.find(
             {'site_id': site_id, 'user_id': user_id},
             {'_id': 0}
-        ).sort('created_at', -1)
+        ).sort('created_at', -1).limit(1).to_list(1)
+        backlink_analysis = backlink_docs[0] if backlink_docs else None
         
         # Get content intelligence
-        content_gaps = await db.content_analyses.find_one(
+        content_docs = await db.content_analyses.find(
             {'site_id': site_id, 'user_id': user_id, 'analysis_type': 'gap_analysis'},
             {'_id': 0}
-        ).sort('created_at', -1)
+        ).sort('created_at', -1).limit(1).to_list(1)
+        content_gaps = content_docs[0] if content_docs else None
         
         # Compile comprehensive report data
         report_data = {
