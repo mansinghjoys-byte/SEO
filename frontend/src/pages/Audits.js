@@ -55,6 +55,60 @@ export default function Audits() {
     }
   };
 
+  const generateReport = async () => {
+    if (!currentAudit) {
+      toast.error('Please run an audit first');
+      return;
+    }
+    
+    if (user?.credits < 15) {
+      toast.error('Insufficient credits. Report generation requires 15 credits.');
+      return;
+    }
+    
+    setGeneratingReport(true);
+    try {
+      const response = await api.post(`/reports/generate/${siteId}`);
+      setReportId(response.data.report_id);
+      toast.success('✅ Report generated successfully! You can now download it.');
+    } catch (error) {
+      toast.error(error.response?.data?.detail || 'Report generation failed');
+    } finally {
+      setGeneratingReport(false);
+    }
+  };
+
+  const downloadReport = async (format) => {
+    if (!reportId) {
+      // Try to generate report first
+      await generateReport();
+      return;
+    }
+    
+    try {
+      const response = await api.get(`/reports/download/${reportId}/${format}`, {
+        responseType: 'blob'
+      });
+      
+      // Create download link
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement('a');
+      link.href = url;
+      
+      const siteName = site?.url.replace('https://', '').replace('http://', '').replace('www.', '').replace('/', '_');
+      const filename = `SEO_Audit_${siteName}_${new Date().toISOString().split('T')[0]}.${format}`;
+      link.setAttribute('download', filename);
+      
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      
+      toast.success(`✅ ${format.toUpperCase()} report downloaded successfully!`);
+    } catch (error) {
+      toast.error(`Failed to download ${format.toUpperCase()} report`);
+    }
+  };
+
   const getSeverityColor = (severity) => {
     switch (severity) {
       case 'critical':
