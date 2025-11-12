@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { Button } from '../components/ui/button';
-import { LayoutDashboard, Globe, Bot, CreditCard, LogOut, Search, CheckCircle, Target, ChevronDown, ChevronUp } from 'lucide-react';
+import { LayoutDashboard, Globe, Bot, CreditCard, LogOut, Search, CheckCircle, Target, ChevronDown, ChevronUp, Download, FileText } from 'lucide-react';
 import api from '../utils/api';
 import { toast } from 'sonner';
 
