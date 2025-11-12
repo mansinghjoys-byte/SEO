@@ -272,6 +272,9 @@ CREDIT_COSTS = {
     'competitor_backlink_analysis': 15,  # Analyze competitor backlinks in depth
     'competitor_content_analysis': 12,  # Analyze competitor content strategy
     'competitor_social_analysis': 8,  # Analyze social media presence (Reddit, Twitter, Quora)
-    'comprehensive_competitor_analysis': 50  # Full comprehensive competitor report
+    'comprehensive_competitor_analysis': 50,  # Full comprehensive competitor report
+    
+    # Report Generation
+    'comprehensive_report': 15  # Generate and download comprehensive SEO audit report (PDF/DOCX)
 }
 
