@@ -415,36 +415,106 @@ class ComprehensiveReportGenerator:
         
         doc.add_paragraph()
         
+        # 4.5 SOCIAL MEDIA ISSUES
+        if comprehensive_audit and comprehensive_audit.get('success'):
+            findings_by_category = comprehensive_audit.get('findings_by_category', {})
+            social_findings = findings_by_category.get('Social Media', [])
+            
+            if social_findings:
+                doc.add_heading('Social Media Issues', 1)
+                for finding in social_findings:
+                    doc.add_heading(f"{finding['issue_number']}. {finding['title']}", level=2)
+                    
+                    p = doc.add_paragraph()
+                    runner = p.add_run('Importance: ')
+                    runner.bold = True
+                    p.add_run(finding['importance'])
+                    
+                    p = doc.add_paragraph()
+                    runner = p.add_run('Solution: ')
+                    runner.bold = True
+                    p.add_run(finding['solution'])
+                    
+                    doc.add_paragraph()
+        
         # 5. OFF-PAGE SEO
         doc.add_heading('Off-Page SEO', 1)
         
-        backlink_data = report_data.get('backlinks', {})
-        if backlink_data:
-            results = backlink_data.get('results', {})
-            doc.add_heading('Backlink Analysis', level=2)
+        if comprehensive_audit and comprehensive_audit.get('success'):
+            findings_by_category = comprehensive_audit.get('findings_by_category', {})
+            offpage_findings = findings_by_category.get('Off-Page SEO', [])
             
-            summary = results.get('summary', {})
-            doc.add_paragraph(f"• Total Backlinks Analyzed: {summary.get('total_opportunities', 0)}")
-            doc.add_paragraph(f"• High Authority Sources: {summary.get('high_authority_count', 0)}")
+            if offpage_findings:
+                for finding in offpage_findings:
+                    doc.add_heading(f"{finding['issue_number']}. {finding['title']}", level=2)
+                    
+                    if finding.get('example'):
+                        p = doc.add_paragraph()
+                        runner = p.add_run('Example: ')
+                        runner.bold = True
+                        p.add_run(finding['example'])
+                    
+                    if finding.get('current_value'):
+                        p = doc.add_paragraph()
+                        runner = p.add_run('Current: ')
+                        runner.bold = True
+                        p.add_run(finding['current_value'])
+                    
+                    p = doc.add_paragraph()
+                    runner = p.add_run('Importance: ')
+                    runner.bold = True
+                    p.add_run(finding['importance'])
+                    
+                    p = doc.add_paragraph()
+                    runner = p.add_run('Solution: ')
+                    runner.bold = True
+                    p.add_run(finding['solution'])
+                    
+                    doc.add_paragraph()
             
-            opportunities = results.get('opportunities', [])[:5]
-            if opportunities:
-                doc.add_heading('Top Backlink Opportunities:', level=3)
-                for opp in opportunities:
-                    doc.add_paragraph(f"• {opp.get('domain', 'N/A')} (Authority: {opp.get('authority_score', 'N/A')})")
+            # Add additional backlink data if available
+            backlink_data = report_data.get('backlinks', {})
+            if backlink_data:
+                results = backlink_data.get('results', {})
+                doc.add_heading('Additional Backlink Analysis', level=2)
+                
+                summary = results.get('summary', {})
+                doc.add_paragraph(f"• Total Backlinks Analyzed: {summary.get('total_opportunities', 0)}")
+                doc.add_paragraph(f"• High Authority Sources: {summary.get('high_authority_count', 0)}")
+                
+                opportunities = results.get('opportunities', [])[:5]
+                if opportunities:
+                    doc.add_heading('Top Backlink Opportunities:', level=3)
+                    for opp in opportunities:
+                        doc.add_paragraph(f"• {opp.get('domain', 'N/A')} (Authority: {opp.get('authority_score', 'N/A')})")
         else:
-            doc.add_heading('1. Low Domain Authority', level=2)
-            p = doc.add_paragraph()
-            runner = p.add_run('Solution: ')
-            runner.bold = True
-            p.add_run('Earn backlinks from high-authority, relevant domains through digital PR, guest posts, and content collaborations.')
-            doc.add_paragraph()
-            
-            doc.add_heading('2. Focus on Quality Backlinks', level=2)
-            p = doc.add_paragraph()
-            runner = p.add_run('Solution: ')
-            runner.bold = True
-            p.add_run('Build content worth citing (whitepapers, insights, case studies). Target industry-relevant sites with higher domain authority.')
+            backlink_data = report_data.get('backlinks', {})
+            if backlink_data:
+                results = backlink_data.get('results', {})
+                doc.add_heading('Backlink Analysis', level=2)
+                
+                summary = results.get('summary', {})
+                doc.add_paragraph(f"• Total Backlinks Analyzed: {summary.get('total_opportunities', 0)}")
+                doc.add_paragraph(f"• High Authority Sources: {summary.get('high_authority_count', 0)}")
+                
+                opportunities = results.get('opportunities', [])[:5]
+                if opportunities:
+                    doc.add_heading('Top Backlink Opportunities:', level=3)
+                    for opp in opportunities:
+                        doc.add_paragraph(f"• {opp.get('domain', 'N/A')} (Authority: {opp.get('authority_score', 'N/A')})")
+            else:
+                doc.add_heading('1. Low Domain Authority', level=2)
+                p = doc.add_paragraph()
+                runner = p.add_run('Solution: ')
+                runner.bold = True
+                p.add_run('Earn backlinks from high-authority, relevant domains through digital PR, guest posts, and content collaborations.')
+                doc.add_paragraph()
+                
+                doc.add_heading('2. Focus on Quality Backlinks', level=2)
+                p = doc.add_paragraph()
+                runner = p.add_run('Solution: ')
+                runner.bold = True
+                p.add_run('Build content worth citing (whitepapers, insights, case studies). Target industry-relevant sites with higher domain authority.')
         
         doc.add_paragraph()
         
