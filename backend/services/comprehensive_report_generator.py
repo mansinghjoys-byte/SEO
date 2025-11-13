@@ -237,9 +237,42 @@ class ComprehensiveReportGenerator:
                 issue_count += 1
         
         # 2. CORE WEB VITALS & PERFORMANCE
-        doc.add_heading('Core Web Vitals & Performance', 1)
+        doc.add_heading('Core Web Vitals & Performance Insights', 1)
         
-        if audit and audit.get('crawl_data'):
+        if comprehensive_audit and comprehensive_audit.get('success'):
+            findings_by_category = comprehensive_audit.get('findings_by_category', {})
+            performance_findings = findings_by_category.get('Core Web Vitals & Performance', [])
+            
+            # Add performance scores if available
+            crawl_data = comprehensive_audit.get('crawl_data', {})
+            if crawl_data:
+                doc.add_heading('Performance Metrics', level=2)
+                doc.add_paragraph(f'Page Load Time: {crawl_data.get("load_time", 0):.2f}s')
+                doc.add_paragraph(f'HTML Size: {crawl_data.get("html_size_kb", 0):.2f} KB')
+                doc.add_paragraph()
+            
+            if performance_findings:
+                for finding in performance_findings:
+                    doc.add_heading(f"{finding['issue_number']}. {finding['title']}", level=2)
+                    
+                    if finding.get('example'):
+                        p = doc.add_paragraph()
+                        runner = p.add_run('Example: ')
+                        runner.bold = True
+                        p.add_run(finding['example'])
+                    
+                    p = doc.add_paragraph()
+                    runner = p.add_run('Importance: ')
+                    runner.bold = True
+                    p.add_run(finding['importance'])
+                    
+                    p = doc.add_paragraph()
+                    runner = p.add_run('Solution: ')
+                    runner.bold = True
+                    p.add_run(finding['solution'])
+                    
+                    doc.add_paragraph()
+        elif audit and audit.get('crawl_data'):
             perf = audit['crawl_data'].get('performance', {})
             doc.add_heading('Insights (Desktop & Mobile)', level=2)
             
@@ -263,20 +296,61 @@ class ComprehensiveReportGenerator:
         # 3. ON-PAGE SEO
         doc.add_heading('On-Page SEO', 1)
         
-        if audit and audit.get('issues'):
+        if comprehensive_audit and comprehensive_audit.get('success'):
+            findings_by_category = comprehensive_audit.get('findings_by_category', {})
+            onpage_findings = findings_by_category.get('On-Page SEO', [])
+            
+            if onpage_findings:
+                for finding in onpage_findings:
+                    doc.add_heading(f"{finding['issue_number']}. {finding['title']}", level=2)
+                    
+                    if finding.get('example'):
+                        p = doc.add_paragraph()
+                        runner = p.add_run('Example: ')
+                        runner.bold = True
+                        p.add_run(finding['example'])
+                    
+                    if finding.get('current_value'):
+                        p = doc.add_paragraph()
+                        runner = p.add_run('Current: ')
+                        runner.bold = True
+                        p.add_run(finding['current_value'])
+                    
+                    if finding.get('recommended_value'):
+                        p = doc.add_paragraph()
+                        runner = p.add_run('Recommended: ')
+                        runner.bold = True
+                        p.add_run(finding['recommended_value'])
+                    
+                    p = doc.add_paragraph()
+                    runner = p.add_run('Importance: ')
+                    runner.bold = True
+                    p.add_run(finding['importance'])
+                    
+                    p = doc.add_paragraph()
+                    runner = p.add_run('Solution: ')
+                    runner.bold = True
+                    p.add_run(finding['solution'])
+                    
+                    doc.add_paragraph()
+        elif audit and audit.get('issues'):
             onpage_issues = [issue for issue in audit['issues'] if issue.get('category') == 'on-page']
             
             issue_count = 1
             for issue in onpage_issues:
                 doc.add_heading(f"{issue_count}. {issue.get('title')}", level=2)
                 
-                # Importance
+                if issue.get('example'):
+                    p = doc.add_paragraph()
+                    runner = p.add_run('Example: ')
+                    runner.bold = True
+                    p.add_run(issue.get('example', ''))
+                
                 p = doc.add_paragraph()
                 runner = p.add_run('Importance: ')
                 runner.bold = True
                 p.add_run(issue.get('description', ''))
                 
-                # Solution
                 p = doc.add_paragraph()
                 runner = p.add_run('Solution: ')
                 runner.bold = True
