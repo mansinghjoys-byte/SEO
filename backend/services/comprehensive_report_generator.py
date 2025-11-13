@@ -362,20 +362,56 @@ class ComprehensiveReportGenerator:
         # 4. WEBSITE CONTENT ISSUES
         doc.add_heading('Website Content Issues', 1)
         
-        content_gaps_data = report_data.get('content_gaps', {})
-        if content_gaps_data:
-            gaps = content_gaps_data.get('results', {}).get('gaps', [])
-            if gaps:
-                doc.add_heading('Content Gaps Identified:', level=2)
-                for gap in gaps[:5]:  # Top 5 gaps
-                    doc.add_paragraph(f"• {gap.get('topic', 'N/A')}", style='List Bullet')
-                    doc.add_paragraph(f"  Priority: {gap.get('priority', 'N/A')}")
+        if comprehensive_audit and comprehensive_audit.get('success'):
+            findings_by_category = comprehensive_audit.get('findings_by_category', {})
+            content_findings = findings_by_category.get('Website Content', [])
+            
+            if content_findings:
+                for finding in content_findings:
+                    doc.add_heading(f"{finding['issue_number']}. {finding['title']}", level=2)
+                    
+                    if finding.get('example'):
+                        p = doc.add_paragraph()
+                        runner = p.add_run('Example: ')
+                        runner.bold = True
+                        p.add_run(finding['example'])
+                    
+                    p = doc.add_paragraph()
+                    runner = p.add_run('Importance: ')
+                    runner.bold = True
+                    p.add_run(finding['importance'])
+                    
+                    p = doc.add_paragraph()
+                    runner = p.add_run('Solution: ')
+                    runner.bold = True
+                    p.add_run(finding['solution'])
+                    
+                    doc.add_paragraph()
+            
+            # Also add content gap analysis if available
+            content_gaps_data = report_data.get('content_gaps', {})
+            if content_gaps_data:
+                gaps = content_gaps_data.get('results', {}).get('gaps', [])
+                if gaps:
+                    doc.add_heading('Additional Content Gaps Identified:', level=2)
+                    for gap in gaps[:5]:  # Top 5 gaps
+                        doc.add_paragraph(f"• {gap.get('topic', 'N/A')}", style='List Bullet')
+                        doc.add_paragraph(f"  Priority: {gap.get('priority', 'N/A')}")
         else:
-            doc.add_paragraph('Issue: Low word count on key pages')
-            p = doc.add_paragraph()
-            runner = p.add_run('Recommendation: ')
-            runner.bold = True
-            p.add_run('Expand page content to at least 800-1000 words with keyword-rich, value-driven copy.')
+            content_gaps_data = report_data.get('content_gaps', {})
+            if content_gaps_data:
+                gaps = content_gaps_data.get('results', {}).get('gaps', [])
+                if gaps:
+                    doc.add_heading('Content Gaps Identified:', level=2)
+                    for gap in gaps[:5]:  # Top 5 gaps
+                        doc.add_paragraph(f"• {gap.get('topic', 'N/A')}", style='List Bullet')
+                        doc.add_paragraph(f"  Priority: {gap.get('priority', 'N/A')}")
+            else:
+                doc.add_paragraph('Issue: Low word count on key pages')
+                p = doc.add_paragraph()
+                runner = p.add_run('Recommendation: ')
+                runner.bold = True
+                p.add_run('Expand page content to at least 800-1000 words with keyword-rich, value-driven copy.')
         
         doc.add_paragraph()
         
