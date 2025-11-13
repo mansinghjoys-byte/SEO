@@ -139,18 +139,82 @@ class ComprehensiveReportGenerator:
         
         # Executive Summary
         doc.add_heading('Executive Summary', 1)
+        
+        # Get comprehensive audit data (preferred) or fallback to basic audit
+        comprehensive_audit = report_data.get('comprehensive_audit', {})
         audit = report_data.get('audit', {})
-        if audit:
+        
+        if comprehensive_audit and comprehensive_audit.get('success'):
+            scores = comprehensive_audit.get('scores', {})
+            summary = comprehensive_audit.get('summary', {})
+            
+            doc.add_paragraph(f'Overall SEO Score: {scores.get("overall_score", 0)}/100')
+            doc.add_paragraph(f'Technical SEO Score: {scores.get("technical_score", 0)}/100')
+            doc.add_paragraph(f'On-Page SEO Score: {scores.get("onpage_score", 0)}/100')
+            doc.add_paragraph(f'Off-Page SEO Score: {scores.get("offpage_score", 0)}/100')
+            doc.add_paragraph()
+            doc.add_paragraph(f'Total Issues Found: {summary.get("total_issues", 0)}')
+            doc.add_paragraph(f'Critical Issues: {summary.get("critical_issues", 0)}')
+            doc.add_paragraph(f'Important Issues: {summary.get("important_issues", 0)}')
+            doc.add_paragraph(f'Minor Issues: {summary.get("minor_issues", 0)}')
+        elif audit:
             doc.add_paragraph(f'Overall SEO Score: {audit.get("seo_score", 0)}/100')
             doc.add_paragraph(f'Technical SEO Score: {audit.get("technical_score", 0)}/100')
             doc.add_paragraph(f'On-Page SEO Score: {audit.get("onpage_score", 0)}/100')
             doc.add_paragraph(f'Off-Page SEO Score: {audit.get("offpage_score", 0)}/100')
+        
         doc.add_paragraph()
         
-        # 1. TECHNICAL SEO SECTION
+        # 1. TECHNICAL SEO SECTION - Enhanced with detailed findings
         doc.add_heading('Technical SEO', 1)
         
-        if audit and audit.get('issues'):
+        # Use comprehensive audit findings if available (much more detailed)
+        if comprehensive_audit and comprehensive_audit.get('success'):
+            findings_by_category = comprehensive_audit.get('findings_by_category', {})
+            technical_findings = findings_by_category.get('Technical SEO', [])
+            
+            if technical_findings:
+                for finding in technical_findings:
+                    # Issue number and title
+                    doc.add_heading(f"{finding['issue_number']}. {finding['title']}", level=2)
+                    
+                    # Example (if present)
+                    if finding.get('example'):
+                        p = doc.add_paragraph()
+                        runner = p.add_run('Example: ')
+                        runner.bold = True
+                        p.add_run(finding['example'])
+                    
+                    # Current vs Recommended (if present)
+                    if finding.get('current_value'):
+                        p = doc.add_paragraph()
+                        runner = p.add_run('Current: ')
+                        runner.bold = True
+                        p.add_run(finding['current_value'])
+                    
+                    if finding.get('recommended_value'):
+                        p = doc.add_paragraph()
+                        runner = p.add_run('Recommended: ')
+                        runner.bold = True
+                        p.add_run(finding['recommended_value'])
+                    
+                    # Importance
+                    p = doc.add_paragraph()
+                    runner = p.add_run('Importance: ')
+                    runner.bold = True
+                    p.add_run(finding['importance'])
+                    
+                    # Solution
+                    p = doc.add_paragraph()
+                    runner = p.add_run('Solution: ')
+                    runner.bold = True
+                    p.add_run(finding['solution'])
+                    
+                    doc.add_paragraph()  # Spacing
+            else:
+                doc.add_paragraph('No critical technical SEO issues found.')
+        elif audit and audit.get('issues'):
+            # Fallback to basic audit
             technical_issues = [issue for issue in audit['issues'] if issue.get('category') == 'technical']
             
             issue_count = 1
