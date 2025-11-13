@@ -521,36 +521,75 @@ class ComprehensiveReportGenerator:
         # 6. GEO & AEO (LLM VISIBILITY)
         doc.add_heading('GEO & AEO (AI Search Optimization)', 1)
         
-        llm_data = report_data.get('llm_visibility', {})
-        if llm_data:
-            results = llm_data.get('results', {})
-            doc.add_heading('LLM Visibility Score', level=2)
-            doc.add_paragraph(f"Overall Score: {results.get('overall_score', 0)}/100")
+        if comprehensive_audit and comprehensive_audit.get('success'):
+            findings_by_category = comprehensive_audit.get('findings_by_category', {})
+            geo_aeo_findings = findings_by_category.get('GEO & AEO', [])
             
-            visibility_by_llm = results.get('visibility_by_llm', [])
-            if visibility_by_llm:
-                doc.add_heading('Visibility by AI Platform:', level=3)
-                for llm in visibility_by_llm:
-                    doc.add_paragraph(f"• {llm.get('name', 'N/A')}: {llm.get('score', 0)}/100")
+            if geo_aeo_findings:
+                for finding in geo_aeo_findings:
+                    doc.add_heading(f"{finding['issue_number']}. {finding['title']}", level=2)
+                    
+                    if finding.get('example'):
+                        p = doc.add_paragraph()
+                        runner = p.add_run('Example: ')
+                        runner.bold = True
+                        p.add_run(finding['example'])
+                    
+                    p = doc.add_paragraph()
+                    runner = p.add_run('Importance: ')
+                    runner.bold = True
+                    p.add_run(finding['importance'])
+                    
+                    p = doc.add_paragraph()
+                    runner = p.add_run('Solution: ')
+                    runner.bold = True
+                    p.add_run(finding['solution'])
+                    
+                    doc.add_paragraph()
             
-            recommendations_list = results.get('recommendations', [])
-            if recommendations_list:
-                doc.add_heading('Recommendations:', level=3)
-                for rec in recommendations_list[:5]:
-                    doc.add_paragraph(f"• {rec}", style='List Bullet')
+            # Add LLM visibility data if available
+            llm_data = report_data.get('llm_visibility', {})
+            if llm_data:
+                results = llm_data.get('results', {})
+                doc.add_heading('LLM Visibility Score Analysis', level=2)
+                doc.add_paragraph(f"Overall Score: {results.get('overall_score', 0)}/100")
+                
+                visibility_by_llm = results.get('visibility_by_llm', [])
+                if visibility_by_llm:
+                    doc.add_heading('Visibility by AI Platform:', level=3)
+                    for llm in visibility_by_llm:
+                        doc.add_paragraph(f"• {llm.get('name', 'N/A')}: {llm.get('score', 0)}/100")
         else:
-            doc.add_heading('Issue: Pages not ranking on AI Overview', level=2)
-            p = doc.add_paragraph()
-            runner = p.add_run('Solution: ')
-            runner.bold = True
-            p.add_run('Optimize on-page content with clear topical focus, E-E-A-T signals, and conversational long-tail keywords. Strengthen internal linking and add structured data.')
-            doc.add_paragraph()
-            
-            doc.add_heading('Issue: FAQs not used in content', level=2)
-            p = doc.add_paragraph()
-            runner = p.add_run('Solution: ')
-            runner.bold = True
-            p.add_run('Add structured FAQ sections using Schema markup on key service and "About" pages.')
+            llm_data = report_data.get('llm_visibility', {})
+            if llm_data:
+                results = llm_data.get('results', {})
+                doc.add_heading('LLM Visibility Score', level=2)
+                doc.add_paragraph(f"Overall Score: {results.get('overall_score', 0)}/100")
+                
+                visibility_by_llm = results.get('visibility_by_llm', [])
+                if visibility_by_llm:
+                    doc.add_heading('Visibility by AI Platform:', level=3)
+                    for llm in visibility_by_llm:
+                        doc.add_paragraph(f"• {llm.get('name', 'N/A')}: {llm.get('score', 0)}/100")
+                
+                recommendations_list = results.get('recommendations', [])
+                if recommendations_list:
+                    doc.add_heading('Recommendations:', level=3)
+                    for rec in recommendations_list[:5]:
+                        doc.add_paragraph(f"• {rec}", style='List Bullet')
+            else:
+                doc.add_heading('Issue: Pages not ranking on AI Overview', level=2)
+                p = doc.add_paragraph()
+                runner = p.add_run('Solution: ')
+                runner.bold = True
+                p.add_run('Optimize on-page content with clear topical focus, E-E-A-T signals, and conversational long-tail keywords. Strengthen internal linking and add structured data.')
+                doc.add_paragraph()
+                
+                doc.add_heading('Issue: FAQs not used in content', level=2)
+                p = doc.add_paragraph()
+                runner = p.add_run('Solution: ')
+                runner.bold = True
+                p.add_run('Add structured FAQ sections using Schema markup on key service and "About" pages.')
         
         doc.add_paragraph()
         
