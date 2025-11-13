@@ -641,11 +641,43 @@ class ComprehensiveReportGenerator:
         # 9. ANALYTICS AND REPORTING
         doc.add_heading('Analytics and Reporting', 1)
         
-        doc.add_heading('Issue: Setup and Verify Tracking', level=2)
-        p = doc.add_paragraph()
-        runner = p.add_run('Solution: ')
-        runner.bold = True
-        p.add_run('Implement and verify Google Tag Manager and GA4 setup sitewide. Request and verify Google Search Console access to monitor search visibility, fix crawl/index issues, and track keyword performance.')
+        if comprehensive_audit and comprehensive_audit.get('success'):
+            findings_by_category = comprehensive_audit.get('findings_by_category', {})
+            analytics_findings = findings_by_category.get('Analytics & Reporting', [])
+            
+            if analytics_findings:
+                for finding in analytics_findings:
+                    doc.add_heading(f"{finding['issue_number']}. {finding['title']}", level=2)
+                    
+                    if finding.get('example'):
+                        p = doc.add_paragraph()
+                        runner = p.add_run('Example: ')
+                        runner.bold = True
+                        p.add_run(finding['example'])
+                    
+                    p = doc.add_paragraph()
+                    runner = p.add_run('Importance: ')
+                    runner.bold = True
+                    p.add_run(finding['importance'])
+                    
+                    p = doc.add_paragraph()
+                    runner = p.add_run('Solution: ')
+                    runner.bold = True
+                    p.add_run(finding['solution'])
+                    
+                    doc.add_paragraph()
+            else:
+                doc.add_heading('Issue: Setup and Verify Tracking', level=2)
+                p = doc.add_paragraph()
+                runner = p.add_run('Solution: ')
+                runner.bold = True
+                p.add_run('Implement and verify Google Tag Manager and GA4 setup sitewide. Request and verify Google Search Console access to monitor search visibility, fix crawl/index issues, and track keyword performance.')
+        else:
+            doc.add_heading('Issue: Setup and Verify Tracking', level=2)
+            p = doc.add_paragraph()
+            runner = p.add_run('Solution: ')
+            runner.bold = True
+            p.add_run('Implement and verify Google Tag Manager and GA4 setup sitewide. Request and verify Google Search Console access to monitor search visibility, fix crawl/index issues, and track keyword performance.')
         
         # Save to BytesIO
         buffer = BytesIO()
