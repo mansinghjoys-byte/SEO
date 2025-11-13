@@ -5,9 +5,10 @@ from core.database import get_database
 from services.billing import CREDIT_COSTS
 from services.seo_audit import SEOAuditService
 from services.advanced_crawler import AdvancedSEOCrawler
+from services.comprehensive_seo_auditor import ComprehensiveSEOAuditor
 from datetime import datetime, timezone
 import uuid
-from typing import List
+from typing import List, Dict, Any
 
 router = APIRouter(prefix='/audits', tags=['Audits'])
 
