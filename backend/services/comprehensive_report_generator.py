@@ -35,6 +35,7 @@ class ComprehensiveReportGenerator:
     async def generate_report_data(self, site_id: str, user_id: str) -> Dict[str, Any]:
         """
         Collect all data needed for comprehensive report
+        Now includes comprehensive audit findings for detailed reporting
         """
         db = await get_database()
         
@@ -49,6 +50,13 @@ class ComprehensiveReportGenerator:
             {'_id': 0}
         ).sort('created_at', -1).limit(1).to_list(1)
         latest_audit = audits[0] if audits else None
+        
+        # Get comprehensive audit (NEW - this has detailed findings)
+        comprehensive_audits = await db.comprehensive_audits.find(
+            {'site_id': site_id, 'user_id': user_id},
+            {'_id': 0}
+        ).sort('created_at', -1).limit(1).to_list(1)
+        comprehensive_audit = comprehensive_audits[0] if comprehensive_audits else None
         
         # Get deep analysis if available
         deep_analyses = await db.deep_analyses.find(
@@ -97,6 +105,7 @@ class ComprehensiveReportGenerator:
             'site': site,
             'generated_at': datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
             'audit': latest_audit,
+            'comprehensive_audit': comprehensive_audit,  # NEW: Detailed findings
             'deep_analysis': deep_analysis,
             'llm_visibility': llm_visibility,
             'recommendations': recommendations,
