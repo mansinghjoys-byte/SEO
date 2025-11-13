@@ -1506,28 +1506,333 @@ class RankForgeCompetitorTester:
             
         return False
     
-    def run_all_tests(self):
-        """Run all backend tests including new competitor analysis endpoints"""
-        print("🚀 Starting RankForge SEO Platform Backend API Tests")
+    def test_comprehensive_audit(self):
+        """Test comprehensive SEO audit endpoint (15 credits)"""
+        print("\n🔍 Testing Comprehensive SEO Audit...")
+        
+        if not self.user_token or not self.site_id:
+            self.log_test("Comprehensive SEO Audit", False, "Missing token or site_id")
+            return False
+            
+        try:
+            response = requests.post(
+                f"{self.base_url}/audits/comprehensive/{self.site_id}",
+                headers=self.headers,
+                timeout=120  # Longer timeout for comprehensive audit
+            )
+            
+            if response.status_code == 200:
+                data = response.json()
+                
+                if data.get("success"):
+                    findings = data.get("findings", [])
+                    categories = data.get("categories", {})
+                    scores = data.get("scores", {})
+                    executive_summary = data.get("executive_summary", {})
+                    
+                    # Validate findings structure
+                    detailed_findings = 0
+                    for finding in findings:
+                        if all(key in finding for key in ["issue_number", "category", "severity", "title", "importance", "solution"]):
+                            detailed_findings += 1
+                    
+                    self.log_test(
+                        "Comprehensive SEO Audit", 
+                        True, 
+                        f"Audit completed - {len(findings)} total findings ({detailed_findings} detailed), {len(categories)} categories, executive summary included",
+                        {
+                            "total_findings": len(findings),
+                            "detailed_findings": detailed_findings,
+                            "categories_count": len(categories),
+                            "categories": list(categories.keys()) if categories else [],
+                            "has_scores": bool(scores),
+                            "has_executive_summary": bool(executive_summary),
+                            "site_id": self.site_id
+                        }
+                    )
+                    return True
+                else:
+                    self.log_test(
+                        "Comprehensive SEO Audit", 
+                        False, 
+                        "Audit failed or invalid response structure"
+                    )
+            elif response.status_code == 402:
+                self.log_test(
+                    "Comprehensive SEO Audit", 
+                    False, 
+                    "Insufficient credits (expected if user has < 15 credits)"
+                )
+            else:
+                self.log_test(
+                    "Comprehensive SEO Audit", 
+                    False, 
+                    f"HTTP {response.status_code}: {response.text}"
+                )
+                
+        except requests.exceptions.RequestException as e:
+            self.log_test("Comprehensive SEO Audit", False, f"Request failed: {str(e)}")
+            
+        return False
+    
+    def test_report_generation(self):
+        """Test report generation endpoint (15 credits)"""
+        print("\n📊 Testing Report Generation...")
+        
+        if not self.user_token or not self.site_id:
+            self.log_test("Report Generation", False, "Missing token or site_id")
+            return False, None
+            
+        try:
+            response = requests.post(
+                f"{self.base_url}/reports/generate/{self.site_id}",
+                headers=self.headers,
+                timeout=120  # Longer timeout for report generation
+            )
+            
+            if response.status_code == 200:
+                data = response.json()
+                
+                if data.get("success"):
+                    report_id = data.get("report_id")
+                    download_urls = data.get("download_urls", {})
+                    metadata = data.get("metadata", {})
+                    
+                    self.log_test(
+                        "Report Generation", 
+                        True, 
+                        f"Report generated successfully - Report ID: {report_id}, Download URLs available",
+                        {
+                            "report_id": report_id,
+                            "has_pdf_url": "pdf" in download_urls,
+                            "has_docx_url": "docx" in download_urls,
+                            "has_metadata": bool(metadata),
+                            "site_id": self.site_id
+                        }
+                    )
+                    return True, report_id
+                else:
+                    self.log_test(
+                        "Report Generation", 
+                        False, 
+                        "Report generation failed or invalid response structure"
+                    )
+            elif response.status_code == 402:
+                self.log_test(
+                    "Report Generation", 
+                    False, 
+                    "Insufficient credits (expected if user has < 15 credits)"
+                )
+            else:
+                self.log_test(
+                    "Report Generation", 
+                    False, 
+                    f"HTTP {response.status_code}: {response.text}"
+                )
+                
+        except requests.exceptions.RequestException as e:
+            self.log_test("Report Generation", False, f"Request failed: {str(e)}")
+            
+        return False, None
+    
+    def test_report_download_pdf(self, report_id):
+        """Test PDF report download endpoint"""
+        print("\n📄 Testing PDF Report Download...")
+        
+        if not self.user_token or not report_id:
+            self.log_test("PDF Report Download", False, "Missing token or report_id")
+            return False
+            
+        try:
+            response = requests.get(
+                f"{self.base_url}/reports/download/{report_id}/pdf",
+                headers=self.headers,
+                timeout=60
+            )
+            
+            if response.status_code == 200:
+                content_type = response.headers.get('content-type', '')
+                content_length = len(response.content)
+                
+                # Check if it's actually a PDF
+                is_pdf = content_type == 'application/pdf' or response.content.startswith(b'%PDF')
+                
+                self.log_test(
+                    "PDF Report Download", 
+                    True, 
+                    f"PDF downloaded successfully - Size: {content_length} bytes, Content-Type: {content_type}",
+                    {
+                        "report_id": report_id,
+                        "content_length": content_length,
+                        "content_type": content_type,
+                        "is_valid_pdf": is_pdf
+                    }
+                )
+                return True
+            else:
+                self.log_test(
+                    "PDF Report Download", 
+                    False, 
+                    f"HTTP {response.status_code}: {response.text}"
+                )
+                
+        except requests.exceptions.RequestException as e:
+            self.log_test("PDF Report Download", False, f"Request failed: {str(e)}")
+            
+        return False
+    
+    def test_report_download_docx(self, report_id):
+        """Test DOCX report download endpoint"""
+        print("\n📝 Testing DOCX Report Download...")
+        
+        if not self.user_token or not report_id:
+            self.log_test("DOCX Report Download", False, "Missing token or report_id")
+            return False
+            
+        try:
+            response = requests.get(
+                f"{self.base_url}/reports/download/{report_id}/docx",
+                headers=self.headers,
+                timeout=60
+            )
+            
+            if response.status_code == 200:
+                content_type = response.headers.get('content-type', '')
+                content_length = len(response.content)
+                
+                # Check if it's actually a DOCX (ZIP-based format)
+                is_docx = (content_type == 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' or 
+                          response.content.startswith(b'PK'))
+                
+                self.log_test(
+                    "DOCX Report Download", 
+                    True, 
+                    f"DOCX downloaded successfully - Size: {content_length} bytes, Content-Type: {content_type}",
+                    {
+                        "report_id": report_id,
+                        "content_length": content_length,
+                        "content_type": content_type,
+                        "is_valid_docx": is_docx
+                    }
+                )
+                return True
+            else:
+                self.log_test(
+                    "DOCX Report Download", 
+                    False, 
+                    f"HTTP {response.status_code}: {response.text}"
+                )
+                
+        except requests.exceptions.RequestException as e:
+            self.log_test("DOCX Report Download", False, f"Request failed: {str(e)}")
+            
+        return False
+    
+    def test_report_history(self):
+        """Test report history endpoint"""
+        print("\n📋 Testing Report History...")
+        
+        if not self.user_token or not self.site_id:
+            self.log_test("Report History", False, "Missing token or site_id")
+            return False
+            
+        try:
+            response = requests.get(
+                f"{self.base_url}/reports/history/{self.site_id}",
+                headers=self.headers,
+                timeout=30
+            )
+            
+            if response.status_code == 200:
+                data = response.json()
+                
+                if data.get("success"):
+                    reports = data.get("reports", [])
+                    
+                    self.log_test(
+                        "Report History", 
+                        True, 
+                        f"Retrieved {len(reports)} historical reports",
+                        {
+                            "reports_count": len(reports),
+                            "site_id": self.site_id
+                        }
+                    )
+                    return True
+                else:
+                    self.log_test(
+                        "Report History", 
+                        False, 
+                        "Failed to retrieve report history"
+                    )
+            else:
+                self.log_test(
+                    "Report History", 
+                    False, 
+                    f"HTTP {response.status_code}: {response.text}"
+                )
+                
+        except requests.exceptions.RequestException as e:
+            self.log_test("Report History", False, f"Request failed: {str(e)}")
+            
+        return False
+
+    def run_comprehensive_report_tests(self):
+        """Run comprehensive SEO report generation tests as requested"""
+        print("🚀 Starting Comprehensive SEO Report Generation Testing")
         print(f"🌐 Backend URL: {self.base_url}")
         print(f"👤 User Email: {USER_CREDENTIALS['email']}")
         print("=" * 80)
         
-        # Test sequence based on review request priorities
+        # Test sequence for comprehensive report generation
         test_results = []
         
-        # 1. Redis Connectivity (Critical Infrastructure)
-        test_results.append(self.test_redis_connectivity())
-        
-        # 2. User Authentication (Critical)
+        # 1. User Authentication (Critical)
         if not self.test_user_login():
             print("❌ Cannot proceed without authentication")
             return 0, 1, self.test_results
         
-        # 3. Get Sites (Required for most tests)
+        # 2. Get Sites or Create Test Site
         if not self.test_get_sites():
             print("❌ Cannot proceed without site data")
             return 1, 2, self.test_results
+        
+        print("\n" + "="*80)
+        print("🎯 TESTING COMPREHENSIVE SEO REPORT GENERATION WORKFLOW")
+        print("="*80)
+        
+        # 3. Run Comprehensive Audit (15 credits)
+        test_results.append(self.test_comprehensive_audit())
+        
+        # 4. Generate Report (15 credits) 
+        report_success, report_id = self.test_report_generation()
+        test_results.append(report_success)
+        
+        if report_success and report_id:
+            # 5. Test PDF Download
+            test_results.append(self.test_report_download_pdf(report_id))
+            
+            # 6. Test DOCX Download  
+            test_results.append(self.test_report_download_docx(report_id))
+        else:
+            print("⚠️ Skipping download tests - report generation failed")
+            test_results.extend([False, False])
+        
+        # 7. Test Report History
+        test_results.append(self.test_report_history())
+        
+        # 8. Check Credit Deduction (30 credits total: 15 audit + 15 report)
+        test_results.append(self.check_credit_deduction())
+        
+        # Calculate results
+        passed = sum(test_results)
+        total = len(test_results)
+        
+        return passed, total, self.test_results
+
+    def run_all_tests(self):
+        """Run comprehensive report generation tests (main focus)"""
+        return self.run_comprehensive_report_tests()
         
         # NEW COMPETITOR ANALYSIS ENDPOINTS (PRIORITY TESTING)
         print("\n" + "="*80)
