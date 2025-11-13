@@ -11,7 +11,7 @@ from datetime import datetime
 import time
 
 # Configuration
-BACKEND_URL = "https://seo-audit-sync.preview.emergentagent.com/api"
+BACKEND_URL = "https://codebase-report-sync.preview.emergentagent.com/api"
 TEST_USER_CREDENTIALS = {
     "email": "tester@test.com",
     "password": "Test123!@#",

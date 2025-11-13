@@ -12,7 +12,7 @@ from datetime import datetime
 import time
 
 # Configuration from review request
-BACKEND_URL = "https://seo-audit-sync.preview.emergentagent.com/api"
+BACKEND_URL = "https://codebase-report-sync.preview.emergentagent.com/api"
 TEST_USER_CREDENTIALS = {
     "email": "test@rankforge.com",
     "password": "Test@123"

@@ -12,7 +12,7 @@ from datetime import datetime
 import time
 
 # Configuration
-BACKEND_URL = "https://seo-audit-sync.preview.emergentagent.com/api"
+BACKEND_URL = "https://codebase-report-sync.preview.emergentagent.com/api"
 USER_CREDENTIALS = {
     "email": "comprehensive.tester@example.com",
     "password": "ComprehensiveTest123!"
