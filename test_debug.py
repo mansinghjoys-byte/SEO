@@ -4,7 +4,7 @@ import json
 
 class DebugTester:
     def __init__(self):
-        self.base_url = "https://audit-enhancer.preview.emergentagent.com/api"
+        self.base_url = "https://seo-audit-sync.preview.emergentagent.com/api"
         self.headers = {"Content-Type": "application/json"}
         self.user_token = None
         self.site_id = None

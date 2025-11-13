@@ -6,7 +6,7 @@ import requests
 import json
 from datetime import datetime
 
-BACKEND_URL = "https://audit-enhancer.preview.emergentagent.com/api"
+BACKEND_URL = "https://seo-audit-sync.preview.emergentagent.com/api"
 
 def test_llm_visibility_agent():
     """Test the new LLM Visibility Agent functionality"""
