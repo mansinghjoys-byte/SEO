@@ -173,8 +173,8 @@ class RankForgeCompetitorTester:
         """Create a test site for testing"""
         try:
             site_data = {
-                "url": "https://example-seo-test.com",
-                "name": "Test Site for LLM Visibility"
+                "url": "https://www.example.com",
+                "name": "Test Site for Comprehensive SEO Report"
             }
             
             response = requests.post(
