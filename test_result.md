@@ -389,6 +389,9 @@ backend:
       - working: true
         agent: "main"
         comment: "✅ VERIFIED: RQ worker running successfully. Status: RUNNING and listening on default queue. Ready for async task processing at scale (1000+ users)."
+      - working: true
+        agent: "main"
+        comment: "✅ RE-VERIFIED (Nov 13): RQ worker reconfigured and running. Worker ID: 1d4548edba3f4222a8bc1ce0b861cef4, PID: 1471, listening on default queue. Ready for background jobs."
   
   - task: "Agent Chat Endpoint Fix"
     implemented: true
